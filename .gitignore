@@ -28,3 +28,4 @@ allFiredEvents
 /analyzer/
 known-origin-contracts.iml
 .idea
+!/scripts/data/
