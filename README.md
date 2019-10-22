@@ -14,7 +14,7 @@
   <a href="https://www.ethereum.org/" target="_blank"><img src="https://img.shields.io/badge/platform-Ethereum-brightgreen.svg?style=flat-square" alt="Ethereum" /></a>
   <a href="http://erc721.org/" target="_blank"><img src="https://img.shields.io/badge/token-ERC721-ff69b4.svg?style=flat-square" alt="Token ERC721" /> </a>
   <img src="https://img.shields.io/badge/contributions-welcome-orange.svg?style=flat-square" alt="Contributions Welcome" />
-  <img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="MIT License" />
+  <img src="https://travis-ci.com/knownorigin/known-origin-contracts.svg?branch=master" alt="MIT License" />
   <a href="https://travis-ci.org/knownorigin/known-origin-web3-marketplace" target="_blank"<img src="https://travis-ci.org/knownorigin/known-origin-web3-marketplace.svg?branch=master" /><a/>
   
   <a href="https://t.me/knownorigin_io" target="_blank"><img src="https://img.shields.io/badge/Join%20Us%20On-Telegram-2599D2.svg?style=flat-square" alt="Join Us On Telegram" /></a>
