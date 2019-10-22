@@ -1,0 +1,17 @@
+{
+    "name": "OwnMe (black)",
+    "description": "Creative Challenge - 0xCert Collaboration",
+    "attributes": {
+        "artist": "hackatao",
+        "scarcity": "rare",
+        "tags": [
+            "digital",
+            "nifty",
+            "0xcert",
+            "creative challenge"
+        ]
+    },
+    "external_uri": "https://knownorigin.io/artists/HKT/editions/HKTOWNMEBLK00DIG",
+    "image": "https://ipfs.infura.io/ipfs/QmTEe9ToKkCwhVaL2GaJnaWg6uR5qgxjWRsPXRyKhauxWc/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmTEe9ToKkCwhVaL2GaJnaWg6uR5qgxjWRsPXRyKhauxWc/other"
+}

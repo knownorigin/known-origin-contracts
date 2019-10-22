@@ -1,0 +1,17 @@
+{
+    "name": "DDF2",
+    "description": "Deluxe experience",
+    "attributes": {
+        "artist": "obxium",
+        "scarcity": "ultra rare",
+        "tags": [
+            "high res",
+            "digital",
+            "illustration",
+            "character"
+        ]
+    },
+    "external_uri": "https://knownorigin.io/artists/OBX/editions/OBXDDF2000000DIG",
+    "image": "https://ipfs.infura.io/ipfs/Qmbs3BGdB1HPkjULSHsH9kFBAqpPUX7yzGmRfXnAX6jBHU/image",
+    "meta": "https://ipfs.infura.io/ipfs/Qmbs3BGdB1HPkjULSHsH9kFBAqpPUX7yzGmRfXnAX6jBHU/other"
+}

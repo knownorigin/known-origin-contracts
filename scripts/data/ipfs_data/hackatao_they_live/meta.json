@@ -1,0 +1,19 @@
+{
+  "artist": "Hackatao",
+  "artworkName": "They Live",
+  "description": "Artwork inspired by Carpenter's 80s cult movie, They Live. The actuality of the movie's message is always alive. Therefore, do not sleep too quietly.",
+  "attributes": {
+    "artist": "hackatao",
+    "scarcity": "rare",
+    "tags": [
+      "high res",
+      "digital",
+      "illustration",
+      "cult",
+      "movie",
+      "they",
+      "live"
+    ]
+  },
+  "external_uri": "http://knownorigin.io/"
+}

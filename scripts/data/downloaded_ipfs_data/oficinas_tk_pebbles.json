@@ -1,0 +1,17 @@
+{
+    "name": "Pebbles",
+    "description": "Creative Challenge  - 0xCert Collaboration",
+    "attributes": {
+        "artist": "oficinas tk",
+        "scarcity": "rare",
+        "tags": [
+            "digital",
+            "nifty",
+            "0xcert",
+            "creative challenge"
+        ]
+    },
+    "external_uri": "https://knownorigin.io/artists/OTK/editions/OTKPEBBLES000DIG",
+    "image": "https://ipfs.infura.io/ipfs/QmRucvkgAJnNAfXUQPY7NATrB3gC7jnMNf75csHdJzbb77/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmRucvkgAJnNAfXUQPY7NATrB3gC7jnMNf75csHdJzbb77/other"
+}

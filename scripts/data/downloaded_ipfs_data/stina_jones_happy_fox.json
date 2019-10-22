@@ -1,0 +1,15 @@
+{
+    "name": "Happy Arctic Fox",
+    "description": "Happy Arctic Fox",
+    "attributes": {
+        "tags": [
+            "illustration",
+            "character",
+            "fox",
+            "cute"
+        ]
+    },
+    "external_uri": "http://knownorigin.io",
+    "image": "https://ipfs.infura.io/ipfs/QmT9iCuqkB9i9U2KXm6YhH5bn6jY7YJwWJHMu1EAsTtB4o/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmT9iCuqkB9i9U2KXm6YhH5bn6jY7YJwWJHMu1EAsTtB4o/other"
+}

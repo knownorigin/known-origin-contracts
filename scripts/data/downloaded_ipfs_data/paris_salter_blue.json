@@ -1,0 +1,16 @@
+{
+    "name": "Blue",
+    "description": "Digital still life",
+    "attributes": {
+        "tags": [
+            "drawing",
+            "blue",
+            "vector",
+            "3d render",
+            "still life"
+        ]
+    },
+    "external_uri": "http://knownorigin.io",
+    "image": "https://ipfs.infura.io/ipfs/QmW6YzvhpkbNZJaH1efq8riGfL7YRab1h3iVtCn2K9qTuV/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmW6YzvhpkbNZJaH1efq8riGfL7YRab1h3iVtCn2K9qTuV/other"
+}

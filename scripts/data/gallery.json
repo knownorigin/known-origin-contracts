@@ -1,0 +1,20 @@
+{
+  "artists": [
+    {
+      "name": "CoinJournal",
+      "artworks": [
+        {
+          "artworkName": "CoinJournal X CoinFest (Night)",
+          "ipfsPath": "coin_journal_coinfest_night",
+          "edition": "CNJCINFSTNG1HDIG",
+          "numberOfEditions": 25,
+          "fiatCost": 2.00,
+          "costInEth": 0.0075
+        }
+      ]
+    }
+  ]
+}
+
+
+

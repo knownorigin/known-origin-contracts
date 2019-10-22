@@ -1,0 +1,16 @@
+{
+    "name": "Red",
+    "description": "Digital still life",
+    "attributes": {
+        "tags": [
+            "drawing",
+            "red",
+            "vector",
+            "3d render",
+            "still life"
+        ]
+    },
+    "external_uri": "http://knownorigin.io",
+    "image": "https://ipfs.infura.io/ipfs/QmbtM2yqaNZ65zG7mJpg93aYkvbjdcbQcP4tzqBRFzxeKV/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmbtM2yqaNZ65zG7mJpg93aYkvbjdcbQcP4tzqBRFzxeKV/other"
+}

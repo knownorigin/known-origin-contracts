@@ -1,0 +1,17 @@
+{
+    "name": "NONFUNGIBLE TOKENS",
+    "description": "Creative Challenge  - 0xCert Collaboration",
+    "attributes": {
+        "artist": "hex0x6c",
+        "scarcity": "rare",
+        "tags": [
+            "digital",
+            "nifty",
+            "0xcert",
+            "creative challenge"
+        ]
+    },
+    "external_uri": "https://knownorigin.io/artists/HEX/editions/HEXNFT0000001DIG",
+    "image": "https://ipfs.infura.io/ipfs/QmTyK5eAf5XgkdKtw9xSpFeCTbg5SpW7o8TcBwKVefSrvK/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmTyK5eAf5XgkdKtw9xSpFeCTbg5SpW7o8TcBwKVefSrvK/other"
+}

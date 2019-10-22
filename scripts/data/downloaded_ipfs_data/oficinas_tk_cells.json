@@ -1,0 +1,17 @@
+{
+    "name": "Cells",
+    "description": "Creative Challenge  - 0xCert Collaboration",
+    "attributes": {
+        "artist": "oficinas tk",
+        "scarcity": "rare",
+        "tags": [
+            "digital",
+            "nifty",
+            "0xcert",
+            "creative challenge"
+        ]
+    },
+    "external_uri": "https://knownorigin.io/artists/OTK/editions/OTKCELLS00000DIG",
+    "image": "https://ipfs.infura.io/ipfs/Qmb5oFEmSJRFBZaiRZxgMqWwiPkqHL4ARq2v1XBgfnawvF/image",
+    "meta": "https://ipfs.infura.io/ipfs/Qmb5oFEmSJRFBZaiRZxgMqWwiPkqHL4ARq2v1XBgfnawvF/other"
+}

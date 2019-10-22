@@ -1,0 +1,16 @@
+{
+    "name": "Green",
+    "description": "Digital still life",
+    "attributes": {
+        "tags": [
+            "drawing",
+            "green",
+            "vector",
+            "3d render",
+            "still life"
+        ]
+    },
+    "external_uri": "http://knownorigin.io",
+    "image": "https://ipfs.infura.io/ipfs/QmZ6bCyQysKJHeUWHik7XZPvAT5JZZjUbbrwKMteaF9Jyr/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmZ6bCyQysKJHeUWHik7XZPvAT5JZZjUbbrwKMteaF9Jyr/other"
+}

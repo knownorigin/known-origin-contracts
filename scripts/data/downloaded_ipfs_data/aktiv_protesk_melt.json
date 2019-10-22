@@ -1,0 +1,17 @@
+{
+    "name": "Melt",
+    "description": "Creative Challenge  - 0xCert Collaboration",
+    "attributes": {
+        "artist": "aktiv protesk",
+        "scarcity": "rare",
+        "tags": [
+            "digital",
+            "nifty",
+            "0xcert",
+            "creative challenge"
+        ]
+    },
+    "external_uri": "https://knownorigin.io/artists/AKP/editions/AKPMELT000000DIG",
+    "image": "https://ipfs.infura.io/ipfs/QmctDZHWLHh87kNp7qvNXJupfj2Pt7GE7UegfkR1ctcnMP/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmctDZHWLHh87kNp7qvNXJupfj2Pt7GE7UegfkR1ctcnMP/other"
+}

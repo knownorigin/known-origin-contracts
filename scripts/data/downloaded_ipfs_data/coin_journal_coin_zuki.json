@@ -1,0 +1,17 @@
+{
+    "name": "CoinZuki",
+    "description": "Creative Challenge  - 0xCert Collaboration",
+    "attributes": {
+        "artist": "coinjournal",
+        "scarcity": "rare",
+        "tags": [
+            "digital",
+            "nifty",
+            "0xcert",
+            "creative challenge"
+        ]
+    },
+    "external_uri": "https://knownorigin.io/artists/CNJ/editions/CNJCOINZUKI00DIG",
+    "image": "https://ipfs.infura.io/ipfs/QmQvcmPP83hnvzeRnuB1oJm9E1iuoTR4VXZpVeDRj66tmK/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmQvcmPP83hnvzeRnuB1oJm9E1iuoTR4VXZpVeDRj66tmK/other"
+}

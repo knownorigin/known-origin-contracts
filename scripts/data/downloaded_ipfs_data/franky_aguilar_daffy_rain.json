@@ -1,0 +1,17 @@
+{
+    "name": "Daffy Rain",
+    "description": "Digital Artwork",
+    "attributes": {
+        "tags": [
+            "digital",
+            "illustration",
+            "character",
+            "glitchy",
+            "daffy",
+            "rain"
+        ]
+    },
+    "external_uri": "https://knownorigin.io/artists/FKA/editions/FKADAFFY0RAINDIG",
+    "image": "https://ipfs.infura.io/ipfs/QmRUXoMgq5sbzxWGXUUETCMYW6jQnnzmv6wie5svbGSNKW/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmRUXoMgq5sbzxWGXUUETCMYW6jQnnzmv6wie5svbGSNKW/other"
+}

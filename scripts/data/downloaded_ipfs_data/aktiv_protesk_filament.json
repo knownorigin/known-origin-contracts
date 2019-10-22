@@ -1,0 +1,13 @@
+{
+    "name": "Filament",
+    "description": "SuperCluster Colour Series",
+    "attributes": {
+        "tags": [
+            "high res",
+            "vector"
+        ]
+    },
+    "external_uri": "http://knownorigin.io",
+    "image": "https://ipfs.infura.io/ipfs/QmVKcRZJNpyXCpv99RtTojqgJwBL5rmY69V8vhcZrnQMQq/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmVKcRZJNpyXCpv99RtTojqgJwBL5rmY69V8vhcZrnQMQq/other"
+}

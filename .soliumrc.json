@@ -1,0 +1,19 @@
+{
+  "extends": "solium:all",
+  "plugins": ["security"],
+  "rules": {
+    "error-reason": ["error"],
+    "indentation": "off",
+    "lbrace": "off",
+    "max-len": ["warning", 119],
+    "no-constant": ["error"],
+    "no-empty-blocks": "off",
+    "quotes": ["error", "double"],
+    "uppercase": "off",
+    "visibility-first": "error",
+
+    "security/enforce-explicit-visibility": ["error"],
+    "security/no-block-members": "off",
+    "security/no-inline-assembly": ["warning"]
+  }
+}

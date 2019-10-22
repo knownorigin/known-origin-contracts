@@ -1,0 +1,15 @@
+{
+    "name": "NEOPLA",
+    "description": "Generative image, made in processing",
+    "attributes": {
+        "tags": [
+            "digital",
+            "generative",
+            "image",
+            "processing"
+        ]
+    },
+    "external_uri": "https://knownorigin.io/artists/MNO/editions/MNONEOPLA0001DIG",
+    "image": "https://ipfs.infura.io/ipfs/QmUtcC7s2aLN6ExSDRq7NF5YizZRTcKiXBxdfJnzj3cHGx/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmUtcC7s2aLN6ExSDRq7NF5YizZRTcKiXBxdfJnzj3cHGx/other"
+}

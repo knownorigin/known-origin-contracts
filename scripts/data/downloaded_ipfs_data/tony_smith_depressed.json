@@ -1,0 +1,12 @@
+{
+    "name": "Depressed",
+    "description": "Study of a depressed occasion",
+    "attributes": {
+        "tags": [
+            "vector"
+        ]
+    },
+    "external_uri": "http://knownorigin.io",
+    "image": "https://ipfs.infura.io/ipfs/QmdBiq84u4QP9hreJCwqbjh3bFM1MFb1aPhuuZTuqdYJaV/image",
+    "meta": "https://ipfs.infura.io/ipfs/QmdBiq84u4QP9hreJCwqbjh3bFM1MFb1aPhuuZTuqdYJaV/other"
+}
