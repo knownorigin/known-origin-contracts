@@ -273,14 +273,15 @@
       "type": "function"
     }
   ],
+  "metadata": "",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.4.21;\n\n/**\n * @title ERC721 Non-Fungible Token Standard basic interface\n * @dev see https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md\n */\ncontract ERC721Basic {\n  event Transfer(address indexed _from, address indexed _to, uint256 _tokenId);\n  event Approval(address indexed _owner, address indexed _approved, uint256 _tokenId);\n  event ApprovalForAll(address indexed _owner, address indexed _operator, bool _approved);\n\n  function balanceOf(address _owner) public view returns (uint256 _balance);\n  function ownerOf(uint256 _tokenId) public view returns (address _owner);\n  function exists(uint256 _tokenId) public view returns (bool _exists);\n\n  function approve(address _to, uint256 _tokenId) public;\n  function getApproved(uint256 _tokenId) public view returns (address _operator);\n\n  function setApprovalForAll(address _operator, bool _approved) public;\n  function isApprovedForAll(address _owner, address _operator) public view returns (bool);\n\n  function transferFrom(address _from, address _to, uint256 _tokenId) public;\n  function safeTransferFrom(address _from, address _to, uint256 _tokenId) public;\n  function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes _data) public;\n}\n",
-  "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/known-origin-web3-marketplace/contracts/v1/ERC721Basic.sol",
+  "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v1/ERC721Basic.sol",
   "ast": {
-    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/known-origin-web3-marketplace/contracts/v1/ERC721Basic.sol",
+    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v1/ERC721Basic.sol",
     "exportedSymbols": {
       "ERC721Basic": [
         764
@@ -1564,7 +1565,7 @@
     "src": "0:1237:11"
   },
   "legacyAST": {
-    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/known-origin-web3-marketplace/contracts/v1/ERC721Basic.sol",
+    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v1/ERC721Basic.sol",
     "exportedSymbols": {
       "ERC721Basic": [
         764
@@ -2852,8 +2853,8 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.0-beta.2",
-  "updatedAt": "2018-11-25T17:38:48.735Z",
+  "schemaVersion": "3.0.16",
+  "updatedAt": "2019-11-15T09:13:57.860Z",
   "devdoc": {
     "methods": {},
     "title": "ERC721 Non-Fungible Token Standard basic interface"

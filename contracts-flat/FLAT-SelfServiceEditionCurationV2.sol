@@ -171,9 +171,19 @@ library SafeMath {
   }
 }
 
+// File: contracts/v2/interfaces/ISelfServiceAccessControls.sol
+
+pragma solidity 0.4.24;
+
+interface ISelfServiceAccessControls {
+
+  function isEnabledForAccount(address account) public view returns (bool);
+
+}
+
 // File: contracts/v2/tools/SelfServiceAccessControls.sol
 
-contract SelfServiceAccessControls is Ownable {
+contract SelfServiceAccessControls is Ownable, ISelfServiceAccessControls {
 
   // Simple map to only allow certain artist create editions at first
   mapping(address => bool) public allowedArtists;

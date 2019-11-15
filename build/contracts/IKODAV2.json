@@ -109,14 +109,15 @@
       "type": "function"
     }
   ],
+  "metadata": "",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "/**\n* Minimal interface definition for KODA V2 contract calls\n*\n* https://www.knownorigin.io/\n*/\ninterface IKODAV2 {\n  function mint(address _to, uint256 _editionNumber) external returns (uint256);\n\n  function editionExists(uint256 _editionNumber) external returns (bool);\n\n  function totalRemaining(uint256 _editionNumber) external view returns (uint256);\n\n  function artistCommission(uint256 _editionNumber) external view returns (address _artistAccount, uint256 _artistCommission);\n\n  function editionOptionalCommission(uint256 _editionNumber) external view returns (uint256 _rate, address _recipient);\n}\n",
-  "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/known-origin-web3-marketplace/contracts/v2/auctions/IKODAV2.sol",
+  "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/auctions/IKODAV2.sol",
   "ast": {
-    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/known-origin-web3-marketplace/contracts/v2/auctions/IKODAV2.sol",
+    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/auctions/IKODAV2.sol",
     "exportedSymbols": {
       "IKODAV2": [
         7867
@@ -639,7 +640,7 @@
     "src": "97:511:22"
   },
   "legacyAST": {
-    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/known-origin-web3-marketplace/contracts/v2/auctions/IKODAV2.sol",
+    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/auctions/IKODAV2.sol",
     "exportedSymbols": {
       "IKODAV2": [
         7867
@@ -1166,8 +1167,8 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.2",
-  "updatedAt": "2019-02-27T14:11:07.324Z",
+  "schemaVersion": "3.0.16",
+  "updatedAt": "2019-11-15T09:11:15.206Z",
   "devdoc": {
     "methods": {}
   },

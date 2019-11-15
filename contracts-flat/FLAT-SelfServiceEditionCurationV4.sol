@@ -171,19 +171,9 @@ library SafeMath {
   }
 }
 
-// File: contracts/v2/interfaces/ISelfServiceAccessControls.sol
-
-pragma solidity 0.4.24;
-
-interface ISelfServiceAccessControls {
-
-  function isEnabledForAccount(address account) public view returns (bool);
-
-}
-
 // File: contracts/v2/tools/SelfServiceAccessControls.sol
 
-contract SelfServiceAccessControls is Ownable, ISelfServiceAccessControls {
+contract SelfServiceAccessControls is Ownable {
 
   // Simple map to only allow certain artist create editions at first
   mapping(address => bool) public allowedArtists;
@@ -227,9 +217,9 @@ contract SelfServiceAccessControls is Ownable, ISelfServiceAccessControls {
   }
 }
 
-// File: contracts/v2/tools/SelfServiceEditionCurationV3.sol
+// File: contracts/v2/tools/SelfServiceEditionCurationV4.sol
 
-pragma solidity 0.4.24;
+pragma solidity 0.5.12;
 
 
 
@@ -255,6 +245,8 @@ interface IKODAV2SelfServiceEditionCuration {
   function totalAvailableEdition(uint256 _editionNumber) external returns (uint256);
 
   function highestEditionNumber() external returns (uint256);
+
+  function updateOptionalCommission(uint256 _editionNumber, uint256 _rate, address _recipient);
 }
 
 interface IKODAAuction {
@@ -262,7 +254,7 @@ interface IKODAAuction {
 }
 
 // One invocation per time-period
-contract SelfServiceEditionCurationV3 is Ownable, Pausable {
+contract SelfServiceEditionCurationV4 is Ownable, Pausable {
   using SafeMath for uint256;
 
   event SelfServiceEditionCreated(
@@ -324,7 +316,7 @@ contract SelfServiceEditionCurationV3 is Ownable, Pausable {
 
     frozenTil[msg.sender] = block.timestamp.add(freezeWindow);
 
-    return _createEdition(msg.sender, _totalAvailable, _priceInWei, _startDate, _tokenUri, _enableAuction);
+    return _createEdition(msg.sender, _totalAvailable, _priceInWei, _startDate, _tokenUri, _enableAuction, artistCommission, 0, address(0));
   }
 
   /**
@@ -343,7 +335,7 @@ contract SelfServiceEditionCurationV3 is Ownable, Pausable {
   onlyOwner
   returns (uint256 _editionNumber)
   {
-    return _createEdition(_artist, _totalAvailable, _priceInWei, _startDate, _tokenUri, _enableAuction);
+    return _createEdition(_artist, _totalAvailable, _priceInWei, _startDate, _tokenUri, _enableAuction, artistCommission, 0, address(0));
   }
 
   /**
@@ -354,8 +346,12 @@ contract SelfServiceEditionCurationV3 is Ownable, Pausable {
     uint256 _totalAvailable,
     uint256 _priceInWei,
     uint256 _startDate,
+    uint256 _endDate,
     string _tokenUri,
-    bool _enableAuction
+    bool _enableAuction,
+    uint256 _artistCommission,
+    uint256 _commissionSplitRate,
+    address _commissionSplitAddress
   )
   internal
   returns (uint256 _editionNumber){
@@ -363,6 +359,8 @@ contract SelfServiceEditionCurationV3 is Ownable, Pausable {
     // Enforce edition size
     require(_totalAvailable > 0, "Must be at least one available in edition");
     require(_totalAvailable <= maxEditionSize, "Must not exceed max edition size");
+
+    // TODO validate commission split
 
     // Enforce min price
     require(_priceInWei >= minPricePerEdition, "Price must be greater than minimum");
@@ -381,13 +379,18 @@ contract SelfServiceEditionCurationV3 is Ownable, Pausable {
 
     // Attempt to create a new edition
     require(
-      _createNewEdition(editionNumber, _artist, _totalAvailable, _priceInWei, _startDate, _tokenUri),
+      _createNewEdition(editionNumber, _artist, _totalAvailable, _priceInWei, _startDate, _endDate, _artistCommission, _tokenUri),
       "Failed to create new edition"
     );
 
     // Enable the auction if desired
     if (_enableAuction) {
       auction.setArtistsControlAddressAndEnabledEdition(editionNumber, _artist);
+    }
+
+    // Set the additional commission rate if found
+    if (_commissionSplitRate > 0) {
+      kodaV2.updateOptionalCommission(_editionNumber, _commissionSplitRate, _commissionSplitAddress);
     }
 
     // Trigger event
@@ -405,6 +408,8 @@ contract SelfServiceEditionCurationV3 is Ownable, Pausable {
     uint256 _totalAvailable,
     uint256 _priceInWei,
     uint256 _startDate,
+    uint256 _endDate,
+    uint256 _artistCommission,
     string _tokenUri
   )
   internal
@@ -414,9 +419,9 @@ contract SelfServiceEditionCurationV3 is Ownable, Pausable {
       0x0, // _editionData - no edition data
       1, // _editionType - KODA always type 1
       _startDate,
-      0, // _endDate - 0 = MAX unit256
+      _endDate, // _endDate - 0 = MAX unit256
       _artist,
-      artistCommission,
+      _artistCommission, // defaults to global property artistCommission if no extra commission split is found
       _priceInWei,
       _tokenUri,
       _totalAvailable

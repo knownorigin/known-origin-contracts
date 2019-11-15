@@ -1,15 +1,15 @@
 {
-  "contractName": "ERC165",
+  "contractName": "ISelfServiceAccessControls",
   "abi": [
     {
       "constant": true,
       "inputs": [
         {
-          "name": "interfaceID",
-          "type": "bytes4"
+          "name": "account",
+          "type": "address"
         }
       ],
-      "name": "supportsInterface",
+      "name": "isEnabledForAccount",
       "outputs": [
         {
           "name": "",
@@ -17,7 +17,7 @@
         }
       ],
       "payable": false,
-      "stateMutability": "pure",
+      "stateMutability": "view",
       "type": "function"
     }
   ],
@@ -26,28 +26,27 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.21;\n\ninterface ERC165 {\n  /// @notice Query if a contract implements an interface\n  /// @param interfaceID The interface identifier, as specified in ERC-165\n  /// @dev Interface identification is specified in ERC-165. This function\n  ///  uses less than 30,000 gas.\n  /// @return `true` if the contract implements `interfaceID` and\n  ///  `interfaceID` is not 0xffffffff, `false` otherwise\n  function supportsInterface(bytes4 interfaceID) external pure returns (bool);\n}\n",
-  "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v1/ERC165.sol",
+  "source": "pragma solidity 0.4.24;\n\ninterface ISelfServiceAccessControls {\n\n  function isEnabledForAccount(address account) public view returns (bool);\n\n}\n",
+  "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/ISelfServiceAccessControls.sol",
   "ast": {
-    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v1/ERC165.sol",
+    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/ISelfServiceAccessControls.sol",
     "exportedSymbols": {
-      "ERC165": [
-        603
+      "ISelfServiceAccessControls": [
+        8001
       ]
     },
-    "id": 604,
+    "id": 8002,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 595,
+        "id": 7993,
         "literals": [
           "solidity",
-          "^",
           "0.4",
-          ".21"
+          ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:9"
+        "src": "0:23:26"
       },
       {
         "baseContracts": [],
@@ -55,68 +54,68 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 603,
+        "id": 8001,
         "linearizedBaseContracts": [
-          603
+          8001
         ],
-        "name": "ERC165",
+        "name": "ISelfServiceAccessControls",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": null,
-            "documentation": "@notice Query if a contract implements an interface\n @param interfaceID The interface identifier, as specified in ERC-165\n @dev Interface identification is specified in ERC-165. This function\n  uses less than 30,000 gas.\n @return `true` if the contract implements `interfaceID` and\n  `interfaceID` is not 0xffffffff, `false` otherwise",
-            "id": 602,
+            "documentation": null,
+            "id": 8000,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": true,
             "modifiers": [],
-            "name": "supportsInterface",
+            "name": "isEnabledForAccount",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 598,
+              "id": 7996,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 597,
-                  "name": "interfaceID",
+                  "id": 7995,
+                  "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 602,
-                  "src": "440:18:9",
+                  "scope": 8000,
+                  "src": "96:15:26",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_bytes4",
-                    "typeString": "bytes4"
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
                   },
                   "typeName": {
-                    "id": 596,
-                    "name": "bytes4",
+                    "id": 7994,
+                    "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "440:6:9",
+                    "src": "96:7:26",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_bytes4",
-                      "typeString": "bytes4"
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "439:20:9"
+              "src": "95:17:26"
             },
             "payable": false,
             "returnParameters": {
-              "id": 601,
+              "id": 7999,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 600,
+                  "id": 7998,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 602,
-                  "src": "483:4:9",
+                  "scope": 8000,
+                  "src": "134:4:26",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -124,10 +123,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 599,
+                    "id": 7997,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "483:4:9",
+                    "src": "134:4:26",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -137,41 +136,40 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "482:6:9"
+              "src": "133:6:26"
             },
-            "scope": 603,
-            "src": "413:76:9",
-            "stateMutability": "pure",
+            "scope": 8001,
+            "src": "67:73:26",
+            "stateMutability": "view",
             "superFunction": null,
-            "visibility": "external"
+            "visibility": "public"
           }
         ],
-        "scope": 604,
-        "src": "26:465:9"
+        "scope": 8002,
+        "src": "25:118:26"
       }
     ],
-    "src": "0:492:9"
+    "src": "0:144:26"
   },
   "legacyAST": {
-    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v1/ERC165.sol",
+    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/ISelfServiceAccessControls.sol",
     "exportedSymbols": {
-      "ERC165": [
-        603
+      "ISelfServiceAccessControls": [
+        8001
       ]
     },
-    "id": 604,
+    "id": 8002,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 595,
+        "id": 7993,
         "literals": [
           "solidity",
-          "^",
           "0.4",
-          ".21"
+          ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:9"
+        "src": "0:23:26"
       },
       {
         "baseContracts": [],
@@ -179,68 +177,68 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 603,
+        "id": 8001,
         "linearizedBaseContracts": [
-          603
+          8001
         ],
-        "name": "ERC165",
+        "name": "ISelfServiceAccessControls",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": null,
-            "documentation": "@notice Query if a contract implements an interface\n @param interfaceID The interface identifier, as specified in ERC-165\n @dev Interface identification is specified in ERC-165. This function\n  uses less than 30,000 gas.\n @return `true` if the contract implements `interfaceID` and\n  `interfaceID` is not 0xffffffff, `false` otherwise",
-            "id": 602,
+            "documentation": null,
+            "id": 8000,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": true,
             "modifiers": [],
-            "name": "supportsInterface",
+            "name": "isEnabledForAccount",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 598,
+              "id": 7996,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 597,
-                  "name": "interfaceID",
+                  "id": 7995,
+                  "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 602,
-                  "src": "440:18:9",
+                  "scope": 8000,
+                  "src": "96:15:26",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_bytes4",
-                    "typeString": "bytes4"
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
                   },
                   "typeName": {
-                    "id": 596,
-                    "name": "bytes4",
+                    "id": 7994,
+                    "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "440:6:9",
+                    "src": "96:7:26",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_bytes4",
-                      "typeString": "bytes4"
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "439:20:9"
+              "src": "95:17:26"
             },
             "payable": false,
             "returnParameters": {
-              "id": 601,
+              "id": 7999,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 600,
+                  "id": 7998,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 602,
-                  "src": "483:4:9",
+                  "scope": 8000,
+                  "src": "134:4:26",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -248,10 +246,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 599,
+                    "id": 7997,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "483:4:9",
+                    "src": "134:4:26",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -261,20 +259,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "482:6:9"
+              "src": "133:6:26"
             },
-            "scope": 603,
-            "src": "413:76:9",
-            "stateMutability": "pure",
+            "scope": 8001,
+            "src": "67:73:26",
+            "stateMutability": "view",
             "superFunction": null,
-            "visibility": "external"
+            "visibility": "public"
           }
         ],
-        "scope": 604,
-        "src": "26:465:9"
+        "scope": 8002,
+        "src": "25:118:26"
       }
     ],
-    "src": "0:492:9"
+    "src": "0:144:26"
   },
   "compiler": {
     "name": "solc",
@@ -282,23 +280,11 @@
   },
   "networks": {},
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-11-15T09:13:57.856Z",
+  "updatedAt": "2019-11-15T10:36:42.032Z",
   "devdoc": {
-    "methods": {
-      "supportsInterface(bytes4)": {
-        "details": "Interface identification is specified in ERC-165. This function  uses less than 30,000 gas.",
-        "params": {
-          "interfaceID": "The interface identifier, as specified in ERC-165"
-        },
-        "return": "`true` if the contract implements `interfaceID` and  `interfaceID` is not 0xffffffff, `false` otherwise"
-      }
-    }
+    "methods": {}
   },
   "userdoc": {
-    "methods": {
-      "supportsInterface(bytes4)": {
-        "notice": "Query if a contract implements an interface"
-      }
-    }
+    "methods": {}
   }
 }

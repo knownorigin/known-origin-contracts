@@ -171,7 +171,7 @@ library SafeMath {
   }
 }
 
-// File: contracts/v2/tools/IKODAV2Controls.sol
+// File: contracts/v2/interfaces/IKODAV2Controls.sol
 
 pragma solidity 0.4.24;
 
