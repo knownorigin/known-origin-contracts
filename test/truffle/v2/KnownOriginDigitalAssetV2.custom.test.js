@@ -38,16 +38,16 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
   const editionType = 1;
 
   const editionNumber1 = 100000;
-  const editionData1 = web3.utils.asciiToHex("editionData1");
-  const editionTokenUri1 = "edition1";
+  const editionData1 = web3.utils.asciiToHex('editionData1');
+  const editionTokenUri1 = 'edition1';
   const edition1Price = etherToWei(0.1);
 
   const editionNumber2 = 200000;
-  const editionData2 = web3.utils.asciiToHex("editionData2");
-  const editionTokenUri2 = "edition2";
+  const editionData2 = web3.utils.asciiToHex('editionData2');
+  const editionTokenUri2 = 'edition2';
   const edition2Price = etherToWei(0.2);
 
-  const BASE_URI = "https://ipfs.infura.io/ipfs/";
+  const BASE_URI = 'https://ipfs.infura.io/ipfs/';
   const MAX_UINT32 = 4294967295;
 
   before(async () => {
@@ -88,18 +88,18 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
     });
 
     it('can be changed', async () => {
-      await this.token.updateTokenBaseURI("http://a-new-ipfs.com");
+      await this.token.updateTokenBaseURI('http://a-new-ipfs.com');
 
       let tokenBaseURI = await this.token.tokenBaseURI();
-      tokenBaseURI.should.be.equal("http://a-new-ipfs.com");
+      tokenBaseURI.should.be.equal('http://a-new-ipfs.com');
     });
 
     it('only invokable from KO', async () => {
-      await assertRevert(this.token.updateTokenBaseURI("http://a-new-ipfs.com", {from: account1}));
+      await assertRevert(this.token.updateTokenBaseURI('http://a-new-ipfs.com', {from: account1}));
     });
 
     it('cannot set invalid address', async () => {
-      await assertRevert(this.token.updateTokenBaseURI(""));
+      await assertRevert(this.token.updateTokenBaseURI(''));
     });
   });
 
@@ -201,7 +201,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
         it('editionData', async () => {
           let editionData = await this.token.editionData(editionNumber1);
-          bytesToString(editionData).should.be.equal("editionData1");
+          bytesToString(editionData).should.be.equal('editionData1');
         });
 
         it('purchaseDatesEdition', async () => {
@@ -385,13 +385,13 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
       describe('updateEditionTokenURI', () => {
         it('can be updated by whitelist', async () => {
-          await this.token.updateEditionTokenURI(editionNumber1, "newUri");
+          await this.token.updateEditionTokenURI(editionNumber1, 'newUri');
           let uri = await this.token.tokenURIEdition(editionNumber1);
-          uri.should.be.equal("https://ipfs.infura.io/ipfs/newUri");
+          uri.should.be.equal('https://ipfs.infura.io/ipfs/newUri');
         });
 
         it('should fail when not whitelisted', async () => {
-          await assertRevert(this.token.updateEditionTokenURI(editionNumber1, "newUri", {from: account1}));
+          await assertRevert(this.token.updateEditionTokenURI(editionNumber1, 'newUri', {from: account1}));
         });
       });
     });
@@ -399,8 +399,8 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
     describe('creating disabled editions', () => {
 
       const editionNumber3 = 300000;
-      const editionData3 = web3.utils.asciiToHex("editionData3");
-      const editionTokenUri3 = "edition3";
+      const editionData3 = web3.utils.asciiToHex('editionData3');
+      const editionTokenUri3 = 'edition3';
       const edition3Price = etherToWei(0.3);
 
       beforeEach(async () => {
@@ -410,7 +410,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       it('edition 3 setup correctly', async () => {
         let edition = await this.token.detailsOfEdition(editionNumber3);
 
-        bytesToString(edition[0]).should.be.equal("editionData3"); //_editionData
+        bytesToString(edition[0]).should.be.equal('editionData3'); //_editionData
         edition[1].should.be.eq.BN(editionType); //_editionType
         edition[2].should.be.eq.BN(0); // _startDate
         edition[3].should.be.eq.BN(MAX_UINT32); // _endDate
@@ -433,8 +433,8 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
     describe('creating disabled full edition', async () => {
 
       const editionNumber3 = 300000;
-      const editionData3 = web3.utils.asciiToHex("editionData3");
-      const editionTokenUri3 = "edition3";
+      const editionData3 = web3.utils.asciiToHex('editionData3');
+      const editionTokenUri3 = 'edition3';
       const edition3Price = etherToWei(0.3);
 
       beforeEach(async () => {
@@ -449,7 +449,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       it('edition setup correctly', async () => {
         let edition = await this.token.detailsOfEdition(editionNumber3);
 
-        bytesToString(edition[0]).should.be.equal("editionData3"); //_editionData
+        bytesToString(edition[0]).should.be.equal('editionData3'); //_editionData
         edition[1].should.be.eq.BN(editionType); //_editionType
         edition[2].should.be.eq.BN(0); // _startDate
         edition[3].should.be.eq.BN(MAX_UINT32); // _endDate
@@ -532,7 +532,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
         it('reverts if tokenURI is not provided', async () => {
           await assertRevert(
-            this.token.createActiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, "", 3, {from: _owner})
+            this.token.createActiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, '', 3, {from: _owner})
           );
         });
 
@@ -584,7 +584,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
         it('reverts if tokenURI is not provided', async () => {
           await assertRevert(
-            this.token.createInactiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, "", 3, {from: _owner})
+            this.token.createInactiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, '', 3, {from: _owner})
           );
         });
 
@@ -655,7 +655,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         logs1[0].event.should.be.equal('EditionCreated');
 
         logs1[0].args._editionNumber.should.be.eq.BN(editionNumber1);
-        bytesToString(logs1[0].args._editionData).should.be.equal("editionData1");
+        bytesToString(logs1[0].args._editionData).should.be.equal('editionData1');
         logs1[0].args._editionType.should.be.eq.BN(editionType);
       });
 
@@ -664,7 +664,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         logs2[0].event.should.be.equal('EditionCreated');
 
         logs2[0].args._editionNumber.should.be.eq.BN(editionNumber2);
-        bytesToString(logs2[0].args._editionData).should.be.equal("editionData2");
+        bytesToString(logs2[0].args._editionData).should.be.equal('editionData2');
         logs2[0].args._editionType.should.be.eq.BN(editionType);
       });
     });
@@ -694,7 +694,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         let tokenURI = await this.token.tokenURI(tokenId1);
         tokenURI.should.be.equal(`${BASE_URI}${editionTokenUri1}`);
 
-        const newTokenUri = "my-new-token-uri";
+        const newTokenUri = 'my-new-token-uri';
         await this.token.setTokenURI(tokenId1, newTokenUri);
 
         tokenURI = await this.token.tokenURI(tokenId1);
@@ -702,7 +702,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       });
 
       it('is rejected unless whitelisted', async () => {
-        await assertRevert(this.token.setTokenURI(tokenId1, "new-uri", {from: account3}));
+        await assertRevert(this.token.setTokenURI(tokenId1, 'new-uri', {from: account3}));
       });
     });
 
@@ -1079,7 +1079,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
         results[0].should.be.eq.BN(editionNumber1);
         results[1].should.be.eq.BN(editionType);
-        bytesToString(results[2]).should.be.equal("editionData1");
+        bytesToString(results[2]).should.be.equal('editionData1');
         results[3].should.be.equal(`https://ipfs.infura.io/ipfs/edition1`);
         results[4].should.be.equal(account1);
       });
@@ -1089,7 +1089,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
         results[0].should.be.eq.BN(editionNumber2);
         results[1].should.be.eq.BN(editionType);
-        bytesToString(results[2]).should.be.equal("editionData2");
+        bytesToString(results[2]).should.be.equal('editionData2');
         results[3].should.be.equal(`https://ipfs.infura.io/ipfs/edition2`);
         results[4].should.be.equal(account2);
       });
@@ -1114,7 +1114,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
         results[0].should.be.eq.BN(editionNumber1);
         results[1].should.be.eq.BN(editionType);
-        bytesToString(results[2]).should.be.equal("editionData1");
+        bytesToString(results[2]).should.be.equal('editionData1');
         results[3].should.be.equal(`${BASE_URI}${editionTokenUri1}`);
         results[4].should.be.equal(account1);
       });
@@ -1124,7 +1124,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
         results[0].should.be.eq.BN(editionNumber2);
         results[1].should.be.eq.BN(editionType);
-        bytesToString(results[2]).should.be.equal("editionData2");
+        bytesToString(results[2]).should.be.equal('editionData2');
         results[3].should.be.equal(`${BASE_URI}${editionTokenUri2}`);
         results[4].should.be.equal(account2);
       });
@@ -1448,7 +1448,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
           results[0].should.be.eq.BN(editionNumber1);
           results[1].should.be.eq.BN(editionType);
-          bytesToString(results[2]).should.be.equal("editionData1");
+          bytesToString(results[2]).should.be.equal('editionData1');
           results[3].should.be.equal(`https://ipfs.infura.io/ipfs/edition1`);
           results[4].should.be.equal(account3);
         });
@@ -1458,7 +1458,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
           results[0].should.be.eq.BN(editionNumber2);
           results[1].should.be.eq.BN(editionType);
-          bytesToString(results[2]).should.be.equal("editionData2");
+          bytesToString(results[2]).should.be.equal('editionData2');
           results[3].should.be.equal(`https://ipfs.infura.io/ipfs/edition2`);
           results[4].should.be.equal(account4);
         });
@@ -1516,8 +1516,8 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
   describe('Under mint', async () => {
 
     const editionNumber3 = 300000;
-    const editionData3 = web3.utils.asciiToHex("editionData3");
-    const editionTokenUri3 = "edition3";
+    const editionData3 = web3.utils.asciiToHex('editionData3');
+    const editionTokenUri3 = 'edition3';
     const edition3Price = etherToWei(0.3);
     const minted = 2;
     const available = 4;
@@ -1529,7 +1529,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
     it('under mint edition 3 is setup correctly', async () => {
       let edition = await this.token.detailsOfEdition(editionNumber3);
 
-      bytesToString(edition[0]).should.be.equal("editionData3"); //_editionData
+      bytesToString(edition[0]).should.be.equal('editionData3'); //_editionData
       edition[1].should.be.eq.BN(editionType); //_editionType
       edition[2].should.be.eq.BN(0); // _startDate
       edition[3].should.be.eq.BN(MAX_UINT32); // _endDate
@@ -1900,7 +1900,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         it('edition 1 setup remains correct', async () => {
           let edition = await this.token.detailsOfEdition(editionNumber1);
 
-          bytesToString(edition[0]).should.be.equal("editionData1"); //_editionData
+          bytesToString(edition[0]).should.be.equal('editionData1'); //_editionData
           edition[1].should.be.eq.BN(editionType); //_editionType
           edition[2].should.be.eq.BN(0); // _startDate
           edition[3].should.be.eq.BN(MAX_UINT32); // _endDate
@@ -1914,19 +1914,19 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         });
 
         it(`tokenData reverts when burnt`, async () => {
-          [_200001, _100002].forEach(async function (token) {
+          [_200001, _100002].forEach(async (token) => {
             await assertRevert(this.token.tokenData(token));
           });
         });
 
         it(`tokenData reverts when burnt`, async () => {
-          [_200001, _100002].forEach(async function (token) {
+          [_200001, _100002].forEach(async (token) => {
             await assertRevert(this.token.tokenData(token));
           });
         });
 
         it('purchaseDatesToken is cleared when burnt', async () => {
-          [_200001, _100002].forEach(async function (token) {
+          [_200001, _100002].forEach(async (token) => {
             let result1 = await this.token.purchaseDatesToken(token);
             result1.map(e => e.toNumber())
               .should.be.deep.equal([0, 0]);
@@ -1934,14 +1934,14 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         });
 
         it('priceInWeiToken is cleared when burnt', async () => {
-          [_200001, _100002].forEach(async function (token) {
+          [_200001, _100002].forEach(async (token) => {
             let result1 = await this.token.priceInWeiToken(token);
             result1.should.be.eq.BN(0);
           });
         });
 
         it('setTokenURI cant be changed once burnt', async () => {
-          await assertRevert(this.token.setTokenURI(_200001, "123", {from: _owner}));
+          await assertRevert(this.token.setTokenURI(_200001, '123', {from: _owner}));
         });
 
       });
