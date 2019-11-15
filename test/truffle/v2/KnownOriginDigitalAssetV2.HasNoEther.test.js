@@ -15,15 +15,15 @@ require('chai')
 contract('HasNoEther', function ([_, owner, anyone]) {
   const amount = web3.utils.toWei('1', 'ether');
 
-  beforeEach(async function () {
+  beforeEach(async () => {
     this.hasNoEther = await KnownOriginDigitalAssetV2.new({from: owner});
   });
 
-  it('should not accept ether in constructor', async function () {
+  it('should not accept ether in constructor', async () => {
     await expectThrow(KnownOriginDigitalAssetV2.new({value: amount}));
   });
 
-  it('should not accept ether', async function () {
+  it('should not accept ether', async () => {
     await expectThrow(
       ethSendTransaction({
         from: owner,
@@ -33,7 +33,7 @@ contract('HasNoEther', function ([_, owner, anyone]) {
     );
   });
 
-  it('should allow owner to reclaim ether', async function () {
+  it('should allow owner to reclaim ether', async () => {
     const startBalance = await ethGetBalance(this.hasNoEther.address);
     assert.equal(startBalance, 0);
 
@@ -53,7 +53,7 @@ contract('HasNoEther', function ([_, owner, anyone]) {
     toBN(ownerFinalBalance).gt(toBN(ownerStartBalance)).should.be.true;
   });
 
-  it('should allow only owner to reclaim ether', async function () {
+  it('should allow only owner to reclaim ether', async () => {
     // Force ether into it
     const forceEther = await ForceEther.new({value: amount});
     await forceEther.destroyAndSend(this.hasNoEther.address);

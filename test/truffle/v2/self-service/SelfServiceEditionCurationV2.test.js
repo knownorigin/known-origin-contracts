@@ -9,7 +9,8 @@ const toBN = require('../../../helpers/toBN');
 const {duration, increaseTo, advanceBlock, latest} = require('../../../helpers/time');
 
 const KnownOriginDigitalAssetV2 = artifacts.require('KnownOriginDigitalAssetV2');
-const SelfServiceEditionCuration = artifacts.require('SelfServiceEditionCuration');
+const SelfServiceEditionCurationV2 = artifacts.require('SelfServiceEditionCurationV2');
+const SelfServiceAccessControls = artifacts.require('SelfServiceAccessControls');
 
 const ArtistAcceptingBidsV2 = artifacts.require('ArtistAcceptingBidsV2');
 
@@ -18,7 +19,7 @@ require('chai')
   .use(bnChai(web3.utils.BN))
   .should();
 
-contract('SelfServiceEditionCuration tests', function (accounts) {
+contract('SelfServiceEditionCurationV2 tests', function (accounts) {
 
   const ROLE_KNOWN_ORIGIN = 1;
   const MAX_UINT32 = 4294967295;
@@ -47,15 +48,18 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
     total: 100
   };
 
-  beforeEach(async function () {
+  beforeEach(async () => {
     // Create KODA
     this.koda = await KnownOriginDigitalAssetV2.new({from: _owner});
 
     // Create Auction
     this.auction = await ArtistAcceptingBidsV2.new(this.koda.address, {from: _owner});
 
+    // Create Self Service Access controls
+    this.accessControls = await SelfServiceAccessControls.new({from: _owner});
+
     // Create Minter
-    this.minter = await SelfServiceEditionCuration.new(this.koda.address, this.auction.address, {from: _owner});
+    this.minter = await SelfServiceEditionCurationV2.new(this.koda.address, this.auction.address, this.accessControls.address, {from: _owner});
 
     // Whitelist the minting contract
     await this.koda.addAddressToAccessControl(this.minter.address, ROLE_KNOWN_ORIGIN, {from: _owner});
@@ -64,42 +68,42 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
     await this.auction.addAddressToWhitelist(this.minter.address, {from: _owner});
   });
 
-  beforeEach(async function () {
+  beforeEach(async () => {
     // Create 2 editions in KODA already
     await this.koda.createActiveEdition(edition1.number, editionData, editionType, 0, 0, edition1.artist, artistCommission, edition1Price, edition1.tokenUri, edition1.total, {from: _owner});
     await this.koda.createActiveEdition(edition2.number, editionData, editionType, 0, 0, edition2.artist, artistCommission, edition1Price, edition2.tokenUri, edition2.total, {from: _owner});
   });
 
-  describe('creating new editions', async function () {
+  describe('creating new editions', async () => {
 
-    describe('failing validation', async function () {
+    describe('failing validation', async () => {
 
-      beforeEach(async function () {
-        await this.minter.setOpenToAllArtist(true, {from: _owner});
+      beforeEach(async () => {
+        await this.accessControls.setOpenToAllArtist(true, {from: _owner});
       });
 
-      it('should fail when creating editions larger than 100', async function () {
+      it('should fail when creating editions larger than 100', async () => {
         await assertRevert(
           this.minter.createEdition(101, etherToWei(1), 0, "123", false, {from: edition2.artist}),
           "Must not exceed max edition size"
         );
       });
 
-      it('should fail when creating editions of size of zero', async function () {
+      it('should fail when creating editions of size of zero', async () => {
         await assertRevert(
           this.minter.createEdition(0, etherToWei(1), 0, "123", false, {from: edition2.artist}),
           "Must be at least one available in edition"
         );
       });
 
-      it('should fail when token URI not defined', async function () {
+      it('should fail when token URI not defined', async () => {
         await assertRevert(
           this.minter.createEdition(100, etherToWei(1), 0, "", false, {from: edition2.artist}),
           "Token URI is missing"
         );
       });
 
-      it('should fail if artist not on the KO platform and minter IS open to all', async function () {
+      it('should fail if artist not on the KO platform and minter IS open to all', async () => {
         await assertRevert(
           this.minter.createEdition(100, etherToWei(1), 0, "232323", false, {from: koCommission}),
           "Can only mint your own once we have enabled you on the platform"
@@ -107,16 +111,16 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
       });
     });
 
-    describe('success without enabling auctions', async function () {
+    describe('success without enabling auctions', async () => {
 
-      describe('when enabled for all artists', async function () {
+      describe('when enabled for all artists', async () => {
 
-        beforeEach(async function () {
+        beforeEach(async () => {
           // enable for all artists on the platform
-          await this.minter.setOpenToAllArtist(true, {from: _owner});
+          await this.accessControls.setOpenToAllArtist(true, {from: _owner});
         });
 
-        it('unknown artists should NOT be able to create edition', async function () {
+        it('unknown artists should NOT be able to create edition', async () => {
           const edition3 = {
             total: 10,
             tokenUri: "ipfs://edition3",
@@ -130,14 +134,17 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
 
       });
 
-      describe('when enabled for selected artists', async function () {
-        beforeEach(async function () {
-          await this.minter.setOpenToAllArtist(false, {from: _owner});
+      describe('when enabled for selected artists', async () => {
+        beforeEach(async () => {
+          await this.accessControls.setOpenToAllArtist(false, {from: _owner});
           // enable only for edition1.artist
-          await this.minter.setAllowedArtist(edition1.artist, true, {from: _owner});
+          await this.accessControls.setAllowedArtist(edition1.artist, true, {from: _owner});
+
+          // Increase to 2 a day
+          await this.minter.setMaxInvocations(2, {from: _owner});
         });
 
-        it('artist 1 should be able to create multiple editions', async function () {
+        it('artist 1 should be able to create multiple editions', async () => {
           const edition3 = {
             total: 10,
             tokenUri: "ipfs://edition3",
@@ -157,7 +164,7 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
             price: etherToWei(2)
           };
           const {logs: edition2Logs} = await this.minter.createEdition(edition4.total, edition4.price, 0, edition4.tokenUri, false, {from: edition1.artist});
-          console.log(edition2Logs);
+          // console.log(edition2Logs);
 
           edition2Logs[0].event.should.be.equal('SelfServiceEditionCreated');
           edition2Logs[0].args._editionNumber.should.be.eq.BN(20300); // last edition no. is 20200 and has total of 10 in it = 20210 - rounded up to nearest 100 = 20300
@@ -166,7 +173,7 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
           edition2Logs[0].args._totalAvailable.should.be.eq.BN(edition4.total);
         });
 
-        it('artist 2 should NOT be able to create edition', async function () {
+        it('artist 2 should NOT be able to create edition', async () => {
           const edition3 = {
             total: 10,
             tokenUri: "ipfs://edition3",
@@ -181,13 +188,13 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
 
     });
 
-    describe('success an enabling auctions', async function () {
+    describe('success an enabling auctions', async () => {
 
-      beforeEach(async function () {
-        await this.minter.setOpenToAllArtist(true, {from: _owner});
+      beforeEach(async () => {
+        await this.accessControls.setOpenToAllArtist(true, {from: _owner});
       });
 
-      it('can mint new edition and enables auction', async function () {
+      it('can mint new edition and enables auction', async () => {
         const edition3 = {
           total: 10,
           tokenUri: "ipfs://edition3",
@@ -228,13 +235,13 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
 
     });
 
-    describe('creating several editions in a row', async function () {
+    describe('creating several editions in a row', async () => {
 
-      beforeEach(async function () {
-        await this.minter.setOpenToAllArtist(true, {from: _owner});
+      beforeEach(async () => {
+        await this.accessControls.setOpenToAllArtist(true, {from: _owner});
       });
 
-      it('successful creates all the right editions', async function () {
+      it('successful creates all the right editions', async () => {
         const {logs: edition1} = await this.minter.createEditionFor(accounts[2], 17, etherToWei(1), 0, "111-111-111", true, {from: _owner});
         validateEditionCreatedLog(edition1, {
           _editionNumber: 20200,
@@ -304,18 +311,158 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
     });
   });
 
-  describe('invocation restrictions', async function () {
+  describe('invocation restrictions', async () => {
 
-    beforeEach(async function () {
-      await this.minter.setOpenToAllArtist(true, {from: _owner});
+    beforeEach(async () => {
+      await this.accessControls.setOpenToAllArtist(true, {from: _owner});
 
-      // lower max for testing
-      await this.minter.maxInvocations(2, {from: _owner});
+      const maxInvocations = await this.minter.maxInvocations();
+      maxInvocations.should.be.eq.BN(1);
     });
 
-    describe('when enforcing invocation checks', async function () {
+    describe('when enforcing invocation checks', async () => {
 
-      it('will fail when exceeds invocations in time period', async function () {
+      it('will fail when exceeds invocations in time period', async () => {
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+
+        (await this.minter.invocationsInTimePeriod(edition1.artist)).should.be.eq.BN(1);
+        (await this.minter.canCreateAnotherEdition(edition1.artist)).should.be.equal(false);
+
+        await assertRevert(
+          this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist}),
+          "Exceeded max invocations for time period"
+        );
+      });
+
+      it('can only mint set number within the time frame', async () => {
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+
+        await assertRevert(
+          this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist}),
+          "Exceeded max invocations for time period"
+        );
+
+        const twentyThreeHours = toBN((await latest())).add(toBN(duration.hours(23)));
+        await increaseTo(twentyThreeHours);
+
+        await assertRevert(
+          this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist}),
+          "Exceeded max invocations for time period"
+        );
+
+        const oneHour = toBN((await latest())).add(toBN(duration.hours(1)));
+        await increaseTo(oneHour);
+
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+
+        await assertRevert(
+          this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist}),
+          "Exceeded max invocations for time period"
+        );
+      });
+
+      it('can mint more once the invocation time period pass', async () => {
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+
+        await assertRevert(
+          this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist}),
+          "Exceeded max invocations for time period"
+        );
+
+        const oneDay = toBN((await latest())).add(toBN(duration.days(1)));
+        await increaseTo(oneDay);
+
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+
+        await assertRevert(
+          this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist}),
+          "Exceeded max invocations for time period"
+        );
+
+        // Check still failing after an hour
+        const oneHour = toBN((await latest())).add(toBN(duration.hours(1)));
+        await increaseTo(oneHour);
+        await assertRevert(
+          this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist}),
+          "Exceeded max invocations for time period"
+        );
+
+        // Move on 23 hrs to complete the day and check working again
+        await increaseTo(toBN((await latest())).add(toBN(duration.hours(23))));
+
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+      });
+
+      it('when check disabled, you can mint as mint as you like', async () => {
+        await this.minter.setDisableInvocationCheck(true, {from: _owner});
+
+        // Mint lots
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+      });
+
+    });
+  });
+
+  describe('with an increased number of invocations per day', async () => {
+
+    beforeEach(async () => {
+      await this.accessControls.setOpenToAllArtist(true, {from: _owner});
+
+      // Increase to 3 a day
+      await this.minter.setMaxInvocations(3, {from: _owner});
+
+      const maxInvocations = await this.minter.maxInvocations();
+      maxInvocations.should.be.eq.BN(3);
+    });
+
+    describe('when enforcing invocation checks', async () => {
+
+      it('will fail when exceeds invocations in time period', async () => {
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+        (await this.minter.invocationsInTimePeriod(edition1.artist)).should.be.eq.BN(1);
+        (await this.minter.canCreateAnotherEdition(edition1.artist)).should.be.equal(true);
+
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+        (await this.minter.invocationsInTimePeriod(edition1.artist)).should.be.eq.BN(2);
+        (await this.minter.canCreateAnotherEdition(edition1.artist)).should.be.equal(true);
+
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+        (await this.minter.invocationsInTimePeriod(edition1.artist)).should.be.eq.BN(3);
+        (await this.minter.canCreateAnotherEdition(edition1.artist)).should.be.equal(false);
+
+        await assertRevert(
+          this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist}),
+          "Exceeded max invocations for time period"
+        );
+      });
+
+      it('can only mint set number within the time frame', async () => {
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
+
+        await assertRevert(
+          this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist}),
+          "Exceeded max invocations for time period"
+        );
+
+        const twentyThreeHours = (await latest()) + duration.hours(23);
+        await increaseTo(twentyThreeHours);
+
+        await assertRevert(
+          this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist}),
+          "Exceeded max invocations for time period"
+        );
+
+        const oneHour = (await latest()) + duration.hours(1);
+        await increaseTo(oneHour);
+
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
         await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
         await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
 
@@ -325,7 +472,8 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
         );
       });
 
-      it('can mint more once the invocation time period pass', async function () {
+      it('can mint more once the invocation time period pass', async () => {
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
         await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
         await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
 
@@ -337,6 +485,7 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
         const oneDay = (await latest()) + duration.days(1);
         await increaseTo(oneDay);
 
+        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
         await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
         await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
 
@@ -357,10 +506,9 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
         await increaseTo(((await latest()) + duration.hours(23)));
 
         await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
-        await this.minter.createEdition(10, edition1Price, 0, "tokenUri", false, {from: edition1.artist});
       });
 
-      it('when check disabled, you can mint as mint as you like', async function () {
+      it('when check disabled, you can mint as mint as you like', async () => {
         await this.minter.setDisableInvocationCheck(true, {from: _owner});
 
         // Mint lots
@@ -376,4 +524,31 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
 
   });
 
+  describe('price restrictions', async () => {
+
+    beforeEach(async () => {
+      await this.accessControls.setOpenToAllArtist(true, {from: _owner});
+      await this.minter.setMinPricePerEdition(etherToWei(1), {from: _owner});
+    });
+
+    it('min price should be set', async () => {
+      const minPricePerEdition = await this.minter.minPricePerEdition();
+      minPricePerEdition.should.be.eq.BN(etherToWei(1));
+    });
+
+    it('should fail minting when price less than 1 ETH', async () => {
+      await assertRevert(
+        this.minter.createEdition(10, etherToWei(9.99), 0, "tokenUri", false, {from: edition1.artist}),
+        "Price must be greater than minimum"
+      );
+    });
+
+    it('should success minting when price is 1 ETH', async () => {
+      await this.minter.createEdition(10, etherToWei(1), 0, "tokenUri", false, {from: edition1.artist});
+    });
+
+    it('should success minting when price is greater than 1 ETH', async () => {
+      await this.minter.createEdition(10, etherToWei(1.1), 0, "tokenUri", false, {from: edition1.artist});
+    });
+  });
 });

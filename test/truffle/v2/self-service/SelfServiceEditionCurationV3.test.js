@@ -47,7 +47,7 @@ contract('SelfServiceEditionCurationV3 tests', function (accounts) {
     total: 100
   };
 
-  beforeEach(async function () {
+  beforeEach(async () => {
     // Create KODA
     this.koda = await KnownOriginDigitalAssetV2.new({from: _owner});
 
@@ -69,42 +69,42 @@ contract('SelfServiceEditionCurationV3 tests', function (accounts) {
     this.freezeWindow = await this.minter.freezeWindow();
   });
 
-  beforeEach(async function () {
+  beforeEach(async () => {
     // Create 2 editions in KODA already
     await this.koda.createActiveEdition(edition1.number, editionData, editionType, 0, 0, edition1.artist, artistCommission, edition1Price, edition1.tokenUri, edition1.total, {from: _owner});
     await this.koda.createActiveEdition(edition2.number, editionData, editionType, 0, 0, edition2.artist, artistCommission, edition1Price, edition2.tokenUri, edition2.total, {from: _owner});
   });
 
-  describe('creating new editions', async function () {
+  describe('creating new editions', async () => {
 
-    describe('failing validation', async function () {
+    describe('failing validation', async () => {
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         await this.accessControls.setOpenToAllArtist(true, {from: _owner});
       });
 
-      it('should fail when creating editions larger than 100', async function () {
+      it('should fail when creating editions larger than 100', async () => {
         await assertRevert(
           this.minter.createEdition(101, etherToWei(1), 0, '123', false, {from: edition2.artist}),
           'Must not exceed max edition size'
         );
       });
 
-      it('should fail when creating editions of size of zero', async function () {
+      it('should fail when creating editions of size of zero', async () => {
         await assertRevert(
           this.minter.createEdition(0, etherToWei(1), 0, '123', false, {from: edition2.artist}),
           'Must be at least one available in edition'
         );
       });
 
-      it('should fail when token URI not defined', async function () {
+      it('should fail when token URI not defined', async () => {
         await assertRevert(
           this.minter.createEdition(100, etherToWei(1), 0, '', false, {from: edition2.artist}),
           'Token URI is missing'
         );
       });
 
-      it('should fail if artist not on the KO platform and minter IS open to all', async function () {
+      it('should fail if artist not on the KO platform and minter IS open to all', async () => {
         await assertRevert(
           this.minter.createEdition(100, etherToWei(1), 0, '232323', false, {from: koCommission}),
           'Can only mint your own once we have enabled you on the platform'
@@ -112,16 +112,16 @@ contract('SelfServiceEditionCurationV3 tests', function (accounts) {
       });
     });
 
-    describe('success without enabling auctions', async function () {
+    describe('success without enabling auctions', async () => {
 
-      describe('when enabled for all artists', async function () {
+      describe('when enabled for all artists', async () => {
 
-        beforeEach(async function () {
+        beforeEach(async () => {
           // enable for all artists on the platform
           await this.accessControls.setOpenToAllArtist(true, {from: _owner});
         });
 
-        it('unknown artists should NOT be able to create edition', async function () {
+        it('unknown artists should NOT be able to create edition', async () => {
           const edition3 = {
             total: 10,
             tokenUri: 'ipfs://edition3',
@@ -135,15 +135,15 @@ contract('SelfServiceEditionCurationV3 tests', function (accounts) {
 
       });
 
-      describe('when enabled for selected artists', async function () {
-        beforeEach(async function () {
+      describe('when enabled for selected artists', async () => {
+        beforeEach(async () => {
           await this.accessControls.setOpenToAllArtist(false, {from: _owner});
 
           // enable only for edition1.artist
           await this.accessControls.setAllowedArtist(edition1.artist, true, {from: _owner});
         });
 
-        it('artist 1 should be not able to create multiple editions without waiting', async function () {
+        it('artist 1 should be not able to create multiple editions without waiting', async () => {
           const edition3 = {
             total: 10,
             tokenUri: 'ipfs://edition3',
@@ -169,7 +169,7 @@ contract('SelfServiceEditionCurationV3 tests', function (accounts) {
           );
         });
 
-        it('artist 1 should be not able to create multiple editions without waiting less than window', async function () {
+        it('artist 1 should be not able to create multiple editions without waiting less than window', async () => {
           const edition3 = {
             total: 10,
             tokenUri: 'ipfs://edition3',
@@ -201,7 +201,7 @@ contract('SelfServiceEditionCurationV3 tests', function (accounts) {
           );
         });
 
-        it('artist 1 should be able to create multiple editions if they wait for new window', async function () {
+        it('artist 1 should be able to create multiple editions if they wait for new window', async () => {
           const edition3 = {
             total: 10,
             tokenUri: 'ipfs://edition3',
@@ -238,7 +238,7 @@ contract('SelfServiceEditionCurationV3 tests', function (accounts) {
           edition2Logs[0].args._totalAvailable.should.be.eq.BN(edition4.total);
         });
 
-        it('artist 2 should NOT be able to create edition', async function () {
+        it('artist 2 should NOT be able to create edition', async () => {
           const edition3 = {
             total: 10,
             tokenUri: 'ipfs://edition3',
@@ -253,13 +253,13 @@ contract('SelfServiceEditionCurationV3 tests', function (accounts) {
 
     });
 
-    describe('success an enabling auctions', async function () {
+    describe('success an enabling auctions', async () => {
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         await this.accessControls.setOpenToAllArtist(true, {from: _owner});
       });
 
-      it('can mint new edition and enables auction', async function () {
+      it('can mint new edition and enables auction', async () => {
         const edition3 = {
           total: 10,
           tokenUri: 'ipfs://edition3',
@@ -300,13 +300,13 @@ contract('SelfServiceEditionCurationV3 tests', function (accounts) {
 
     });
 
-    describe('creating several editions for an artist in a row', async function () {
+    describe('creating several editions for an artist in a row', async () => {
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         await this.accessControls.setOpenToAllArtist(true, {from: _owner});
       });
 
-      it('successful creates all the right editions', async function () {
+      it('successful creates all the right editions', async () => {
         const {logs: edition1} = await this.minter.createEditionFor(accounts[2], 17, etherToWei(1), 0, '111-111-111', true, {from: _owner});
         validateEditionCreatedLog(edition1, {
           _editionNumber: 20200,
@@ -376,30 +376,30 @@ contract('SelfServiceEditionCurationV3 tests', function (accounts) {
     });
   });
 
-  describe('price restrictions', async function () {
+  describe('price restrictions', async () => {
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.accessControls.setOpenToAllArtist(true, {from: _owner});
       await this.minter.setMinPricePerEdition(etherToWei(1), {from: _owner});
     });
 
-    it('min price should be set', async function () {
+    it('min price should be set', async () => {
       const minPricePerEdition = await this.minter.minPricePerEdition();
       minPricePerEdition.should.be.eq.BN(etherToWei(1));
     });
 
-    it('should fail minting when price less than 1 ETH', async function () {
+    it('should fail minting when price less than 1 ETH', async () => {
       await assertRevert(
         this.minter.createEdition(10, etherToWei(9.99), 0, 'tokenUri', false, {from: edition1.artist}),
         'Price must be greater than minimum'
       );
     });
 
-    it('should success minting when price is 1 ETH', async function () {
+    it('should success minting when price is 1 ETH', async () => {
       await this.minter.createEdition(10, etherToWei(1), 0, 'tokenUri', false, {from: edition1.artist});
     });
 
-    it('should success minting when price is greater than 1 ETH', async function () {
+    it('should success minting when price is greater than 1 ETH', async () => {
       await this.minter.createEdition(10, etherToWei(1.1), 0, 'tokenUri', false, {from: edition1.artist});
     });
   });
