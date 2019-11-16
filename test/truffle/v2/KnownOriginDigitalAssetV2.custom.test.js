@@ -1926,11 +1926,11 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         });
 
         it('purchaseDatesToken is cleared when burnt', async () => {
-          [_200001, _100002].forEach(async (token) => {
-            let result1 = await this.token.purchaseDatesToken(token);
-            result1.map(e => e.toNumber())
-              .should.be.deep.equal([0, 0]);
-          });
+          for (const token of [_200001, _100002]) {
+            let {_startDate, _endDate} = await this.token.purchaseDatesToken(token);
+            _endDate.toNumber().should.be.deep.equal(0);
+            _startDate.toNumber().should.be.deep.equal(0);
+          }
         });
 
         it('priceInWeiToken is cleared when burnt', async () => {
