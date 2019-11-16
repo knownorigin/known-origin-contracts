@@ -166,15 +166,15 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.4.24+commit.e67f0147\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"_withdrawalAccount\",\"type\":\"address\"}],\"name\":\"withdrawStuckEther\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"account\",\"type\":\"address\"}],\"name\":\"isEnabledForAccount\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"address\"}],\"name\":\"allowedArtists\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_artist\",\"type\":\"address\"},{\"name\":\"_allowed\",\"type\":\"bool\"}],\"name\":\"setAllowedArtist\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_openToAllArtist\",\"type\":\"bool\"}],\"name\":\"setOpenToAllArtist\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"openToAllArtist\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"}],\"name\":\"OwnershipRenounced\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"isEnabledForAccount(address)\":{\"details\":\"Checks to see if the account can create editions\"},\"renounceOwnership()\":{\"details\":\"Allows the current owner to relinquish control of the contract.\"},\"setAllowedArtist(address,bool)\":{\"details\":\"Controls who can call this contractOnly callable from owner\"},\"setOpenToAllArtist(bool)\":{\"details\":\"Controls is the contract is open to allOnly callable from owner\"},\"transferOwnership(address)\":{\"details\":\"Allows the current owner to transfer control of the contract to a newOwner.\",\"params\":{\"_newOwner\":\"The address to transfer ownership to.\"}},\"withdrawStuckEther(address)\":{\"details\":\"Allows for the ability to extract stuck etherOnly callable from owner\"}}},\"userdoc\":{\"methods\":{\"renounceOwnership()\":{\"notice\":\"Renouncing to ownership will leave the contract without an owner. It will not be possible to call the functions with the `onlyOwner` modifier anymore.\"}}}},\"settings\":{\"compilationTarget\":{\"/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/tools/SelfServiceAccessControls.sol\":\"SelfServiceAccessControls\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/ISelfServiceAccessControls.sol\":{\"keccak256\":\"0x189255f192288ea0e5587badfe170d615703979d459aaf1951c336ed04069b79\",\"urls\":[\"bzzr://6bb929e11ea3c9094ca8d6d6a4ee97c158c09b180f8288fa0ae2c2db734e5571\"]},\"/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/tools/SelfServiceAccessControls.sol\":{\"keccak256\":\"0x467c7e97ccf604eb201954ba327f849f5ddb5cc6b6cb3c365052d7911411ba53\",\"urls\":[\"bzzr://df9566d26c24929dab8147e343f19beefd2d2dda4ab13c5c539b3138ed85faba\"]},\"openzeppelin-solidity/contracts/ownership/Ownable.sol\":{\"keccak256\":\"0x84c7090c27cf3657b73d9e26b6b316975fa0bd233b8169f254de0c3b3acfaefc\",\"urls\":[\"bzzr://b983355647976c1daa5de581a1b6a41be9c5adc17cce257b8679649db78f8a11\"]}},\"version\":1}",
-  "bytecode": "0x60806040526002805460ff1916905560008054600160a060020a031916331790556104a48061002f6000396000f3006080604052600436106100985763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166326ccd77a811461009d5780632bd3152d146100c057806346f7c98a146100f5578063715018a6146101165780638da5cb5b1461012b578063a2ed40881461015c578063df282d9114610182578063e29cda481461019c578063f2fde38b146101b1575b600080fd5b3480156100a957600080fd5b506100be600160a060020a03600435166101d2565b005b3480156100cc57600080fd5b506100e1600160a060020a036004351661029a565b604080519115158252519081900360200190f35b34801561010157600080fd5b506100e1600160a060020a03600435166102d3565b34801561012257600080fd5b506100be6102e8565b34801561013757600080fd5b50610140610354565b60408051600160a060020a039092168252519081900360200190f35b34801561016857600080fd5b506100be600160a060020a03600435166024351515610363565b34801561018e57600080fd5b506100be60043515156103a5565b3480156101a857600080fd5b506100e16103cf565b3480156101bd57600080fd5b506100be600160a060020a03600435166103d8565b600054600160a060020a031633146101e957600080fd5b600160a060020a038116151561026057604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601860248201527f496e76616c696420616464726573732070726f76696465640000000000000000604482015290519081900360640190fd5b604051600160a060020a03821690303180156108fc02916000818181858888f19350505050158015610296573d6000803e3d6000fd5b5050565b60025460009060ff16156102b0575060016102ce565b50600160a060020a03811660009081526001602052604090205460ff165b919050565b60016020526000908152604090205460ff1681565b600054600160a060020a031633146102ff57600080fd5b60008054604051600160a060020a03909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031681565b600054600160a060020a0316331461037a57600080fd5b600160a060020a03919091166000908152600160205260409020805460ff1916911515919091179055565b600054600160a060020a031633146103bc57600080fd5b6002805460ff1916911515919091179055565b60025460ff1681565b600054600160a060020a031633146103ef57600080fd5b6103f8816103fb565b50565b600160a060020a038116151561041057600080fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820fcc6e7599f40414ef068c27a1578df7dfcceb29f0cbf7c2df85f97795b10832a0029",
-  "deployedBytecode": "0x6080604052600436106100985763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166326ccd77a811461009d5780632bd3152d146100c057806346f7c98a146100f5578063715018a6146101165780638da5cb5b1461012b578063a2ed40881461015c578063df282d9114610182578063e29cda481461019c578063f2fde38b146101b1575b600080fd5b3480156100a957600080fd5b506100be600160a060020a03600435166101d2565b005b3480156100cc57600080fd5b506100e1600160a060020a036004351661029a565b604080519115158252519081900360200190f35b34801561010157600080fd5b506100e1600160a060020a03600435166102d3565b34801561012257600080fd5b506100be6102e8565b34801561013757600080fd5b50610140610354565b60408051600160a060020a039092168252519081900360200190f35b34801561016857600080fd5b506100be600160a060020a03600435166024351515610363565b34801561018e57600080fd5b506100be60043515156103a5565b3480156101a857600080fd5b506100e16103cf565b3480156101bd57600080fd5b506100be600160a060020a03600435166103d8565b600054600160a060020a031633146101e957600080fd5b600160a060020a038116151561026057604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601860248201527f496e76616c696420616464726573732070726f76696465640000000000000000604482015290519081900360640190fd5b604051600160a060020a03821690303180156108fc02916000818181858888f19350505050158015610296573d6000803e3d6000fd5b5050565b60025460009060ff16156102b0575060016102ce565b50600160a060020a03811660009081526001602052604090205460ff165b919050565b60016020526000908152604090205460ff1681565b600054600160a060020a031633146102ff57600080fd5b60008054604051600160a060020a03909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031681565b600054600160a060020a0316331461037a57600080fd5b600160a060020a03919091166000908152600160205260409020805460ff1916911515919091179055565b600054600160a060020a031633146103bc57600080fd5b6002805460ff1916911515919091179055565b60025460ff1681565b600054600160a060020a031633146103ef57600080fd5b6103f8816103fb565b50565b600160a060020a038116151561041057600080fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820fcc6e7599f40414ef068c27a1578df7dfcceb29f0cbf7c2df85f97795b10832a0029",
+  "metadata": "{\"compiler\":{\"version\":\"0.4.24+commit.e67f0147\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"_withdrawalAccount\",\"type\":\"address\"}],\"name\":\"withdrawStuckEther\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"account\",\"type\":\"address\"}],\"name\":\"isEnabledForAccount\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"address\"}],\"name\":\"allowedArtists\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_artist\",\"type\":\"address\"},{\"name\":\"_allowed\",\"type\":\"bool\"}],\"name\":\"setAllowedArtist\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_openToAllArtist\",\"type\":\"bool\"}],\"name\":\"setOpenToAllArtist\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"openToAllArtist\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"}],\"name\":\"OwnershipRenounced\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"isEnabledForAccount(address)\":{\"details\":\"Checks to see if the account can create editions\"},\"renounceOwnership()\":{\"details\":\"Allows the current owner to relinquish control of the contract.\"},\"setAllowedArtist(address,bool)\":{\"details\":\"Controls who can call this contractOnly callable from owner\"},\"setOpenToAllArtist(bool)\":{\"details\":\"Controls is the contract is open to allOnly callable from owner\"},\"transferOwnership(address)\":{\"details\":\"Allows the current owner to transfer control of the contract to a newOwner.\",\"params\":{\"_newOwner\":\"The address to transfer ownership to.\"}},\"withdrawStuckEther(address)\":{\"details\":\"Allows for the ability to extract stuck etherOnly callable from owner\"}}},\"userdoc\":{\"methods\":{\"renounceOwnership()\":{\"notice\":\"Renouncing to ownership will leave the contract without an owner. It will not be possible to call the functions with the `onlyOwner` modifier anymore.\"}}}},\"settings\":{\"compilationTarget\":{\"/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/self-service/SelfServiceAccessControls.sol\":\"SelfServiceAccessControls\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/ISelfServiceAccessControls.sol\":{\"keccak256\":\"0x189255f192288ea0e5587badfe170d615703979d459aaf1951c336ed04069b79\",\"urls\":[\"bzzr://6bb929e11ea3c9094ca8d6d6a4ee97c158c09b180f8288fa0ae2c2db734e5571\"]},\"/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/self-service/SelfServiceAccessControls.sol\":{\"keccak256\":\"0x467c7e97ccf604eb201954ba327f849f5ddb5cc6b6cb3c365052d7911411ba53\",\"urls\":[\"bzzr://df9566d26c24929dab8147e343f19beefd2d2dda4ab13c5c539b3138ed85faba\"]},\"openzeppelin-solidity/contracts/ownership/Ownable.sol\":{\"keccak256\":\"0x84c7090c27cf3657b73d9e26b6b316975fa0bd233b8169f254de0c3b3acfaefc\",\"urls\":[\"bzzr://b983355647976c1daa5de581a1b6a41be9c5adc17cce257b8679649db78f8a11\"]}},\"version\":1}",
+  "bytecode": "0x60806040526002805460ff1916905560008054600160a060020a031916331790556104a48061002f6000396000f3006080604052600436106100985763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166326ccd77a811461009d5780632bd3152d146100c057806346f7c98a146100f5578063715018a6146101165780638da5cb5b1461012b578063a2ed40881461015c578063df282d9114610182578063e29cda481461019c578063f2fde38b146101b1575b600080fd5b3480156100a957600080fd5b506100be600160a060020a03600435166101d2565b005b3480156100cc57600080fd5b506100e1600160a060020a036004351661029a565b604080519115158252519081900360200190f35b34801561010157600080fd5b506100e1600160a060020a03600435166102d3565b34801561012257600080fd5b506100be6102e8565b34801561013757600080fd5b50610140610354565b60408051600160a060020a039092168252519081900360200190f35b34801561016857600080fd5b506100be600160a060020a03600435166024351515610363565b34801561018e57600080fd5b506100be60043515156103a5565b3480156101a857600080fd5b506100e16103cf565b3480156101bd57600080fd5b506100be600160a060020a03600435166103d8565b600054600160a060020a031633146101e957600080fd5b600160a060020a038116151561026057604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601860248201527f496e76616c696420616464726573732070726f76696465640000000000000000604482015290519081900360640190fd5b604051600160a060020a03821690303180156108fc02916000818181858888f19350505050158015610296573d6000803e3d6000fd5b5050565b60025460009060ff16156102b0575060016102ce565b50600160a060020a03811660009081526001602052604090205460ff165b919050565b60016020526000908152604090205460ff1681565b600054600160a060020a031633146102ff57600080fd5b60008054604051600160a060020a03909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031681565b600054600160a060020a0316331461037a57600080fd5b600160a060020a03919091166000908152600160205260409020805460ff1916911515919091179055565b600054600160a060020a031633146103bc57600080fd5b6002805460ff1916911515919091179055565b60025460ff1681565b600054600160a060020a031633146103ef57600080fd5b6103f8816103fb565b50565b600160a060020a038116151561041057600080fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820e3a21f5c74cc95a6fa219fb2a62ab49a320db201715eafae98efdbcf58d12f2e0029",
+  "deployedBytecode": "0x6080604052600436106100985763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166326ccd77a811461009d5780632bd3152d146100c057806346f7c98a146100f5578063715018a6146101165780638da5cb5b1461012b578063a2ed40881461015c578063df282d9114610182578063e29cda481461019c578063f2fde38b146101b1575b600080fd5b3480156100a957600080fd5b506100be600160a060020a03600435166101d2565b005b3480156100cc57600080fd5b506100e1600160a060020a036004351661029a565b604080519115158252519081900360200190f35b34801561010157600080fd5b506100e1600160a060020a03600435166102d3565b34801561012257600080fd5b506100be6102e8565b34801561013757600080fd5b50610140610354565b60408051600160a060020a039092168252519081900360200190f35b34801561016857600080fd5b506100be600160a060020a03600435166024351515610363565b34801561018e57600080fd5b506100be60043515156103a5565b3480156101a857600080fd5b506100e16103cf565b3480156101bd57600080fd5b506100be600160a060020a03600435166103d8565b600054600160a060020a031633146101e957600080fd5b600160a060020a038116151561026057604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601860248201527f496e76616c696420616464726573732070726f76696465640000000000000000604482015290519081900360640190fd5b604051600160a060020a03821690303180156108fc02916000818181858888f19350505050158015610296573d6000803e3d6000fd5b5050565b60025460009060ff16156102b0575060016102ce565b50600160a060020a03811660009081526001602052604090205460ff165b919050565b60016020526000908152604090205460ff1681565b600054600160a060020a031633146102ff57600080fd5b60008054604051600160a060020a03909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031681565b600054600160a060020a0316331461037a57600080fd5b600160a060020a03919091166000908152600160205260409020805460ff1916911515919091179055565b600054600160a060020a031633146103bc57600080fd5b6002805460ff1916911515919091179055565b60025460ff1681565b600054600160a060020a031633146103ef57600080fd5b6103f8816103fb565b50565b600160a060020a038116151561041057600080fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820e3a21f5c74cc95a6fa219fb2a62ab49a320db201715eafae98efdbcf58d12f2e0029",
   "sourceMap": "120:1292:30:-;;;386:35;;;-1:-1:-1;;386:35:30;;;416:5;567:18:45;;-1:-1:-1;;;;;;567:18:45;575:10;567:18;;;120:1292:30;;;;;;",
   "deployedSourceMap": "120:1292:30:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1201:209;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1201:209:30;-1:-1:-1;;;;;1201:209:30;;;;;;;928:166;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;928:166:30;-1:-1:-1;;;;;928:166:30;;;;;;;;;;;;;;;;;;;;;;;269:46;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;269:46:30;-1:-1:-1;;;;;269:46:30;;;;;1001:111:45;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1001:111:45;;;;238:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:45;;;;;;;;-1:-1:-1;;;;;238:20:45;;;;;;;;;;;;;;733:120:30;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;733:120:30;-1:-1:-1;;;;;733:120:30;;;;;;;;;523:113;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;523:113:30;;;;;;;386:35;;8:9:-1;5:2;;;30:1;27;20:12;5:2;386:35:30;;;;1274:103:45;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1274:103:45;-1:-1:-1;;;;;1274:103:45;;;;;1201:209:30;719:5:45;;-1:-1:-1;;;;;719:5:45;705:10;:19;697:28;;;;;;-1:-1:-1;;;;;1288:32:30;;;;1280:69;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1355:50;;-1:-1:-1;;;;;1355:27:30;;;1391:4;1383:21;1355:50;;;;;;;;;1383:21;1355:27;:50;;;;;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1355:50:30;1201:209;:::o;928:166::-;1011:15;;995:4;;1011:15;;1007:47;;;-1:-1:-1;1043:4:30;1036:11;;1007:47;-1:-1:-1;;;;;;1066:23:30;;;;;;:14;:23;;;;;;;;928:166;;;;:::o;269:46::-;;;;;;;;;;;;;;;:::o;1001:111:45:-;719:5;;-1:-1:-1;;;;;719:5:45;705:10;:19;697:28;;;;;;1077:5;;;1058:25;;-1:-1:-1;;;;;1077:5:45;;;;1058:25;;;1105:1;1089:18;;-1:-1:-1;;1089:18:45;;;1001:111::o;238:20::-;;;-1:-1:-1;;;;;238:20:45;;:::o;733:120:30:-;719:5:45;;-1:-1:-1;;;;;719:5:45;705:10;:19;697:28;;;;;;-1:-1:-1;;;;;814:23:30;;;;;;;;:14;:23;;;;;:34;;-1:-1:-1;;814:34:30;;;;;;;;;;733:120::o;523:113::-;719:5:45;;-1:-1:-1;;;;;719:5:45;705:10;:19;697:28;;;;;;597:15:30;:34;;-1:-1:-1;;597:34:30;;;;;;;;;;523:113::o;386:35::-;;;;;;:::o;1274:103:45:-;719:5;;-1:-1:-1;;;;;719:5:45;705:10;:19;697:28;;;;;;1343:29;1362:9;1343:18;:29::i;:::-;1274:103;:::o;1512:171::-;-1:-1:-1;;;;;1582:23:45;;;;1574:32;;;;;;1638:5;;;1617:38;;-1:-1:-1;;;;;1617:38:45;;;;1638:5;;;1617:38;;;1661:5;:17;;-1:-1:-1;;1661:17:45;-1:-1:-1;;;;;1661:17:45;;;;;;;;;;1512:171::o",
   "source": "import \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\nimport \"../interfaces/ISelfServiceAccessControls.sol\";\n\ncontract SelfServiceAccessControls is Ownable, ISelfServiceAccessControls {\n\n  // Simple map to only allow certain artist create editions at first\n  mapping(address => bool) public allowedArtists;\n\n  // When true any existing KO artist can mint their own editions\n  bool public openToAllArtist = false;\n\n  /**\n   * @dev Controls is the contract is open to all\n   * @dev Only callable from owner\n   */\n  function setOpenToAllArtist(bool _openToAllArtist) onlyOwner public {\n    openToAllArtist = _openToAllArtist;\n  }\n\n  /**\n   * @dev Controls who can call this contract\n   * @dev Only callable from owner\n   */\n  function setAllowedArtist(address _artist, bool _allowed) onlyOwner public {\n    allowedArtists[_artist] = _allowed;\n  }\n\n  /**\n   * @dev Checks to see if the account can create editions\n   */\n  function isEnabledForAccount(address account) public view returns (bool) {\n    if (openToAllArtist) {\n      return true;\n    }\n    return allowedArtists[account];\n  }\n\n  /**\n   * @dev Allows for the ability to extract stuck ether\n   * @dev Only callable from owner\n   */\n  function withdrawStuckEther(address _withdrawalAccount) onlyOwner public {\n    require(_withdrawalAccount != address(0), \"Invalid address provided\");\n    _withdrawalAccount.transfer(address(this).balance);\n  }\n}\n",
-  "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/tools/SelfServiceAccessControls.sol",
+  "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/self-service/SelfServiceAccessControls.sol",
   "ast": {
-    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/tools/SelfServiceAccessControls.sol",
+    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/self-service/SelfServiceAccessControls.sol",
     "exportedSymbols": {
       "SelfServiceAccessControls": [
         8556
@@ -200,7 +200,7 @@
         "id": 8473,
         "nodeType": "ImportDirective",
         "scope": 8557,
-        "sourceUnit": 8002,
+        "sourceUnit": 8454,
         "src": "64:54:30",
         "symbolAliases": [],
         "unitAlias": ""
@@ -232,10 +232,10 @@
               "id": 8476,
               "name": "ISelfServiceAccessControls",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 8001,
+              "referencedDeclaration": 8453,
               "src": "167:26:30",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ISelfServiceAccessControls_$8001",
+                "typeIdentifier": "t_contract$_ISelfServiceAccessControls_$8453",
                 "typeString": "contract ISelfServiceAccessControls"
               }
             },
@@ -245,7 +245,7 @@
           }
         ],
         "contractDependencies": [
-          8001,
+          8453,
           11636
         ],
         "contractKind": "contract",
@@ -254,7 +254,7 @@
         "id": 8556,
         "linearizedBaseContracts": [
           8556,
-          8001,
+          8453,
           11636
         ],
         "name": "SelfServiceAccessControls",
@@ -839,7 +839,7 @@
             "scope": 8556,
             "src": "928:166:30",
             "stateMutability": "view",
-            "superFunction": 8000,
+            "superFunction": 8452,
             "visibility": "public"
           },
           {
@@ -1210,7 +1210,7 @@
     "src": "0:1413:30"
   },
   "legacyAST": {
-    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/tools/SelfServiceAccessControls.sol",
+    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/self-service/SelfServiceAccessControls.sol",
     "exportedSymbols": {
       "SelfServiceAccessControls": [
         8556
@@ -1236,7 +1236,7 @@
         "id": 8473,
         "nodeType": "ImportDirective",
         "scope": 8557,
-        "sourceUnit": 8002,
+        "sourceUnit": 8454,
         "src": "64:54:30",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1268,10 +1268,10 @@
               "id": 8476,
               "name": "ISelfServiceAccessControls",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 8001,
+              "referencedDeclaration": 8453,
               "src": "167:26:30",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ISelfServiceAccessControls_$8001",
+                "typeIdentifier": "t_contract$_ISelfServiceAccessControls_$8453",
                 "typeString": "contract ISelfServiceAccessControls"
               }
             },
@@ -1281,7 +1281,7 @@
           }
         ],
         "contractDependencies": [
-          8001,
+          8453,
           11636
         ],
         "contractKind": "contract",
@@ -1290,7 +1290,7 @@
         "id": 8556,
         "linearizedBaseContracts": [
           8556,
-          8001,
+          8453,
           11636
         ],
         "name": "SelfServiceAccessControls",
@@ -1875,7 +1875,7 @@
             "scope": 8556,
             "src": "928:166:30",
             "stateMutability": "view",
-            "superFunction": 8000,
+            "superFunction": 8452,
             "visibility": "public"
           },
           {
@@ -2264,7 +2264,7 @@
     }
   },
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-11-15T10:36:42.046Z",
+  "updatedAt": "2019-11-16T07:22:38.235Z",
   "devdoc": {
     "methods": {
       "isEnabledForAccount(address)": {

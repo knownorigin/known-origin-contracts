@@ -10,6 +10,7 @@ const {duration, increaseTo, advanceBlock, latest} = require('../../../helpers/t
 const KnownOriginDigitalAssetV2 = artifacts.require('KnownOriginDigitalAssetV2');
 const SelfServiceEditionCurationV4 = artifacts.require('SelfServiceEditionCurationV4');
 const SelfServiceAccessControls = artifacts.require('SelfServiceAccessControls');
+const SelfServiceFrequencyControls = artifacts.require('SelfServiceFrequencyControls');
 
 const ArtistAcceptingBidsV2 = artifacts.require('ArtistAcceptingBidsV2');
 
@@ -57,11 +58,15 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
     // Create Self Service Access controls
     this.accessControls = await SelfServiceAccessControls.new({from: _owner});
 
+    // Create Self Service Access controls
+    this.frequencyControls = await SelfServiceFrequencyControls.new({from: _owner});
+
     // Create Minter
     this.minter = await SelfServiceEditionCurationV4.new(
       this.koda.address,
       this.auction.address,
       this.accessControls.address,
+      this.frequencyControls.address,
       {from: _owner}
     );
 

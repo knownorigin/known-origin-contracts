@@ -33,12 +33,12 @@ module.exports = async function (deployer, network, accounts) {
 
   // Deploy new minting controls
   await deployer.deploy(SelfServiceMintingControls, {from: _koAccount});
-  const mintingControls = await SelfServiceMintingControls.deployed();
+  const frequencyControls = await SelfServiceMintingControls.deployed();
 
-  console.log(`Minting controls deployed [${mintingControls.address}]`);
+  console.log(`Frequency controls deployed [${frequencyControls.address}]`);
 
   // Deploy the self service contract
-  await deployer.deploy(SelfServiceEditionCurationV4, koda.address, auction.address, accessControls.address, {from: _koAccount});
+  await deployer.deploy(SelfServiceEditionCurationV4, koda.address, auction.address, accessControls.address, frequencyControls.address, {from: _koAccount});
 
   const selfServiceV4 = await SelfServiceEditionCurationV4.deployed();
   console.log('Self service address', selfServiceV4.address);

@@ -7,7 +7,7 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "../interfaces/IKODAV2SelfServiceEditionCuration.sol";
 import "../interfaces/IKODAAuction.sol";
 import "../interfaces/ISelfServiceAccessControls.sol";
-import "../interfaces/ISelfServiceMintingControls.sol";
+import "../interfaces/ISelfServiceFrequencyControls.sol";
 
 // One invocation per time-period
 contract SelfServiceEditionCurationV4 is Ownable, Pausable {
@@ -25,7 +25,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
   IKODAV2SelfServiceEditionCuration public kodaV2;
   IKODAAuction public auction;
   ISelfServiceAccessControls public accessControls;
-  ISelfServiceMintingControls public mintingControls;
+  ISelfServiceFrequencyControls public frequencyControls;
 
   // Default KO commission
   uint256 public koCommission = 15;
@@ -43,12 +43,12 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
     IKODAV2SelfServiceEditionCuration _kodaV2,
     IKODAAuction _auction,
     ISelfServiceAccessControls _accessControls,
-    ISelfServiceMintingControls _mintingControls
+    ISelfServiceFrequencyControls _frequencyControls
   ) public {
     kodaV2 = _kodaV2;
     auction = _auction;
     accessControls = _accessControls;
-    mintingControls = _mintingControls;
+    frequencyControls = _frequencyControls;
   }
 
   /**
@@ -69,7 +69,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
   whenNotPaused
   returns (uint256 _editionNumber)
   {
-    require(!mintingControls.canMint(msg.sender), 'Sender currently frozen out of creation');
+    require(!frequencyControls.canMint(msg.sender), 'Sender currently frozen out of creation');
     require(_artistCommission.add(_commissionSplitRate).add(koCommission) <= 100, "Total commission exceeds 100");
 
     uint256 editionNumber = _createEdition(msg.sender, _enableAuction, _totalAvailable, _priceInWei, _artistCommission, _tokenUri);
@@ -86,7 +86,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
       kodaV2.updateOptionalCommission(_editionNumber, _commissionSplitRate, _commissionSplitAddress);
     }
 
-    mintingControls.recordSuccessfulMint(msg.sender);
+    frequencyControls.recordSuccessfulMint(msg.sender);
 
     return editionNumber;
   }
@@ -127,7 +127,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
       kodaV2.updateOptionalCommission(_editionNumber, _commissionSplitRate, _commissionSplitAddress);
     }
 
-    mintingControls.recordSuccessfulMint(_artist);
+    frequencyControls.recordSuccessfulMint(_artist);
 
     return editionNumber;
   }
@@ -266,7 +266,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    * @dev Checks to see if the account is currently frozen out
    */
   function isFrozen(address account) public view returns (bool) {
-    return mintingControls.canMint(account);
+    return frequencyControls.canMint(account);
   }
 
   /**
@@ -283,7 +283,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
     if (!isEnabledForAccount(account)) {
       return false;
     }
-    return !mintingControls.canMint(account);
+    return !frequencyControls.canMint(account);
   }
 
   /**

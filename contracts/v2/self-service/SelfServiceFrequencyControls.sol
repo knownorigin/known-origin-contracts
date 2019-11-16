@@ -2,9 +2,9 @@ pragma solidity 0.4.24;
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/access/Whitelist.sol";
-import "../interfaces/ISelfServiceMintingControls.sol";
+import "../interfaces/ISelfServiceFrequencyControls.sol";
 
-contract SelfServiceMintingControls is ISelfServiceMintingControls, Whitelist {
+contract SelfServiceFrequencyControls is ISelfServiceFrequencyControls, Whitelist {
   using SafeMath for uint256;
 
   // frozen out for..

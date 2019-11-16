@@ -8,7 +8,7 @@ const bnChai = require('bn-chai');
 const {advanceBlock} = require('../../helpers/time');
 
 const _ = require('lodash');
-const {inTransaction} = require("../../helpers/expectEvent");
+const {inTransaction} = require('../../helpers/expectEvent');
 
 const KnownOriginDigitalAssetV2 = artifacts.require('KnownOriginDigitalAssetV2');
 const ERC721Receiver = artifacts.require('ERC721ReceiverMockV2.sol');
@@ -36,16 +36,16 @@ contract('KnownOriginDigitalAssetV2 - ERC721Token', function (accounts) {
   const editionType = 1;
 
   const editionNumber1 = 100000;
-  const editionData1 = web3.utils.asciiToHex("editionData1");
-  const editionTokenUri1 = "edition1";
+  const editionData1 = web3.utils.asciiToHex('editionData1');
+  const editionTokenUri1 = 'edition1';
   const edition1Price = etherToWei(0.1);
 
   const editionNumber2 = 200000;
-  const editionData2 = web3.utils.asciiToHex("editionData2");
-  const editionTokenUri2 = "edition2";
+  const editionData2 = web3.utils.asciiToHex('editionData2');
+  const editionTokenUri2 = 'edition2';
   const edition2Price = etherToWei(0.1);
 
-  const BASE_URI = "https://ipfs.infura.io/ipfs/";
+  const BASE_URI = 'https://ipfs.infura.io/ipfs/';
 
   before(async () => {
     // Advance to the next block to correctly read time in the solidity "now" function interpreted by testrpc
@@ -253,6 +253,17 @@ contract('KnownOriginDigitalAssetV2 - ERC721Token', function (accounts) {
         });
       });
     });
+
+    // describe.only('ERC165 supportsInterface()', async () => {
+    //   shouldSupportInterfaces([
+    //     'ERC165',
+    //     'ERC721',
+    //     'ERC721Exists',
+    //     'ERC721Enumerable',
+    //     'ERC721Metadata',
+    //   ]);
+    // });
+
   });
 
   describe('like a mintable and burnable ERC721Token', () => {
@@ -899,20 +910,6 @@ contract('KnownOriginDigitalAssetV2 - ERC721Token', function (accounts) {
         });
       });
     });
-
-    shouldSupportInterfaces([
-      'ERC165',
-      'ERC721',
-      'ERC721Exists',
-    ]);
   });
-
-  shouldSupportInterfaces([
-    'ERC165',
-    'ERC721',
-    'ERC721Exists',
-    'ERC721Enumerable',
-    'ERC721Metadata',
-  ]);
 
 });
