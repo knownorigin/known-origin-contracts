@@ -310,7 +310,7 @@ contract('SelfServiceEditionCuration tests', function (accounts) {
       await this.minter.setOpenToAllArtist(true, {from: _owner});
 
       // lower max for testing
-      await this.minter.maxInvocations(2, {from: _owner});
+      await this.minter.setMaxInvocations(2, {from: _owner});
     });
 
     describe('when enforcing invocation checks', async () => {
