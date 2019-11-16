@@ -66,5 +66,5 @@ if [ "$SOLIDITY_COVERAGE" = true ]; then
   fi
 else
   echo "Triggering truffle test"
-  node $NODE_DEBUG_OPTION ./node_modules/.bin/truffle test "$@"
+  node $NODE_DEBUG_OPTION GAS_REPORTER=true ./node_modules/.bin/truffle test "$@"
 fi

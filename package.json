@@ -5,10 +5,9 @@
   "scripts": {
     "download-ipfsdata": "node ./scripts/ipfs/download-all-ipfs-data.js",
     "coverage": "test/coverage.sh",
-    "test/contracts": "test/test_truffle.sh",
-    "test/dapp": "npm run unit",
+    "test/contracts": "GAS_REPORTER=true test/test_truffle.sh",
     "test": "npm run test/contracts",
-    "lint": "eslint --ext .js src test/unit/specs test/e2e/specs"
+    "lint": "eslint --ext .js src test/unit"
   },
   "private": true,
   "repository": {
@@ -32,15 +31,15 @@
     "eslint": "^3.19.0",
     "memory-streams": "^0.1.3",
     "file-matcher": "^1.3.0",
-    "eth-gas-reporter": "^0.1.12",
+    "eth-gas-reporter": "^0.2.12",
     "ethjs": "^0.4.0",
-    "ganache-cli": "^6.2.4",
+    "ganache-cli": "^6.7.0",
     "ipfs-api": "^18.1.1",
-    "mocha": "^5.2.0",
+    "mocha": "^6.2.2",
     "openzeppelin-solidity": "^1.12.0",
-    "solidity-coverage": "^0.5.11",
-    "truffle": "^5.0.9",
-    "truffle-flattener": "^1.3.0",
+    "solidity-coverage": "^0.7.0-beta.2",
+    "truffle": "^5.1.0",
+    "truffle-flattener": "^1.4.2",
     "truffle-hdwallet-provider": "^1.0.5"
   }
 }

@@ -7,17 +7,16 @@ if (!mnemonic) {
     e.g. export KNOWN_ORIGIN_MNEMONIC='<your seed phrase>'
   `);
 }
-// Check gas prices before live deploy - https://ethgasstation.info/
+
+/**
+ * Loads mocha settings based on which shell env variables are set. Options are:
+ *   - GAS_REPORTER: run gas analytics with tests
+ */
+const mocha = require('./mocha-config');
 
 module.exports = {
-  mocha: {
-    useColors: true,
-    reporter: 'eth-gas-reporter',
-    reporterOptions: {
-      currency: 'USD',
-      gasPrice: 3
-    }
-  },
+  // N.B - this seems to crash solidity-coverage so dont run at the same time
+  mocha,
   compilers: {
     solc: {
       version: '0.4.24',
