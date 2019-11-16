@@ -17,7 +17,7 @@ contract SelfServiceFrequencyControls is ISelfServiceFrequencyControls, Whitelis
     super.addAddressToWhitelist(msg.sender);
   }
 
-  function canMint(address minter) external view returns (bool) {
+  function canCreateNewEdition(address minter) external view returns (bool) {
     return !_isFrozen(minter);
   }
 

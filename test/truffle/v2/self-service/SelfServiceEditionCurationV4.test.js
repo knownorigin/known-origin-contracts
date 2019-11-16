@@ -19,7 +19,7 @@ require('chai')
   .use(bnChai(web3.utils.BN))
   .should();
 
-contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
+contract('SelfServiceEditionCurationV4 tests', function (accounts) {
 
   const ROLE_KNOWN_ORIGIN = 1;
   const MAX_UINT32 = 4294967295;
@@ -28,11 +28,14 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
   const _owner = accounts[0];
   const koCommission = accounts[1];
 
+  const optionalSplitAddress = accounts[2];
+  const optionalSplitRate = 42;
+
   const editionType = 1;
   const editionData = web3.utils.asciiToHex('editionData');
   const edition1Price = etherToWei(0.1);
 
-  const artistCommission = 76;
+  const artistCommission = 85;
 
   const edition1 = {
     number: 10000,
@@ -76,7 +79,10 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
     // Whitelist the self service contract
     await this.auction.addAddressToWhitelist(this.minter.address, {from: _owner});
 
-    this.freezeWindow = await this.minter.freezeWindow();
+    // Whitelist the self service contract against the frequency checker
+    await this.frequencyControls.addAddressToWhitelist(this.minter.address, {from: _owner});
+
+    this.freezeWindow = await this.frequencyControls.freezeWindow();
   });
 
   beforeEach(async () => {
@@ -95,28 +101,28 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
 
       it('should fail when creating editions larger than 100', async () => {
         await assertRevert(
-          this.minter.createEdition(101, etherToWei(1), 0, '123', false, {from: edition2.artist}),
+          this.minter.createEdition(false, ZERO_ADDRESS, 0, 101, etherToWei(1), 0, 0, artistCommission, '123', {from: edition2.artist}),
           'Must not exceed max edition size'
         );
       });
 
       it('should fail when creating editions of size of zero', async () => {
         await assertRevert(
-          this.minter.createEdition(0, etherToWei(1), 0, '123', false, {from: edition2.artist}),
+          this.minter.createEdition(false, ZERO_ADDRESS, 0, 0, etherToWei(1), 0, 0, artistCommission, '123', {from: edition2.artist}),
           'Must be at least one available in edition'
         );
       });
 
       it('should fail when token URI not defined', async () => {
         await assertRevert(
-          this.minter.createEdition(100, etherToWei(1), 0, '', false, {from: edition2.artist}),
+          this.minter.createEdition(false, ZERO_ADDRESS, 0, 10, etherToWei(1), 0, 0, artistCommission, '', {from: edition2.artist}),
           'Token URI is missing'
         );
       });
 
       it('should fail if artist not on the KO platform and minter IS open to all', async () => {
         await assertRevert(
-          this.minter.createEdition(100, etherToWei(1), 0, '232323', false, {from: koCommission}),
+          this.minter.createEdition(false, ZERO_ADDRESS, 0, 10, etherToWei(1), 0, 0, artistCommission, '123', {from: koCommission}),
           'Can only mint your own once we have enabled you on the platform'
         );
       });
@@ -138,7 +144,7 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
             price: etherToWei(1)
           };
           await assertRevert(
-            this.minter.createEdition(edition3.total, edition3.price, 0, edition3.tokenUri, false, {from: accounts[6]}),
+            this.minter.createEdition(false, ZERO_ADDRESS, 0, edition3.total, edition3.price, 0, 0, artistCommission, edition3.tokenUri, {from: accounts[6]}),
             'Can only mint your own once we have enabled you on the platform'
           );
         });
@@ -160,7 +166,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
             price: etherToWei(1)
           };
 
-          const {logs: edition1Logs} = await this.minter.createEdition(edition3.total, edition3.price, 0, edition3.tokenUri, false, {from: edition1.artist});
+          const {logs: edition1Logs} = await this.minter.createEdition(
+            false, ZERO_ADDRESS, 0, edition3.total, edition3.price, 0, 0, artistCommission, edition3.tokenUri,
+            {
+              from: edition1.artist
+            }
+          );
           edition1Logs[0].event.should.be.equal('SelfServiceEditionCreated');
           edition1Logs[0].args._editionNumber.should.be.eq.BN(20200); // last edition no. is 20000 and has total of 100 in it
           edition1Logs[0].args._creator.should.be.equal(edition1.artist); // artist from edition 1 created it
@@ -174,7 +185,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
           };
 
           await assertRevert(
-            this.minter.createEdition(edition4.total, edition4.price, 0, edition4.tokenUri, false, {from: edition1.artist}),
+            this.minter.createEdition(
+              false, ZERO_ADDRESS, 0, edition4.total, edition4.price, 0, 0, artistCommission, edition4.tokenUri,
+              {
+                from: edition1.artist
+              }
+            ),
             'Sender currently frozen out of creation'
           );
         });
@@ -186,7 +202,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
             price: etherToWei(1)
           };
 
-          const {logs: edition1Logs} = await this.minter.createEdition(edition3.total, edition3.price, 0, edition3.tokenUri, false, {from: edition1.artist});
+          const {logs: edition1Logs} = await this.minter.createEdition(
+            false, ZERO_ADDRESS, 0, edition3.total, edition3.price, 0, 0, artistCommission, edition3.tokenUri,
+            {
+              from: edition1.artist
+            }
+          );
           edition1Logs[0].event.should.be.equal('SelfServiceEditionCreated');
           edition1Logs[0].args._editionNumber.should.be.eq.BN(20200); // last edition no. is 20000 and has total of 100 in it
           edition1Logs[0].args._creator.should.be.equal(edition1.artist); // artist from edition 1 created it
@@ -206,7 +227,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
           };
 
           await assertRevert(
-            this.minter.createEdition(edition4.total, edition4.price, 0, edition4.tokenUri, false, {from: edition1.artist}),
+            this.minter.createEdition(
+              false, ZERO_ADDRESS, 0, edition4.total, edition4.price, 0, 0, artistCommission, edition4.tokenUri,
+              {
+                from: edition1.artist
+              }
+            ),
             'Sender currently frozen out of creation'
           );
         });
@@ -218,7 +244,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
             price: etherToWei(1)
           };
 
-          const {logs: edition1Logs} = await this.minter.createEdition(edition3.total, edition3.price, 0, edition3.tokenUri, false, {from: edition1.artist});
+          const {logs: edition1Logs} = await this.minter.createEdition(
+            false, ZERO_ADDRESS, 0, edition3.total, edition3.price, 0, 0, artistCommission, edition3.tokenUri,
+            {
+              from: edition1.artist
+            }
+          );
           edition1Logs[0].event.should.be.equal('SelfServiceEditionCreated');
           edition1Logs[0].args._editionNumber.should.be.eq.BN(20200); // last edition no. is 20000 and has total of 100 in it
           edition1Logs[0].args._creator.should.be.equal(edition1.artist); // artist from edition 1 created it
@@ -239,7 +270,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
             tokenUri: 'ipfs://edition4',
             price: etherToWei(2)
           };
-          const {logs: edition2Logs} = await this.minter.createEdition(edition4.total, edition4.price, 0, edition4.tokenUri, false, {from: edition1.artist});
+          const {logs: edition2Logs} = await this.minter.createEdition(
+            false, ZERO_ADDRESS, 0, edition4.total, edition4.price, 0, 0, artistCommission, edition4.tokenUri,
+            {
+              from: edition1.artist
+            }
+          );
 
           edition2Logs[0].event.should.be.equal('SelfServiceEditionCreated');
           edition2Logs[0].args._editionNumber.should.be.eq.BN(20300); // last edition no. is 20200 and has total of 10 in it = 20210 - rounded up to nearest 100 = 20300
@@ -255,7 +291,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
             price: etherToWei(1)
           };
           await assertRevert(
-            this.minter.createEdition(edition3.total, edition3.price, 0, edition3.tokenUri, false, {from: edition2.artist}),
+            this.minter.createEdition(
+              false, ZERO_ADDRESS, 0, edition3.total, edition3.price, 0, 0, artistCommission, edition3.tokenUri,
+              {
+                from: edition2.artist
+              }
+            ),
             'Only allowed artists can create editions for now'
           );
         });
@@ -280,7 +321,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
         const expectedEditionNumber = 20200;
 
         // Check logs from creation call
-        const {logs} = await this.minter.createEdition(edition3.total, edition3.price, 0, edition3.tokenUri, true, {from: creator});
+        const {logs} = await this.minter.createEdition(
+          true, ZERO_ADDRESS, 0, edition3.total, edition3.price, 0, 0, artistCommission, edition3.tokenUri,
+          {
+            from: creator
+          }
+        );
         logs[0].event.should.be.equal('SelfServiceEditionCreated');
         logs[0].args._editionNumber.should.be.eq.BN(expectedEditionNumber); // last edition no. is 20000 and has total of 100 in it
         logs[0].args._creator.should.be.equal(creator); // artist from edition 1 created it
@@ -317,7 +363,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
       });
 
       it('successful creates all the right editions', async () => {
-        const {logs: edition1} = await this.minter.createEditionFor(accounts[2], 17, etherToWei(1), 0, '111-111-111', true, {from: _owner});
+        const {logs: edition1} = await this.minter.createEditionFor(
+          accounts[2], true, ZERO_ADDRESS, 0, 17, etherToWei(1), 0, 0, artistCommission, '111-111-111',
+          {
+            from: _owner
+          }
+        );
         validateEditionCreatedLog(edition1, {
           _editionNumber: 20200,
           _creator: accounts[2],
@@ -325,7 +376,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
           _totalAvailable: 17
         });
 
-        const {logs: edition2} = await this.minter.createEditionFor(accounts[3], 99, etherToWei(2), 0, '222-222-222', true, {from: _owner});
+        const {logs: edition2} = await this.minter.createEditionFor(
+          accounts[3], true, ZERO_ADDRESS, 0, 99, etherToWei(2), 0, 0, artistCommission, '222-222-222',
+          {
+            from: _owner
+          }
+        );
         validateEditionCreatedLog(edition2, {
           _editionNumber: 20300,
           _creator: accounts[3],
@@ -333,7 +389,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
           _totalAvailable: 99
         });
 
-        const {logs: edition3} = await this.minter.createEditionFor(accounts[4], 1, etherToWei(3), 0, '333-333-333', true, {from: _owner});
+        const {logs: edition3} = await this.minter.createEditionFor(
+          accounts[4], true, ZERO_ADDRESS, 0, 1, etherToWei(3), 0, 0, artistCommission, '333-333-333',
+          {
+            from: _owner
+          }
+        );
         validateEditionCreatedLog(edition3, {
           _editionNumber: 20400,
           _creator: accounts[4],
@@ -341,7 +402,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
           _totalAvailable: 1
         });
 
-        const {logs: edition4} = await this.minter.createEditionFor(accounts[5], 34, etherToWei(4), 0, '444-444-444', true, {from: _owner});
+        const {logs: edition4} = await this.minter.createEditionFor(
+          accounts[5], true, ZERO_ADDRESS, 0, 34, etherToWei(4), 0, 0, artistCommission, '444-444-444',
+          {
+            from: _owner
+          }
+        );
         validateEditionCreatedLog(edition4, {
           _editionNumber: 20500,
           _creator: accounts[5],
@@ -349,7 +415,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
           _totalAvailable: 34
         });
 
-        const {logs: edition5} = await this.minter.createEditionFor(accounts[5], 100, etherToWei(5), 0, '555-555-555', true, {from: _owner});
+        const {logs: edition5} = await this.minter.createEditionFor(
+          accounts[5], true, ZERO_ADDRESS, 0, 100, etherToWei(5), 0, 0, artistCommission, '555-555-555',
+          {
+            from: _owner
+          }
+        );
         validateEditionCreatedLog(edition5, {
           _editionNumber: 20600,
           _creator: accounts[5],
@@ -357,7 +428,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
           _totalAvailable: 100
         });
 
-        const {logs: edition6} = await this.minter.createEditionFor(accounts[6], 100, etherToWei(5), 0, '666-666-666', true, {from: _owner});
+        const {logs: edition6} = await this.minter.createEditionFor(
+          accounts[6], true, ZERO_ADDRESS, 0, 100, etherToWei(5), 0, 0, artistCommission, '666-666-666',
+          {
+            from: _owner
+          }
+        );
         validateEditionCreatedLog(edition6, {
           _editionNumber: 20800,
           _creator: accounts[6],
@@ -366,7 +442,12 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
         });
 
         // spills over to the next 1000
-        const {logs: edition7} = await this.minter.createEditionFor(accounts[7], 100, etherToWei(6), 0, '777-777-777', true, {from: _owner});
+        const {logs: edition7} = await this.minter.createEditionFor(
+          accounts[7], true, ZERO_ADDRESS, 0, 100, etherToWei(6), 0, 0, artistCommission, '777-777-777',
+          {
+            from: _owner
+          }
+        );
         validateEditionCreatedLog(edition7, {
           _editionNumber: 21000,
           _creator: accounts[7],
@@ -400,17 +481,32 @@ contract.skip('SelfServiceEditionCurationV4 tests', function (accounts) {
 
     it('should fail minting when price less than 1 ETH', async () => {
       await assertRevert(
-        this.minter.createEdition(10, etherToWei(9.99), 0, 'tokenUri', false, {from: edition1.artist}),
+        this.minter.createEdition(
+          false, ZERO_ADDRESS, 0, 10, etherToWei(9.99), 0, 0, artistCommission, 'tokenUri',
+          {
+            from: edition1.artist
+          }
+        ),
         'Price must be greater than minimum'
       );
     });
 
     it('should success minting when price is 1 ETH', async () => {
-      await this.minter.createEdition(10, etherToWei(1), 0, 'tokenUri', false, {from: edition1.artist});
+      await this.minter.createEdition(
+        false, ZERO_ADDRESS, 0, 10, etherToWei(1), 0, 0, artistCommission, 'tokenUri',
+        {
+          from: edition1.artist
+        }
+      );
     });
 
     it('should success minting when price is greater than 1 ETH', async () => {
-      await this.minter.createEdition(10, etherToWei(1.1), 0, 'tokenUri', false, {from: edition1.artist});
+      await this.minter.createEdition(
+        false, ZERO_ADDRESS, 0, 10, etherToWei(1.1), 0, 0, artistCommission, 'tokenUri',
+        {
+          from: edition1.artist
+        }
+      );
     });
   });
 });

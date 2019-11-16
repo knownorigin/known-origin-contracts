@@ -56,8 +56,8 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    */
   function createEdition(
     bool _enableAuction,
-    address _commissionSplitAddress,
-    uint256 _commissionSplitRate,
+    address _optionalSplitAddress,
+    uint256 _optionalSplitRate,
     uint256 _totalAvailable,
     uint256 _priceInWei,
     uint256 _startDate,
@@ -69,8 +69,8 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
   whenNotPaused
   returns (uint256 _editionNumber)
   {
-    require(!frequencyControls.canMint(msg.sender), 'Sender currently frozen out of creation');
-    require(_artistCommission.add(_commissionSplitRate).add(koCommission) <= 100, "Total commission exceeds 100");
+    require(frequencyControls.canCreateNewEdition(msg.sender), 'Sender currently frozen out of creation');
+    require(_artistCommission.add(_optionalSplitRate).add(koCommission) <= 100, "Total commission exceeds 100");
 
     uint256 editionNumber = _createEdition(msg.sender, _enableAuction, _totalAvailable, _priceInWei, _artistCommission, _tokenUri);
 
@@ -82,8 +82,8 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
       kodaV2.updateEndDate(editionNumber, _endDate);
     }
 
-    if (_commissionSplitRate > 0) {
-      kodaV2.updateOptionalCommission(_editionNumber, _commissionSplitRate, _commissionSplitAddress);
+    if (_optionalSplitRate > 0) {
+      kodaV2.updateOptionalCommission(_editionNumber, _optionalSplitRate, _optionalSplitAddress);
     }
 
     frequencyControls.recordSuccessfulMint(msg.sender);
@@ -98,8 +98,8 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
   function createEditionFor(
     address _artist,
     bool _enableAuction,
-    address _commissionSplitAddress,
-    uint256 _commissionSplitRate,
+    address _optionalSplitAddress,
+    uint256 _optionalSplitRate,
     uint256 _totalAvailable,
     uint256 _priceInWei,
     uint256 _startDate,
@@ -111,7 +111,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
   onlyOwner
   returns (uint256 _editionNumber)
   {
-    require(_artistCommission.add(_commissionSplitRate).add(koCommission) <= 100, "Total commission exceeds 100");
+    require(_artistCommission.add(_optionalSplitRate).add(koCommission) <= 100, "Total commission exceeds 100");
 
     uint256 editionNumber = _createEdition(_artist, _enableAuction, _totalAvailable, _priceInWei, _artistCommission, _tokenUri);
 
@@ -123,8 +123,8 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
       kodaV2.updateEndDate(editionNumber, _endDate);
     }
 
-    if (_commissionSplitRate > 0) {
-      kodaV2.updateOptionalCommission(_editionNumber, _commissionSplitRate, _commissionSplitAddress);
+    if (_optionalSplitRate > 0) {
+      kodaV2.updateOptionalCommission(_editionNumber, _optionalSplitRate, _optionalSplitAddress);
     }
 
     frequencyControls.recordSuccessfulMint(_artist);
@@ -266,7 +266,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    * @dev Checks to see if the account is currently frozen out
    */
   function isFrozen(address account) public view returns (bool) {
-    return frequencyControls.canMint(account);
+    return frequencyControls.canCreateNewEdition(account);
   }
 
   /**
@@ -280,10 +280,10 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    * @dev Checks to see if the account can create editions
    */
   function canCreateAnotherEdition(address account) public view returns (bool) {
-    if (!isEnabledForAccount(account)) {
+    if (!accessControls.isEnabledForAccount(account)) {
       return false;
     }
-    return !frequencyControls.canMint(account);
+    return frequencyControls.canCreateNewEdition(account);
   }
 
   /**

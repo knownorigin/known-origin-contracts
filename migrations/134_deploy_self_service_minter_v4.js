@@ -33,12 +33,18 @@ module.exports = async function (deployer, network, accounts) {
 
   // Deploy new minting controls
   await deployer.deploy(SelfServiceMintingControls, {from: _koAccount});
-  const frequencyControls = await SelfServiceMintingControls.deployed();
 
+  const frequencyControls = await SelfServiceMintingControls.deployed();
   console.log(`Frequency controls deployed [${frequencyControls.address}]`);
 
   // Deploy the self service contract
-  await deployer.deploy(SelfServiceEditionCurationV4, koda.address, auction.address, accessControls.address, frequencyControls.address, {from: _koAccount});
+  await deployer.deploy(SelfServiceEditionCurationV4,
+    koda.address,
+    auction.address,
+    accessControls.address,
+    frequencyControls.address,
+    {from: _koAccount}
+  );
 
   const selfServiceV4 = await SelfServiceEditionCurationV4.deployed();
   console.log('Self service address', selfServiceV4.address);
@@ -50,6 +56,6 @@ module.exports = async function (deployer, network, accounts) {
   // whitelist self service address so it can enable auctions
   await auction.addAddressToWhitelist(selfServiceV4.address, {from: _koAccount});
 
-  // whitelist self service address so it can call minting controls
-  await mintingControls.addAddressToWhitelist(selfServiceV4.address, {from: _koAccount});
+  // whitelist self service address so it can call frequency controls
+  await frequencyControls.addAddressToWhitelist(selfServiceV4.address, {from: _koAccount});
 };
