@@ -4,7 +4,7 @@ const ArtistAcceptingBidsV2 = artifacts.require('ArtistAcceptingBidsV2');
 const SelfServiceEditionCurationV4 = artifacts.require('SelfServiceEditionCurationV4');
 
 const SelfServiceAccessControls = artifacts.require('SelfServiceAccessControls');
-const SelfServiceMintingControls = artifacts.require('SelfServiceMintingControls');
+const SelfServiceFrequencyControls = artifacts.require('SelfServiceFrequencyControls');
 
 const HDWalletProvider = require('truffle-hdwallet-provider');
 const infuraApikey = '4396873c00c84479991e58a34a54ebd9';
@@ -32,9 +32,9 @@ module.exports = async function (deployer, network, accounts) {
   console.log(`KODA V2 [${koda.address}] Auction V2 [${auction.address}] AccessControls V1 [${accessControls.address}]`);
 
   // Deploy new minting controls
-  await deployer.deploy(SelfServiceMintingControls, {from: _koAccount});
+  await deployer.deploy(SelfServiceFrequencyControls, {from: _koAccount});
 
-  const frequencyControls = await SelfServiceMintingControls.deployed();
+  const frequencyControls = await SelfServiceFrequencyControls.deployed();
   console.log(`Frequency controls deployed [${frequencyControls.address}]`);
 
   // Deploy the self service contract
