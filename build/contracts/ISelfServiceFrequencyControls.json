@@ -9,7 +9,7 @@
           "type": "address"
         }
       ],
-      "name": "canMint",
+      "name": "canCreateNewEdition",
       "outputs": [
         {
           "name": "",
@@ -24,8 +24,16 @@
       "constant": false,
       "inputs": [
         {
-          "name": "minter",
+          "name": "artist",
           "type": "address"
+        },
+        {
+          "name": "totalAvailable",
+          "type": "uint256"
+        },
+        {
+          "name": "priceInWei",
+          "type": "uint256"
         }
       ],
       "name": "recordSuccessfulMint",
@@ -45,16 +53,16 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity 0.4.24;\n\ninterface ISelfServiceFrequencyControls {\n  function canMint(address minter) external view returns (bool);\n\n  function recordSuccessfulMint(address minter) external returns (bool);\n}\n",
+  "source": "pragma solidity 0.4.24;\n\ninterface ISelfServiceFrequencyControls {\n\n  /*\n   * \n   */\n  function canCreateNewEdition(address minter) external view returns (bool);\n\n  /*\n   * Records that an edition has been created\n   * @param artist - the edition artist\n   * @param totalAvailable - the edition size\n   * @param priceInWei - the edition price in wei\n   */\n  function recordSuccessfulMint(address artist, uint256 totalAvailable, uint256 priceInWei) external returns (bool);\n}\n",
   "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/ISelfServiceFrequencyControls.sol",
   "ast": {
     "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/ISelfServiceFrequencyControls.sol",
     "exportedSymbols": {
       "ISelfServiceFrequencyControls": [
-        8470
+        8474
       ]
     },
-    "id": 8471,
+    "id": 8475,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -73,9 +81,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 8470,
+        "id": 8474,
         "linearizedBaseContracts": [
-          8470
+          8474
         ],
         "name": "ISelfServiceFrequencyControls",
         "nodeType": "ContractDefinition",
@@ -88,7 +96,7 @@
             "isConstructor": false,
             "isDeclaredConst": true,
             "modifiers": [],
-            "name": "canMint",
+            "name": "canCreateNewEdition",
             "nodeType": "FunctionDefinition",
             "parameters": {
               "id": 8458,
@@ -100,7 +108,7 @@
                   "name": "minter",
                   "nodeType": "VariableDeclaration",
                   "scope": 8462,
-                  "src": "86:14:29",
+                  "src": "116:14:29",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -111,7 +119,7 @@
                     "id": 8456,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "86:7:29",
+                    "src": "116:7:29",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -121,7 +129,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "85:16:29"
+              "src": "115:16:29"
             },
             "payable": false,
             "returnParameters": {
@@ -134,7 +142,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 8462,
-                  "src": "125:4:29",
+                  "src": "155:4:29",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -145,7 +153,7 @@
                     "id": 8459,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "125:4:29",
+                    "src": "155:4:29",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -155,10 +163,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "124:6:29"
+              "src": "154:6:29"
             },
-            "scope": 8470,
-            "src": "69:62:29",
+            "scope": 8474,
+            "src": "87:74:29",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
@@ -166,7 +174,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 8469,
+            "id": 8473,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -174,16 +182,16 @@
             "name": "recordSuccessfulMint",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 8465,
+              "id": 8469,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
                   "id": 8464,
-                  "name": "minter",
+                  "name": "artist",
                   "nodeType": "VariableDeclaration",
-                  "scope": 8469,
-                  "src": "165:14:29",
+                  "scope": 8473,
+                  "src": "388:14:29",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -194,7 +202,7 @@
                     "id": 8463,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "165:7:29",
+                    "src": "388:7:29",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -202,22 +210,74 @@
                   },
                   "value": null,
                   "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 8466,
+                  "name": "totalAvailable",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8473,
+                  "src": "404:22:29",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8465,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "404:7:29",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 8468,
+                  "name": "priceInWei",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8473,
+                  "src": "428:18:29",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8467,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "428:7:29",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
                 }
               ],
-              "src": "164:16:29"
+              "src": "387:60:29"
             },
             "payable": false,
             "returnParameters": {
-              "id": 8468,
+              "id": 8472,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 8467,
+                  "id": 8471,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 8469,
-                  "src": "199:4:29",
+                  "scope": 8473,
+                  "src": "466:4:29",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -225,10 +285,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 8466,
+                    "id": 8470,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "199:4:29",
+                    "src": "466:4:29",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -238,29 +298,29 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "198:6:29"
+              "src": "465:6:29"
             },
-            "scope": 8470,
-            "src": "135:70:29",
+            "scope": 8474,
+            "src": "358:114:29",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 8471,
-        "src": "25:182:29"
+        "scope": 8475,
+        "src": "25:449:29"
       }
     ],
-    "src": "0:208:29"
+    "src": "0:475:29"
   },
   "legacyAST": {
     "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/ISelfServiceFrequencyControls.sol",
     "exportedSymbols": {
       "ISelfServiceFrequencyControls": [
-        8470
+        8474
       ]
     },
-    "id": 8471,
+    "id": 8475,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -279,9 +339,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 8470,
+        "id": 8474,
         "linearizedBaseContracts": [
-          8470
+          8474
         ],
         "name": "ISelfServiceFrequencyControls",
         "nodeType": "ContractDefinition",
@@ -294,7 +354,7 @@
             "isConstructor": false,
             "isDeclaredConst": true,
             "modifiers": [],
-            "name": "canMint",
+            "name": "canCreateNewEdition",
             "nodeType": "FunctionDefinition",
             "parameters": {
               "id": 8458,
@@ -306,7 +366,7 @@
                   "name": "minter",
                   "nodeType": "VariableDeclaration",
                   "scope": 8462,
-                  "src": "86:14:29",
+                  "src": "116:14:29",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -317,7 +377,7 @@
                     "id": 8456,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "86:7:29",
+                    "src": "116:7:29",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -327,7 +387,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "85:16:29"
+              "src": "115:16:29"
             },
             "payable": false,
             "returnParameters": {
@@ -340,7 +400,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 8462,
-                  "src": "125:4:29",
+                  "src": "155:4:29",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -351,7 +411,7 @@
                     "id": 8459,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "125:4:29",
+                    "src": "155:4:29",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -361,10 +421,10 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "124:6:29"
+              "src": "154:6:29"
             },
-            "scope": 8470,
-            "src": "69:62:29",
+            "scope": 8474,
+            "src": "87:74:29",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "external"
@@ -372,7 +432,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 8469,
+            "id": 8473,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -380,16 +440,16 @@
             "name": "recordSuccessfulMint",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 8465,
+              "id": 8469,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
                   "id": 8464,
-                  "name": "minter",
+                  "name": "artist",
                   "nodeType": "VariableDeclaration",
-                  "scope": 8469,
-                  "src": "165:14:29",
+                  "scope": 8473,
+                  "src": "388:14:29",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -400,7 +460,7 @@
                     "id": 8463,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "165:7:29",
+                    "src": "388:7:29",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -408,22 +468,74 @@
                   },
                   "value": null,
                   "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 8466,
+                  "name": "totalAvailable",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8473,
+                  "src": "404:22:29",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8465,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "404:7:29",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 8468,
+                  "name": "priceInWei",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8473,
+                  "src": "428:18:29",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8467,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "428:7:29",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
                 }
               ],
-              "src": "164:16:29"
+              "src": "387:60:29"
             },
             "payable": false,
             "returnParameters": {
-              "id": 8468,
+              "id": 8472,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 8467,
+                  "id": 8471,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 8469,
-                  "src": "199:4:29",
+                  "scope": 8473,
+                  "src": "466:4:29",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -431,10 +543,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 8466,
+                    "id": 8470,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "199:4:29",
+                    "src": "466:4:29",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -444,20 +556,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "198:6:29"
+              "src": "465:6:29"
             },
-            "scope": 8470,
-            "src": "135:70:29",
+            "scope": 8474,
+            "src": "358:114:29",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 8471,
-        "src": "25:182:29"
+        "scope": 8475,
+        "src": "25:449:29"
       }
     ],
-    "src": "0:208:29"
+    "src": "0:475:29"
   },
   "compiler": {
     "name": "solc",
@@ -465,7 +577,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-11-16T07:22:38.234Z",
+  "updatedAt": "2019-11-18T12:36:52.578Z",
   "devdoc": {
     "methods": {}
   },

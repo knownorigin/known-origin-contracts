@@ -86,7 +86,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
       kodaV2.updateOptionalCommission(_editionNumber, _optionalSplitRate, _optionalSplitAddress);
     }
 
-    frequencyControls.recordSuccessfulMint(msg.sender);
+    frequencyControls.recordSuccessfulMint(msg.sender, _totalAvailable, _priceInWei);
 
     return editionNumber;
   }
@@ -127,7 +127,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
       kodaV2.updateOptionalCommission(_editionNumber, _optionalSplitRate, _optionalSplitAddress);
     }
 
-    frequencyControls.recordSuccessfulMint(_artist);
+    frequencyControls.recordSuccessfulMint(_artist, _totalAvailable, _priceInWei);
 
     return editionNumber;
   }

@@ -17,12 +17,12 @@ contract SelfServiceFrequencyControls is ISelfServiceFrequencyControls, Whitelis
     super.addAddressToWhitelist(msg.sender);
   }
 
-  function canCreateNewEdition(address minter) external view returns (bool) {
-    return !_isFrozen(minter);
+  function canCreateNewEdition(address artist) external view returns (bool) {
+    return !_isFrozen(artist);
   }
 
-  function recordSuccessfulMint(address minter) external onlyIfWhitelisted(msg.sender) returns (bool) {
-    frozenTil[minter] = block.timestamp.add(freezeWindow);
+  function recordSuccessfulMint(address artist, uint256 totalAvailable, uint256 priceInWei) external onlyIfWhitelisted(msg.sender) returns (bool) {
+    frozenTil[artist] = block.timestamp.add(freezeWindow);
     return true;
   }
 
