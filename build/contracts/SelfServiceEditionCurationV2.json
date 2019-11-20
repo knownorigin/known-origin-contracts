@@ -16020,10 +16020,95 @@
       "links": {},
       "address": "0x171b37442e527e82A13984cD5Aa92f01a9F29b21",
       "transactionHash": "0x88adf27f1e2771e14385ebbc3ca3c1c95cc4d241abd3462ae0346d64f27b2a7c"
+    },
+    "4": {
+      "events": {
+        "0xaa456f9f24703ca25ecf5b0bfd7bed18ed96589119418060049a312d98372766": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_editionNumber",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "_creator",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "_priceInWei",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "_totalAvailable",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "_enableAuction",
+              "type": "bool"
+            }
+          ],
+          "name": "SelfServiceEditionCreated",
+          "type": "event",
+          "signature": "0xaa456f9f24703ca25ecf5b0bfd7bed18ed96589119418060049a312d98372766"
+        },
+        "0x6985a02210a168e66602d3235cb6db0e70f92b3ba4d376a33c0f3d9434bff625": {
+          "anonymous": false,
+          "inputs": [],
+          "name": "Pause",
+          "type": "event",
+          "signature": "0x6985a02210a168e66602d3235cb6db0e70f92b3ba4d376a33c0f3d9434bff625"
+        },
+        "0x7805862f689e2f13df9f062ff482ad3ad112aca9e0847911ed832e158c525b33": {
+          "anonymous": false,
+          "inputs": [],
+          "name": "Unpause",
+          "type": "event",
+          "signature": "0x7805862f689e2f13df9f062ff482ad3ad112aca9e0847911ed832e158c525b33"
+        },
+        "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipRenounced",
+          "type": "event",
+          "signature": "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
+      "links": {},
+      "address": "0x6ddd236A53979e4fbB49a32a43395fd3b76e140f",
+      "transactionHash": "0x21a0ced334d0dc3c555c7b0c86dbbe33497437a831939353a0d8b0a07be55a43"
     }
   },
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-11-16T07:22:38.253Z",
+  "updatedAt": "2019-11-20T20:57:06.438Z",
   "devdoc": {
     "methods": {
       "canCreateAnotherEdition(address)": {

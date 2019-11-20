@@ -2257,14 +2257,84 @@
       "transactionHash": "0x1151f96a9a088d4585bb14a7b8781ceeb0bea75bb91fd5937789e01fc8bb8791"
     },
     "3": {
-      "events": {},
+      "events": {
+        "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipRenounced",
+          "type": "event",
+          "signature": "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
       "links": {},
       "address": "0x70fd51b73775e0eAE11d5bf3D1fBB895404fDcB8",
       "transactionHash": "0xc39e252d38d0c083e09fc4fd4cfcd9fea52b439f9c6d5209f4ce8aa4b1218e23"
+    },
+    "4": {
+      "events": {
+        "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipRenounced",
+          "type": "event",
+          "signature": "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
+      "links": {},
+      "address": "0x1c9817aEdeC8Af91e439c228b70AEb9145ae5508",
+      "transactionHash": "0x18106577ed52b6b1de93872ce160e284f8e6a62092a71d1903780c8f8a994afb"
     }
   },
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-11-16T07:22:38.235Z",
+  "updatedAt": "2019-11-20T20:59:51.695Z",
   "devdoc": {
     "methods": {
       "isEnabledForAccount(address)": {

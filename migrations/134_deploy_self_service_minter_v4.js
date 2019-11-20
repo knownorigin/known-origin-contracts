@@ -31,7 +31,7 @@ module.exports = async function (deployer, network, accounts) {
   // Get deployed contracts
   console.log(`KODA V2 [${koda.address}] Auction V2 [${auction.address}] AccessControls V1 [${accessControls.address}]`);
 
-  // Deploy new minting controls
+  // Deploy new frequency controls
   await deployer.deploy(SelfServiceFrequencyControls, {from: _koAccount});
 
   const frequencyControls = await SelfServiceFrequencyControls.deployed();
