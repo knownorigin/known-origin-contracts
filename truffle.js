@@ -28,6 +28,15 @@ module.exports = {
       }
     }
   },
+  plugins: [
+    'truffle-plugin-verify'
+  ],
+  api_keys: {
+    etherscan: process.env.ETHERSCAN_KEY
+  },
+  verify: {
+    preamble: 'Author: BlockRocket.tech.\n'
+  },
   networks: {
     development: {
       host: '127.0.0.1',
@@ -37,9 +46,9 @@ module.exports = {
       gasPrice: 0x01
     },
     ganache: {
-      host: "127.0.0.1",
+      host: '127.0.0.1',
       port: 7545,
-      network_id: "*",
+      network_id: '*',
       gas: 6721975,
       gasPrice: 1
     },
@@ -51,8 +60,8 @@ module.exports = {
       gasPrice: 0x01
     },
     coverage: {
-      host: "localhost",
-      network_id: "*",
+      host: 'localhost',
+      network_id: '*',
       port: 8555,         // <-- If you change this, also set the port option in .solcover.js.
       gas: 0xfffffffffff, // <-- Use this high gas value
       gasPrice: 0x01      // <-- Use this low gas price

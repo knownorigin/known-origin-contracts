@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/knownorigin/known-origin-contracts#readme",
   "dependencies": {
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "truffle-plugin-verify": "^0.3.5"
   },
   "devDependencies": {
     "lodash": "^4.17.15",
