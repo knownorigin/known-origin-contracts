@@ -1,5 +1,6 @@
 const assertRevert = require('../../../helpers/assertRevert');
 const etherToWei = require('../../../helpers/etherToWei');
+const moment = require('moment');
 const _ = require('lodash');
 const bnChai = require('bn-chai');
 
@@ -124,6 +125,21 @@ contract('SelfServiceEditionCurationV4 tests', function (accounts) {
         await assertRevert(
           this.minter.createEdition(false, ZERO_ADDRESS, 0, 10, etherToWei(1), 0, 0, artistCommission, '123', {from: koCommission}),
           'Can only mint your own once we have enabled you on the platform'
+        );
+      });
+
+      it('should fail if end date not in the past', async () => {
+        const dateInThePast = 123456;
+        await assertRevert(
+          this.minter.createEdition(false, ZERO_ADDRESS, 0, 10, etherToWei(1), dateInThePast, 0, artistCommission, '123', {from: koCommission}),
+          'End date cannot be in the past'
+        );
+      });
+
+      it('should fail if optional commission and commision greater than 100', async () => {
+        await assertRevert(
+          this.minter.createEdition(false, ZERO_ADDRESS, 1, 10, etherToWei(1), 0, 0, artistCommission, '123', {from: koCommission}),
+          'Total commission exceeds 100'
         );
       });
     });
@@ -456,15 +472,126 @@ contract('SelfServiceEditionCurationV4 tests', function (accounts) {
         });
       });
 
-      function validateEditionCreatedLog(logs, {_editionNumber, _creator, _priceInWei, _totalAvailable}) {
+    });
+
+    describe('should set start and end date', async () => {
+
+      beforeEach(async () => {
+        await this.accessControls.setOpenToAllArtist(true, {from: _owner});
+      });
+
+      it('when minted contain start and end dates', async () => {
+        const edition3 = {
+          total: 10,
+          tokenUri: 'ipfs://edition3',
+          price: etherToWei(1)
+        };
+
+        const creator = edition1.artist;
+        const expectedEditionNumber = 20200;
+
+        const startDate = moment().add(1, 'hours').unix().valueOf();
+        const endDate = moment().add(1, 'week').unix().valueOf();
+
+        // Check logs from creation call
+        const {logs} = await this.minter.createEdition(
+          true, ZERO_ADDRESS, 0, edition3.total, edition3.price, startDate, endDate, artistCommission, edition3.tokenUri,
+          {
+            from: creator
+          }
+        );
         logs[0].event.should.be.equal('SelfServiceEditionCreated');
-        logs[0].args._editionNumber.should.be.eq.BN(_editionNumber);
-        logs[0].args._creator.should.be.equal(_creator);
-        logs[0].args._priceInWei.should.be.eq.BN(_priceInWei);
-        logs[0].args._totalAvailable.should.be.eq.BN(_totalAvailable);
-      }
+        logs[0].args._editionNumber.should.be.eq.BN(expectedEditionNumber); // last edition no. is 20000 and has total of 100 in it
+        logs[0].args._creator.should.be.equal(creator); // artist from edition 1 created it
+        logs[0].args._priceInWei.should.be.eq.BN(edition3.price);
+        logs[0].args._totalAvailable.should.be.eq.BN(edition3.total);
+
+        // Check edition created in KODA
+        const edition = await this.koda.detailsOfEdition(expectedEditionNumber);
+        edition[1].should.be.eq.BN(1);
+        edition[2].should.be.eq.BN(startDate);
+        edition[3].should.be.eq.BN(endDate);
+        edition[4].should.be.equal(creator);
+        edition[5].should.be.eq.BN(85); // reduced commission for KO with self service?
+        edition[6].should.be.eq.BN(edition3.price);
+        edition[7].should.be.equal(`https://ipfs.infura.io/ipfs/${edition3.tokenUri}`);
+        edition[8].should.be.eq.BN(0);
+        edition[9].should.be.eq.BN(edition3.total);
+        edition[10].should.be.equal(true);
+
+        // check auction details
+        const {_enabled, _bidder, _value, _controller} = await this.auction.auctionDetails(expectedEditionNumber);
+        _enabled.should.be.equal(true);
+        _bidder.should.be.equal(ZERO_ADDRESS);
+        _value.should.be.eq.BN(0);
+        _controller.should.be.equal(creator);
+      });
 
     });
+
+    describe('should set optional commissions', async () => {
+
+      beforeEach(async () => {
+        await this.accessControls.setOpenToAllArtist(true, {from: _owner});
+      });
+
+      it('creates edition with extra commission splits set', async () => {
+        const edition3 = {
+          total: 10,
+          tokenUri: 'ipfs://edition3',
+          price: etherToWei(1)
+        };
+
+        const creator = edition1.artist;
+        const expectedEditionNumber = 20200;
+
+        const {logs} = await this.minter.createEdition(
+          true, optionalSplitAddress, optionalSplitRate, edition3.total, edition3.price, 0, 0, 43, edition3.tokenUri,
+          {
+            from: creator
+          }
+        );
+        logs[0].event.should.be.equal('SelfServiceEditionCreated');
+        logs[0].args._editionNumber.should.be.eq.BN(expectedEditionNumber); // last edition no. is 20000 and has total of 100 in it
+        logs[0].args._creator.should.be.equal(creator); // artist from edition 1 created it
+        logs[0].args._priceInWei.should.be.eq.BN(edition3.price);
+        logs[0].args._totalAvailable.should.be.eq.BN(edition3.total);
+
+        // Check edition created in KODA
+        const edition = await this.koda.detailsOfEdition(expectedEditionNumber);
+        edition[1].should.be.eq.BN(1);
+        edition[2].should.be.eq.BN(0);
+        edition[3].should.be.eq.BN(MAX_UINT32);
+        edition[4].should.be.equal(creator);
+        edition[5].should.be.eq.BN(43);
+        edition[6].should.be.eq.BN(edition3.price);
+        edition[7].should.be.equal(`https://ipfs.infura.io/ipfs/${edition3.tokenUri}`);
+        edition[8].should.be.eq.BN(0);
+        edition[9].should.be.eq.BN(edition3.total);
+        edition[10].should.be.equal(true);
+
+        // check auction details
+        const {_enabled, _bidder, _value, _controller} = await this.auction.auctionDetails(expectedEditionNumber);
+        _enabled.should.be.equal(true);
+        _bidder.should.be.equal(ZERO_ADDRESS);
+        _value.should.be.eq.BN(0);
+        _controller.should.be.equal(creator);
+
+        // check optional commissions
+        const {_rate, _recipient} = await this.koda.editionOptionalCommission(expectedEditionNumber);
+        _rate.should.be.eq.BN(optionalSplitRate);
+        _recipient.should.be.equal(optionalSplitAddress);
+      });
+
+    });
+
+    function validateEditionCreatedLog(logs, {_editionNumber, _creator, _priceInWei, _totalAvailable}) {
+      logs[0].event.should.be.equal('SelfServiceEditionCreated');
+      logs[0].args._editionNumber.should.be.eq.BN(_editionNumber);
+      logs[0].args._creator.should.be.equal(_creator);
+      logs[0].args._priceInWei.should.be.eq.BN(_priceInWei);
+      logs[0].args._totalAvailable.should.be.eq.BN(_totalAvailable);
+    }
   });
 
   describe('price restrictions', async () => {

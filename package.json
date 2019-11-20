@@ -20,7 +20,9 @@
     "url": "https://github.com/knownorigin/known-origin-contracts/issues"
   },
   "homepage": "https://github.com/knownorigin/known-origin-contracts#readme",
-  "dependencies": {},
+  "dependencies": {
+    "moment": "^2.24.0"
+  },
   "devDependencies": {
     "lodash": "^4.17.15",
     "bluebird": "^3.5.1",

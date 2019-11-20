@@ -79,11 +79,12 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
     }
 
     if (_endDate > 0) {
+      require(_endDate > now, "End date cannot be in the past");
       kodaV2.updateEndDate(editionNumber, _endDate);
     }
 
     if (_optionalSplitRate > 0) {
-      kodaV2.updateOptionalCommission(_editionNumber, _optionalSplitRate, _optionalSplitAddress);
+      kodaV2.updateOptionalCommission(editionNumber, _optionalSplitRate, _optionalSplitAddress);
     }
 
     frequencyControls.recordSuccessfulMint(msg.sender, _totalAvailable, _priceInWei);
