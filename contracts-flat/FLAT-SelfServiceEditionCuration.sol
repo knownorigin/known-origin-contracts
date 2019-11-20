@@ -171,7 +171,7 @@ library SafeMath {
   }
 }
 
-// File: contracts/v2/tools/SelfServiceEditionCuration.sol
+// File: contracts/v2/self-service/SelfServiceEditionCuration.sol
 
 pragma solidity 0.4.24;
 

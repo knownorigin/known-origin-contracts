@@ -192,7 +192,7 @@ interface IKODAV2Controls {
   function updateActive(uint256 _editionNumber, bool _active) external;
 }
 
-// File: contracts/v2/tools/ArtistEditionControls.sol
+// File: contracts/v2/artist-controls/ArtistEditionControls.sol
 
 pragma solidity 0.4.24;
 

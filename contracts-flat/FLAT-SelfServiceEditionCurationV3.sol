@@ -181,7 +181,7 @@ interface ISelfServiceAccessControls {
 
 }
 
-// File: contracts/v2/tools/SelfServiceAccessControls.sol
+// File: contracts/v2/self-service/SelfServiceAccessControls.sol
 
 contract SelfServiceAccessControls is Ownable, ISelfServiceAccessControls {
 
@@ -227,7 +227,7 @@ contract SelfServiceAccessControls is Ownable, ISelfServiceAccessControls {
   }
 }
 
-// File: contracts/v2/tools/SelfServiceEditionCurationV3.sol
+// File: contracts/v2/self-service/SelfServiceEditionCurationV3.sol
 
 pragma solidity 0.4.24;
 

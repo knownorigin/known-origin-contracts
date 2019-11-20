@@ -171,59 +171,9 @@ library SafeMath {
   }
 }
 
-// File: contracts/v2/tools/SelfServiceAccessControls.sol
+// File: contracts/v2/interfaces/IKODAV2SelfServiceEditionCuration.sol
 
-contract SelfServiceAccessControls is Ownable {
-
-  // Simple map to only allow certain artist create editions at first
-  mapping(address => bool) public allowedArtists;
-
-  // When true any existing KO artist can mint their own editions
-  bool public openToAllArtist = false;
-
-  /**
-   * @dev Controls is the contract is open to all
-   * @dev Only callable from owner
-   */
-  function setOpenToAllArtist(bool _openToAllArtist) onlyOwner public {
-    openToAllArtist = _openToAllArtist;
-  }
-
-  /**
-   * @dev Controls who can call this contract
-   * @dev Only callable from owner
-   */
-  function setAllowedArtist(address _artist, bool _allowed) onlyOwner public {
-    allowedArtists[_artist] = _allowed;
-  }
-
-  /**
-   * @dev Checks to see if the account can create editions
-   */
-  function isEnabledForAccount(address account) public view returns (bool) {
-    if (openToAllArtist) {
-      return true;
-    }
-    return allowedArtists[account];
-  }
-
-  /**
-   * @dev Allows for the ability to extract stuck ether
-   * @dev Only callable from owner
-   */
-  function withdrawStuckEther(address _withdrawalAccount) onlyOwner public {
-    require(_withdrawalAccount != address(0), "Invalid address provided");
-    _withdrawalAccount.transfer(address(this).balance);
-  }
-}
-
-// File: contracts/v2/tools/SelfServiceEditionCurationV4.sol
-
-pragma solidity 0.5.12;
-
-
-
-
+pragma solidity 0.4.24;
 
 interface IKODAV2SelfServiceEditionCuration {
 
@@ -246,12 +196,61 @@ interface IKODAV2SelfServiceEditionCuration {
 
   function highestEditionNumber() external returns (uint256);
 
-  function updateOptionalCommission(uint256 _editionNumber, uint256 _rate, address _recipient);
+  function updateOptionalCommission(uint256 _editionNumber, uint256 _rate, address _recipient) external;
+
+  function updateStartDate(uint256 _editionNumber, uint256 _startDate) external;
+
+  function updateEndDate(uint256 _editionNumber, uint256 _endDate) external;
 }
+
+// File: contracts/v2/interfaces/IKODAAuction.sol
+
+pragma solidity 0.4.24;
 
 interface IKODAAuction {
   function setArtistsControlAddressAndEnabledEdition(uint256 _editionNumber, address _address) external;
 }
+
+// File: contracts/v2/interfaces/ISelfServiceAccessControls.sol
+
+pragma solidity 0.4.24;
+
+interface ISelfServiceAccessControls {
+
+  function isEnabledForAccount(address account) public view returns (bool);
+
+}
+
+// File: contracts/v2/interfaces/ISelfServiceFrequencyControls.sol
+
+pragma solidity 0.4.24;
+
+interface ISelfServiceFrequencyControls {
+
+  /*
+   * Checks is the given artist can create another edition
+   */
+  function canCreateNewEdition(address artist) external view returns (bool);
+
+  /*
+   * Records that an edition has been created
+   * @param artist - the edition artist
+   * @param totalAvailable - the edition size
+   * @param priceInWei - the edition price in wei
+   */
+  function recordSuccessfulMint(address artist, uint256 totalAvailable, uint256 priceInWei) external returns (bool);
+}
+
+// File: contracts/v2/self-service/SelfServiceEditionCurationV4.sol
+
+pragma solidity 0.4.24;
+
+
+
+
+
+
+
 
 // One invocation per time-period
 contract SelfServiceEditionCurationV4 is Ownable, Pausable {
@@ -268,10 +267,11 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
   // Calling address
   IKODAV2SelfServiceEditionCuration public kodaV2;
   IKODAAuction public auction;
-  SelfServiceAccessControls public accessControls;
+  ISelfServiceAccessControls public accessControls;
+  ISelfServiceFrequencyControls public frequencyControls;
 
-  // Default artist commission
-  uint256 public artistCommission = 85;
+  // Default KO commission
+  uint256 public koCommission = 15;
 
   // Config which enforces editions to not be over this size
   uint256 public maxEditionSize = 100;
@@ -279,44 +279,60 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
   // Config the minimum price per edition
   uint256 public minPricePerEdition = 0.01 ether;
 
-  // frozen out for..
-  uint256 public freezeWindow = 1 days;
-
-  // When the current time period started
-  mapping(address => uint256) public frozenTil;
-
   /**
    * @dev Construct a new instance of the contract
    */
   constructor(
     IKODAV2SelfServiceEditionCuration _kodaV2,
     IKODAAuction _auction,
-    SelfServiceAccessControls _accessControls
+    ISelfServiceAccessControls _accessControls,
+    ISelfServiceFrequencyControls _frequencyControls
   ) public {
     kodaV2 = _kodaV2;
     auction = _auction;
     accessControls = _accessControls;
+    frequencyControls = _frequencyControls;
   }
 
   /**
    * @dev Called by artists, create new edition on the KODA platform
    */
   function createEdition(
+    bool _enableAuction,
+    address _optionalSplitAddress,
+    uint256 _optionalSplitRate,
     uint256 _totalAvailable,
     uint256 _priceInWei,
     uint256 _startDate,
-    string _tokenUri,
-    bool _enableAuction
+    uint256 _endDate,
+    uint256 _artistCommission,
+    string _tokenUri
   )
   public
   whenNotPaused
   returns (uint256 _editionNumber)
   {
-    require(!_isFrozen(msg.sender), 'Sender currently frozen out of creation');
+    require(frequencyControls.canCreateNewEdition(msg.sender), 'Sender currently frozen out of creation');
+    require(_artistCommission.add(_optionalSplitRate).add(koCommission) <= 100, "Total commission exceeds 100");
 
-    frozenTil[msg.sender] = block.timestamp.add(freezeWindow);
+    uint256 editionNumber = _createEdition(msg.sender, _enableAuction, _totalAvailable, _priceInWei, _artistCommission, _tokenUri);
 
-    return _createEdition(msg.sender, _totalAvailable, _priceInWei, _startDate, _tokenUri, _enableAuction, artistCommission, 0, address(0));
+    if (_startDate > 0) {
+      kodaV2.updateStartDate(editionNumber, _startDate);
+    }
+
+    if (_endDate > 0) {
+      require(_endDate > now, "End date cannot be in the past");
+      kodaV2.updateEndDate(editionNumber, _endDate);
+    }
+
+    if (_optionalSplitRate > 0) {
+      kodaV2.updateOptionalCommission(editionNumber, _optionalSplitRate, _optionalSplitAddress);
+    }
+
+    frequencyControls.recordSuccessfulMint(msg.sender, _totalAvailable, _priceInWei);
+
+    return editionNumber;
   }
 
   /**
@@ -325,17 +341,39 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    */
   function createEditionFor(
     address _artist,
+    bool _enableAuction,
+    address _optionalSplitAddress,
+    uint256 _optionalSplitRate,
     uint256 _totalAvailable,
     uint256 _priceInWei,
     uint256 _startDate,
-    string _tokenUri,
-    bool _enableAuction
+    uint256 _endDate,
+    uint256 _artistCommission,
+    string _tokenUri
   )
   public
   onlyOwner
   returns (uint256 _editionNumber)
   {
-    return _createEdition(_artist, _totalAvailable, _priceInWei, _startDate, _tokenUri, _enableAuction, artistCommission, 0, address(0));
+    require(_artistCommission.add(_optionalSplitRate).add(koCommission) <= 100, "Total commission exceeds 100");
+
+    uint256 editionNumber = _createEdition(_artist, _enableAuction, _totalAvailable, _priceInWei, _artistCommission, _tokenUri);
+
+    if (_startDate > 0) {
+      kodaV2.updateStartDate(editionNumber, _startDate);
+    }
+
+    if (_endDate > 0) {
+      kodaV2.updateEndDate(editionNumber, _endDate);
+    }
+
+    if (_optionalSplitRate > 0) {
+      kodaV2.updateOptionalCommission(_editionNumber, _optionalSplitRate, _optionalSplitAddress);
+    }
+
+    frequencyControls.recordSuccessfulMint(_artist, _totalAvailable, _priceInWei);
+
+    return editionNumber;
   }
 
   /**
@@ -343,15 +381,11 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    */
   function _createEdition(
     address _artist,
+    bool _enableAuction,
     uint256 _totalAvailable,
     uint256 _priceInWei,
-    uint256 _startDate,
-    uint256 _endDate,
-    string _tokenUri,
-    bool _enableAuction,
     uint256 _artistCommission,
-    uint256 _commissionSplitRate,
-    address _commissionSplitAddress
+    string _tokenUri
   )
   internal
   returns (uint256 _editionNumber){
@@ -360,18 +394,13 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
     require(_totalAvailable > 0, "Must be at least one available in edition");
     require(_totalAvailable <= maxEditionSize, "Must not exceed max edition size");
 
-    // TODO validate commission split
-
     // Enforce min price
     require(_priceInWei >= minPricePerEdition, "Price must be greater than minimum");
 
     // If we are the owner, skip this artists check
     if (msg.sender != owner) {
-
       // Enforce who can call this
-      if (!accessControls.openToAllArtist()) {
-        require(accessControls.allowedArtists(_artist), "Only allowed artists can create editions for now");
-      }
+      require(accessControls.isEnabledForAccount(_artist), "Only allowed artists can create editions for now");
     }
 
     // Find the next edition number we can use
@@ -379,18 +408,13 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
 
     // Attempt to create a new edition
     require(
-      _createNewEdition(editionNumber, _artist, _totalAvailable, _priceInWei, _startDate, _endDate, _artistCommission, _tokenUri),
+      _createNewEdition(editionNumber, _artist, _totalAvailable, _priceInWei, _artistCommission, _tokenUri),
       "Failed to create new edition"
     );
 
     // Enable the auction if desired
     if (_enableAuction) {
       auction.setArtistsControlAddressAndEnabledEdition(editionNumber, _artist);
-    }
-
-    // Set the additional commission rate if found
-    if (_commissionSplitRate > 0) {
-      kodaV2.updateOptionalCommission(_editionNumber, _commissionSplitRate, _commissionSplitAddress);
     }
 
     // Trigger event
@@ -407,8 +431,6 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
     address _artist,
     uint256 _totalAvailable,
     uint256 _priceInWei,
-    uint256 _startDate,
-    uint256 _endDate,
     uint256 _artistCommission,
     string _tokenUri
   )
@@ -418,21 +440,14 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
       _editionNumber,
       0x0, // _editionData - no edition data
       1, // _editionType - KODA always type 1
-      _startDate,
-      _endDate, // _endDate - 0 = MAX unit256
+      0,
+      0, // _endDate - 0 = MAX unit256
       _artist,
       _artistCommission, // defaults to global property artistCommission if no extra commission split is found
       _priceInWei,
       _tokenUri,
       _totalAvailable
     );
-  }
-
-  /**
-   * @dev Internal function for checking is an account is frozen out yet
-   */
-  function _isFrozen(address account) internal view returns (bool) {
-    return (block.timestamp < frozenTil[account]);
   }
 
   /**
@@ -468,11 +483,11 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
   }
 
   /**
-   * @dev Sets the default commission for each edition
+   * @dev Sets the default KO commission for each edition
    * @dev Only callable from owner
    */
-  function setArtistCommission(uint256 _artistCommission) onlyOwner public {
-    artistCommission = _artistCommission;
+  function setKoCommission(uint256 _koCommission) onlyOwner public {
+    koCommission = _koCommission;
   }
 
   /**
@@ -492,18 +507,10 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
   }
 
   /**
-   * @dev Sets freeze window
-   * @dev Only callable from owner
-   */
-  function setFreezeWindow(uint256 _freezeWindow) onlyOwner public {
-    freezeWindow = _freezeWindow;
-  }
-
-  /**
    * @dev Checks to see if the account is currently frozen out
    */
   function isFrozen(address account) public view returns (bool) {
-    return _isFrozen(account);
+    return frequencyControls.canCreateNewEdition(account);
   }
 
   /**
@@ -517,10 +524,10 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    * @dev Checks to see if the account can create editions
    */
   function canCreateAnotherEdition(address account) public view returns (bool) {
-    if (!isEnabledForAccount(account)) {
+    if (!accessControls.isEnabledForAccount(account)) {
       return false;
     }
-    return !_isFrozen(account);
+    return frequencyControls.canCreateNewEdition(account);
   }
 
   /**
