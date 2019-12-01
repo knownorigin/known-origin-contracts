@@ -1,6 +1,6 @@
 pragma solidity 0.4.24;
 
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/access/Whitelist.sol";
 import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
@@ -10,7 +10,7 @@ import "../interfaces/ISelfServiceAccessControls.sol";
 import "../interfaces/ISelfServiceFrequencyControls.sol";
 
 // One invocation per time-period
-contract SelfServiceEditionCurationV4 is Ownable, Pausable {
+contract SelfServiceEditionCurationV4 is Whitelist, Pausable {
   using SafeMath for uint256;
 
   event SelfServiceEditionCreated(
@@ -45,6 +45,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
     ISelfServiceAccessControls _accessControls,
     ISelfServiceFrequencyControls _frequencyControls
   ) public {
+    super.addAddressToWhitelist(msg.sender);
     kodaV2 = _kodaV2;
     auction = _auction;
     accessControls = _accessControls;
@@ -63,6 +64,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
     uint256 _startDate,
     uint256 _endDate,
     uint256 _artistCommission,
+    uint256 _editionType,
     string _tokenUri
   )
   public
@@ -72,20 +74,48 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
     require(frequencyControls.canCreateNewEdition(msg.sender), 'Sender currently frozen out of creation');
     require(_artistCommission.add(_optionalSplitRate).add(koCommission) <= 100, "Total commission exceeds 100");
 
-    uint256 editionNumber = _createEdition(msg.sender, _enableAuction, _totalAvailable, _priceInWei, _artistCommission, _tokenUri);
+    uint256 editionNumber = _createEdition(
+      msg.sender,
+      _enableAuction,
+      [_totalAvailable, _priceInWei, _startDate, _endDate, _artistCommission, _editionType],
+      _tokenUri
+    );
 
-    if (_startDate > 0) {
-      kodaV2.updateStartDate(editionNumber, _startDate);
-    }
-
-    if (_endDate > 0) {
-      require(_endDate > now, "End date cannot be in the past");
-      kodaV2.updateEndDate(editionNumber, _endDate);
-    }
-
-    if (_optionalSplitRate > 0) {
+    if (_optionalSplitRate > 0 && _optionalSplitAddress != address(0)) {
       kodaV2.updateOptionalCommission(editionNumber, _optionalSplitRate, _optionalSplitAddress);
     }
+
+    frequencyControls.recordSuccessfulMint(msg.sender, _totalAvailable, _priceInWei);
+
+    return editionNumber;
+  }
+
+  /**
+   * @dev Called by artists, create new edition on the KODA platform, single commission split between artists and KO only
+   */
+  function createEditionSimple(
+    bool _enableAuction,
+    uint256 _totalAvailable,
+    uint256 _priceInWei,
+    uint256 _startDate,
+    uint256 _endDate,
+    uint256 _artistCommission,
+    uint256 _editionType,
+    string _tokenUri
+  )
+  public
+  whenNotPaused
+  returns (uint256 _editionNumber)
+  {
+    require(frequencyControls.canCreateNewEdition(msg.sender), 'Sender currently frozen out of creation');
+    require(_artistCommission.add(koCommission) <= 100, "Total commission exceeds 100");
+
+    uint256 editionNumber = _createEdition(
+      msg.sender,
+      _enableAuction,
+      [_totalAvailable, _priceInWei, _startDate, _endDate, _artistCommission, _editionType],
+      _tokenUri
+    );
 
     frequencyControls.recordSuccessfulMint(msg.sender, _totalAvailable, _priceInWei);
 
@@ -106,26 +136,24 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
     uint256 _startDate,
     uint256 _endDate,
     uint256 _artistCommission,
+    uint256 _editionType,
     string _tokenUri
   )
   public
-  onlyOwner
+  onlyIfWhitelisted(msg.sender)
   returns (uint256 _editionNumber)
   {
     require(_artistCommission.add(_optionalSplitRate).add(koCommission) <= 100, "Total commission exceeds 100");
 
-    uint256 editionNumber = _createEdition(_artist, _enableAuction, _totalAvailable, _priceInWei, _artistCommission, _tokenUri);
+    uint256 editionNumber = _createEdition(
+      _artist,
+      _enableAuction,
+      [_totalAvailable, _priceInWei, _startDate, _endDate, _artistCommission, _editionType],
+      _tokenUri
+    );
 
-    if (_startDate > 0) {
-      kodaV2.updateStartDate(editionNumber, _startDate);
-    }
-
-    if (_endDate > 0) {
-      kodaV2.updateEndDate(editionNumber, _endDate);
-    }
-
-    if (_optionalSplitRate > 0) {
-      kodaV2.updateOptionalCommission(_editionNumber, _optionalSplitRate, _optionalSplitAddress);
+    if (_optionalSplitRate > 0 && _optionalSplitAddress != address(0)) {
+      kodaV2.updateOptionalCommission(editionNumber, _optionalSplitRate, _optionalSplitAddress);
     }
 
     frequencyControls.recordSuccessfulMint(_artist, _totalAvailable, _priceInWei);
@@ -139,33 +167,40 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
   function _createEdition(
     address _artist,
     bool _enableAuction,
-    uint256 _totalAvailable,
-    uint256 _priceInWei,
-    uint256 _artistCommission,
+    uint256[6] memory _params,
     string _tokenUri
   )
   internal
-  returns (uint256 _editionNumber){
+  returns (uint256 _editionNumber) {
+
+    uint256 _totalAvailable = _params[0];
+    uint256 _priceInWei = _params[1];
 
     // Enforce edition size
-    require(_totalAvailable > 0, "Must be at least one available in edition");
-    require(_totalAvailable <= maxEditionSize, "Must not exceed max edition size");
+    require(msg.sender == owner || (_totalAvailable > 0 && _totalAvailable <= maxEditionSize), "Invalid edition size");
 
     // Enforce min price
-    require(_priceInWei >= minPricePerEdition, "Price must be greater than minimum");
+    require(msg.sender == owner || _priceInWei >= minPricePerEdition, "Invalid price");
 
     // If we are the owner, skip this artists check
-    if (msg.sender != owner) {
-      // Enforce who can call this
-      require(accessControls.isEnabledForAccount(_artist), "Only allowed artists can create editions for now");
-    }
+    require(msg.sender == owner || accessControls.isEnabledForAccount(_artist), "Not allowed to create edition");
 
     // Find the next edition number we can use
     uint256 editionNumber = getNextAvailableEditionNumber();
 
-    // Attempt to create a new edition
     require(
-      _createNewEdition(editionNumber, _artist, _totalAvailable, _priceInWei, _artistCommission, _tokenUri),
+      kodaV2.createActiveEdition(
+        editionNumber,
+        0x0, // _editionData - no edition data
+        _params[5], //_editionType,
+        _params[2], // _startDate,
+        _params[3], //_endDate,
+        _artist,
+        _params[4], // _artistCommission - defaults to artistCommission if optional commission split missing
+        _priceInWei,
+        _tokenUri,
+        _totalAvailable
+      ),
       "Failed to create new edition"
     );
 
@@ -178,33 +213,6 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
     emit SelfServiceEditionCreated(editionNumber, _artist, _priceInWei, _totalAvailable, _enableAuction);
 
     return editionNumber;
-  }
-
-  /**
-   * @dev Internal function for calling external create methods with some none configurable defaults
-   */
-  function _createNewEdition(
-    uint256 _editionNumber,
-    address _artist,
-    uint256 _totalAvailable,
-    uint256 _priceInWei,
-    uint256 _artistCommission,
-    string _tokenUri
-  )
-  internal
-  returns (bool) {
-    return kodaV2.createActiveEdition(
-      _editionNumber,
-      0x0, // _editionData - no edition data
-      1, // _editionType - KODA always type 1
-      0,
-      0, // _endDate - 0 = MAX unit256
-      _artist,
-      _artistCommission, // defaults to global property artistCommission if no extra commission split is found
-      _priceInWei,
-      _tokenUri,
-      _totalAvailable
-    );
   }
 
   /**
@@ -227,7 +235,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    * @dev Sets the KODA address
    * @dev Only callable from owner
    */
-  function setKodavV2(IKODAV2SelfServiceEditionCuration _kodaV2) onlyOwner public {
+  function setKodavV2(IKODAV2SelfServiceEditionCuration _kodaV2) onlyIfWhitelisted(msg.sender) public {
     kodaV2 = _kodaV2;
   }
 
@@ -235,7 +243,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    * @dev Sets the KODA auction
    * @dev Only callable from owner
    */
-  function setAuction(IKODAAuction _auction) onlyOwner public {
+  function setAuction(IKODAAuction _auction) onlyIfWhitelisted(msg.sender) public {
     auction = _auction;
   }
 
@@ -243,7 +251,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    * @dev Sets the default KO commission for each edition
    * @dev Only callable from owner
    */
-  function setKoCommission(uint256 _koCommission) onlyOwner public {
+  function setKoCommission(uint256 _koCommission) onlyIfWhitelisted(msg.sender) public {
     koCommission = _koCommission;
   }
 
@@ -251,7 +259,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    * @dev Sets the max edition size
    * @dev Only callable from owner
    */
-  function setMaxEditionSize(uint256 _maxEditionSize) onlyOwner public {
+  function setMaxEditionSize(uint256 _maxEditionSize) onlyIfWhitelisted(msg.sender) public {
     maxEditionSize = _maxEditionSize;
   }
 
@@ -259,7 +267,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    * @dev Sets minimum price per edition
    * @dev Only callable from owner
    */
-  function setMinPricePerEdition(uint256 _minPricePerEdition) onlyOwner public {
+  function setMinPricePerEdition(uint256 _minPricePerEdition) onlyIfWhitelisted(msg.sender) public {
     minPricePerEdition = _minPricePerEdition;
   }
 
@@ -291,7 +299,7 @@ contract SelfServiceEditionCurationV4 is Ownable, Pausable {
    * @dev Allows for the ability to extract stuck ether
    * @dev Only callable from owner
    */
-  function withdrawStuckEther(address _withdrawalAccount) onlyOwner public {
+  function withdrawStuckEther(address _withdrawalAccount) onlyIfWhitelisted(msg.sender) public {
     require(_withdrawalAccount != address(0), "Invalid address provided");
     _withdrawalAccount.transfer(address(this).balance);
   }

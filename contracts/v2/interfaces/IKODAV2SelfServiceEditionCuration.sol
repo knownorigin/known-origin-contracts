@@ -26,4 +26,6 @@ interface IKODAV2SelfServiceEditionCuration {
   function updateStartDate(uint256 _editionNumber, uint256 _startDate) external;
 
   function updateEndDate(uint256 _editionNumber, uint256 _endDate) external;
+
+  function updateEditionType(uint256 _editionNumber, uint256 _editionType) external;
 }

@@ -4,6 +4,9 @@ interface ISelfServiceFrequencyControls {
 
   /*
    * Checks is the given artist can create another edition
+   * @param artist - the edition artist
+   * @param totalAvailable - the edition size
+   * @param priceInWei - the edition price in wei
    */
   function canCreateNewEdition(address artist) external view returns (bool);
 

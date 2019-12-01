@@ -32,30 +32,35 @@ module.exports = async function (deployer, network, accounts) {
   console.log(`KODA V2 [${koda.address}] Auction V2 [${auction.address}] AccessControls V1 [${accessControls.address}]`);
 
   // Deploy new frequency controls
-  await deployer.deploy(SelfServiceFrequencyControls, {from: _koAccount});
+  try {
+    await deployer.deploy(SelfServiceFrequencyControls, {from: _koAccount});
 
-  const frequencyControls = await SelfServiceFrequencyControls.deployed();
-  console.log(`Frequency controls deployed [${frequencyControls.address}]`);
+    const frequencyControls = await SelfServiceFrequencyControls.deployed();
+    console.log(`Frequency controls deployed [${frequencyControls.address}]`);
 
-  // Deploy the self service contract
-  await deployer.deploy(SelfServiceEditionCurationV4,
-    koda.address,
-    auction.address,
-    accessControls.address,
-    frequencyControls.address,
-    {from: _koAccount}
-  );
+    // Deploy the self service contract
+    await deployer.deploy(SelfServiceEditionCurationV4,
+      koda.address,
+      auction.address,
+      accessControls.address,
+      frequencyControls.address,
+      {from: _koAccount}
+    );
 
-  const selfServiceV4 = await SelfServiceEditionCurationV4.deployed();
-  console.log('Self service address', selfServiceV4.address);
+    const selfServiceV4 = await SelfServiceEditionCurationV4.deployed();
+    console.log('Self service address', selfServiceV4.address);
 
-  // whitelist self service so it can mint new editions
-  const ROLE_KNOWN_ORIGIN = 1;
-  await koda.addAddressToAccessControl(selfServiceV4.address, ROLE_KNOWN_ORIGIN, {from: _koAccount});
+    // whitelist self service so it can mint new editions
+    const ROLE_KNOWN_ORIGIN = 1;
+    await koda.addAddressToAccessControl(selfServiceV4.address, ROLE_KNOWN_ORIGIN, {from: _koAccount});
 
-  // whitelist self service address so it can enable auctions
-  await auction.addAddressToWhitelist(selfServiceV4.address, {from: _koAccount});
+    // whitelist self service address so it can enable auctions
+    await auction.addAddressToWhitelist(selfServiceV4.address, {from: _koAccount});
 
-  // whitelist self service address so it can call frequency controls
-  await frequencyControls.addAddressToWhitelist(selfServiceV4.address, {from: _koAccount});
+    // whitelist self service address so it can call frequency controls
+    await frequencyControls.addAddressToWhitelist(selfServiceV4.address, {from: _koAccount});
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
 };

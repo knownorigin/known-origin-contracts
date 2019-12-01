@@ -165,6 +165,24 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_editionNumber",
+          "type": "uint256"
+        },
+        {
+          "name": "_editionType",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateEditionType",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
   "metadata": "",
@@ -172,16 +190,16 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity 0.4.24;\n\ninterface IKODAV2SelfServiceEditionCuration {\n\n  function createActiveEdition(\n    uint256 _editionNumber,\n    bytes32 _editionData,\n    uint256 _editionType,\n    uint256 _startDate,\n    uint256 _endDate,\n    address _artistAccount,\n    uint256 _artistCommission,\n    uint256 _priceInWei,\n    string _tokenUri,\n    uint256 _totalAvailable\n  ) external returns (bool);\n\n  function artistsEditions(address _artistsAccount) external returns (uint256[1] _editionNumbers);\n\n  function totalAvailableEdition(uint256 _editionNumber) external returns (uint256);\n\n  function highestEditionNumber() external returns (uint256);\n\n  function updateOptionalCommission(uint256 _editionNumber, uint256 _rate, address _recipient) external;\n\n  function updateStartDate(uint256 _editionNumber, uint256 _startDate) external;\n\n  function updateEndDate(uint256 _editionNumber, uint256 _endDate) external;\n}\n",
+  "source": "pragma solidity 0.4.24;\n\ninterface IKODAV2SelfServiceEditionCuration {\n\n  function createActiveEdition(\n    uint256 _editionNumber,\n    bytes32 _editionData,\n    uint256 _editionType,\n    uint256 _startDate,\n    uint256 _endDate,\n    address _artistAccount,\n    uint256 _artistCommission,\n    uint256 _priceInWei,\n    string _tokenUri,\n    uint256 _totalAvailable\n  ) external returns (bool);\n\n  function artistsEditions(address _artistsAccount) external returns (uint256[1] _editionNumbers);\n\n  function totalAvailableEdition(uint256 _editionNumber) external returns (uint256);\n\n  function highestEditionNumber() external returns (uint256);\n\n  function updateOptionalCommission(uint256 _editionNumber, uint256 _rate, address _recipient) external;\n\n  function updateStartDate(uint256 _editionNumber, uint256 _startDate) external;\n\n  function updateEndDate(uint256 _editionNumber, uint256 _endDate) external;\n\n  function updateEditionType(uint256 _editionNumber, uint256 _editionType) external;\n}\n",
   "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/IKODAV2SelfServiceEditionCuration.sol",
   "ast": {
     "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/IKODAV2SelfServiceEditionCuration.sol",
     "exportedSymbols": {
       "IKODAV2SelfServiceEditionCuration": [
-        8443
+        8450
       ]
     },
-    "id": 8444,
+    "id": 8451,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -200,9 +218,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 8443,
+        "id": 8450,
         "linearizedBaseContracts": [
-          8443
+          8450
         ],
         "name": "IKODAV2SelfServiceEditionCuration",
         "nodeType": "ContractDefinition",
@@ -518,7 +536,7 @@
               ],
               "src": "385:6:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "74:318:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -628,7 +646,7 @@
               ],
               "src": "463:28:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "396:96:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -711,7 +729,7 @@
               ],
               "src": "568:9:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "496:82:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -767,7 +785,7 @@
               ],
               "src": "631:9:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "582:59:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -875,7 +893,7 @@
               "parameters": [],
               "src": "746:0:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "645:102:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -957,7 +975,7 @@
               "parameters": [],
               "src": "828:0:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "751:78:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1039,27 +1057,109 @@
               "parameters": [],
               "src": "906:0:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "833:74:27",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 8449,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "updateEditionType",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 8447,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8444,
+                  "name": "_editionNumber",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8449,
+                  "src": "938:22:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8443,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "938:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 8446,
+                  "name": "_editionType",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8449,
+                  "src": "962:20:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8445,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "962:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "937:46:27"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 8448,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "992:0:27"
+            },
+            "scope": 8450,
+            "src": "911:82:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 8444,
-        "src": "25:884:27"
+        "scope": 8451,
+        "src": "25:970:27"
       }
     ],
-    "src": "0:910:27"
+    "src": "0:996:27"
   },
   "legacyAST": {
     "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/IKODAV2SelfServiceEditionCuration.sol",
     "exportedSymbols": {
       "IKODAV2SelfServiceEditionCuration": [
-        8443
+        8450
       ]
     },
-    "id": 8444,
+    "id": 8451,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -1078,9 +1178,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 8443,
+        "id": 8450,
         "linearizedBaseContracts": [
-          8443
+          8450
         ],
         "name": "IKODAV2SelfServiceEditionCuration",
         "nodeType": "ContractDefinition",
@@ -1396,7 +1496,7 @@
               ],
               "src": "385:6:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "74:318:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1506,7 +1606,7 @@
               ],
               "src": "463:28:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "396:96:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1589,7 +1689,7 @@
               ],
               "src": "568:9:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "496:82:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1645,7 +1745,7 @@
               ],
               "src": "631:9:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "582:59:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1753,7 +1853,7 @@
               "parameters": [],
               "src": "746:0:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "645:102:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1835,7 +1935,7 @@
               "parameters": [],
               "src": "828:0:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "751:78:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1917,18 +2017,100 @@
               "parameters": [],
               "src": "906:0:27"
             },
-            "scope": 8443,
+            "scope": 8450,
             "src": "833:74:27",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "external"
+          },
+          {
+            "body": null,
+            "documentation": null,
+            "id": 8449,
+            "implemented": false,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "updateEditionType",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 8447,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8444,
+                  "name": "_editionNumber",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8449,
+                  "src": "938:22:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8443,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "938:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 8446,
+                  "name": "_editionType",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8449,
+                  "src": "962:20:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8445,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "962:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "937:46:27"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 8448,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "992:0:27"
+            },
+            "scope": 8450,
+            "src": "911:82:27",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 8444,
-        "src": "25:884:27"
+        "scope": 8451,
+        "src": "25:970:27"
       }
     ],
-    "src": "0:910:27"
+    "src": "0:996:27"
   },
   "compiler": {
     "name": "solc",
@@ -1936,7 +2118,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-11-18T12:36:52.576Z",
+  "updatedAt": "2019-11-29T16:46:19.545Z",
   "devdoc": {
     "methods": {}
   },

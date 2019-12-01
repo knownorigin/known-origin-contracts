@@ -13,12 +13,18 @@ contract SelfServiceFrequencyControls is ISelfServiceFrequencyControls, Whitelis
   // When the current time period started
   mapping(address => uint256) public frozenTil;
 
+  // Frequency override list for users - you can temporaily add in address which disables the 24hr check
+  mapping(address => bool) public frequencyOverride;
+
   constructor() public {
     super.addAddressToWhitelist(msg.sender);
   }
 
   function canCreateNewEdition(address artist) external view returns (bool) {
-    return !_isFrozen(artist);
+    if (frequencyOverride[artist]) {
+      return true;
+    }
+    return (block.timestamp >= frozenTil[artist]);
   }
 
   function recordSuccessfulMint(address artist, uint256 totalAvailable, uint256 priceInWei) external onlyIfWhitelisted(msg.sender) returns (bool) {
@@ -26,11 +32,8 @@ contract SelfServiceFrequencyControls is ISelfServiceFrequencyControls, Whitelis
     return true;
   }
 
-  /**
-   * @dev Internal function for checking is an account is frozen out yet
-   */
-  function _isFrozen(address account) internal view returns (bool) {
-    return (block.timestamp < frozenTil[account]);
+  function setFrequencyOverride(address artist, bool value) external onlyIfWhitelisted(msg.sender) {
+    frequencyOverride[artist] = value;
   }
 
   /**
