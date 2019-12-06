@@ -34667,7 +34667,7 @@
     }
   },
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-11-20T20:59:51.667Z",
+  "updatedAt": "2019-12-06T10:33:32.386Z",
   "devdoc": {
     "methods": {
       "acceptBid(uint256)": {

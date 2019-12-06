@@ -82,7 +82,7 @@ module.exports = {
       },
       network_id: 3,
       gas: 7000000, // default = 4712388
-      gasPrice: 2000000000 // default = 100 gwei = 100000000000
+      gasPrice: 5000000000 // default = 100 gwei = 100000000000
     },
     rinkeby: {
       provider: function () {
@@ -90,7 +90,7 @@ module.exports = {
       },
       network_id: 4,
       gas: 6500000, // default = 4712388
-      gasPrice: 10000000000 // default = 100 gwei = 100000000000
+      gasPrice: 8000000000 // default = 100 gwei = 100000000000
     }
   }
 };
