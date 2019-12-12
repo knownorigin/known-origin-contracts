@@ -22,14 +22,15 @@
       "type": "function"
     }
   ],
-  "bytecode": "0x608060405260b5806100126000396000f300608060405260043610603e5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663f5074f4181146043575b600080fd5b348015604e57600080fd5b50606e73ffffffffffffffffffffffffffffffffffffffff600435166070565b005b8073ffffffffffffffffffffffffffffffffffffffff16ff00a165627a7a72305820546523f3497ea64fb70be9457acd93cf7fb1667c051f9a26e7f3d73d2b48e0640029",
-  "deployedBytecode": "0x608060405260043610603e5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663f5074f4181146043575b600080fd5b348015604e57600080fd5b50606e73ffffffffffffffffffffffffffffffffffffffff600435166070565b005b8073ffffffffffffffffffffffffffffffffffffffff16ff00a165627a7a72305820546523f3497ea64fb70be9457acd93cf7fb1667c051f9a26e7f3d73d2b48e0640029",
+  "metadata": "{\"compiler\":{\"version\":\"0.4.24+commit.e67f0147\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"_recipient\",\"type\":\"address\"}],\"name\":\"destroyAndSend\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"constructor\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/mocks/ForceEther.sol\":\"ForceEther\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/mocks/ForceEther.sol\":{\"keccak256\":\"0x1877f4cc053db1b2589aad13b58e9aa7fa8f34e6b9c2db6519d6043adb67d7c3\",\"urls\":[\"bzzr://cda40e219a023d43d189c7c192aaef24a318a756e3d465e792f13069d90fc8af\"]}},\"version\":1}",
+  "bytecode": "0x608060405260b5806100126000396000f300608060405260043610603e5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663f5074f4181146043575b600080fd5b348015604e57600080fd5b50606e73ffffffffffffffffffffffffffffffffffffffff600435166070565b005b8073ffffffffffffffffffffffffffffffffffffffff16ff00a165627a7a723058201af4e4fe3ff91a40a762d1576dfdd205178994d1eab7571bc1f05f6226ef5a300029",
+  "deployedBytecode": "0x608060405260043610603e5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663f5074f4181146043575b600080fd5b348015604e57600080fd5b50606e73ffffffffffffffffffffffffffffffffffffffff600435166070565b005b8073ffffffffffffffffffffffffffffffffffffffff16ff00a165627a7a723058201af4e4fe3ff91a40a762d1576dfdd205178994d1eab7571bc1f05f6226ef5a300029",
   "sourceMap": "234:149:8:-;;;;;;;;;",
   "deployedSourceMap": "234:149:8:-;;;;;;;;;;;;;;;;;;;;;;;295:86;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;295:86:8;;;;;;;;;;365:10;352:24;;",
   "source": "pragma solidity ^0.4.24;\n\n\n// @title Force Ether into a contract.\n// @notice  even\n// if the contract is not payable.\n// @notice To use, construct the contract with the target as argument.\n// @author Remco Bloemen <remco@neufund.org>\ncontract ForceEther {\n\n  constructor() public payable { }\n\n  function destroyAndSend(address _recipient) public {\n    selfdestruct(_recipient);\n  }\n}\n",
-  "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/known-origin-web3-marketplace/contracts/mocks/ForceEther.sol",
+  "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/mocks/ForceEther.sol",
   "ast": {
-    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/known-origin-web3-marketplace/contracts/mocks/ForceEther.sol",
+    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/mocks/ForceEther.sol",
     "exportedSymbols": {
       "ForceEther": [
         593
@@ -131,7 +132,7 @@
                       "name": "selfdestruct",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 8369,
+                      "referencedDeclaration": 12591,
                       "src": "352:12:8",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_selfdestruct_nonpayable$_t_address_$returns$__$",
@@ -220,7 +221,7 @@
     "src": "0:384:8"
   },
   "legacyAST": {
-    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/known-origin-web3-marketplace/contracts/mocks/ForceEther.sol",
+    "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/mocks/ForceEther.sol",
     "exportedSymbols": {
       "ForceEther": [
         593
@@ -322,7 +323,7 @@
                       "name": "selfdestruct",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 8369,
+                      "referencedDeclaration": 12591,
                       "src": "352:12:8",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_selfdestruct_nonpayable$_t_address_$returns$__$",
@@ -415,8 +416,8 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.0-beta.2",
-  "updatedAt": "2018-11-25T16:47:59.138Z",
+  "schemaVersion": "3.0.16",
+  "updatedAt": "2019-11-15T09:11:15.019Z",
   "devdoc": {
     "methods": {}
   },

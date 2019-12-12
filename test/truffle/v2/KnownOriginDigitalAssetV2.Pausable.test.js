@@ -15,13 +15,13 @@ contract('Pausable', function (accounts) {
   const editionTokenUri1 = "edition1";
   const edition1Price = etherToWei(0.1);
 
-  beforeEach(async function () {
+  beforeEach(async () => {
     this.token = await KnownOriginDigitalAssetV2.new({from: _owner});
 
     await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
   });
 
-  it('can perform normal process in non-pause', async function () {
+  it('can perform normal process in non-pause', async () => {
     await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
     let tokens = await this.token.tokensOf(account1);
     tokens
@@ -29,12 +29,12 @@ contract('Pausable', function (accounts) {
       .should.be.deep.equal([editionNumber1 + 1]);
   });
 
-  it('can not perform normal process in pause', async function () {
+  it('can not perform normal process in pause', async () => {
     await this.token.pause();
     await assertRevert(this.token.purchase(editionNumber1, {from: account1, value: edition1Price}));
   });
 
-  it('should resume allowing normal process after pause is over', async function () {
+  it('should resume allowing normal process after pause is over', async () => {
     await this.token.pause();
     await this.token.unpause();
 

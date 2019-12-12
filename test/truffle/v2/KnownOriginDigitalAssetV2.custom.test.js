@@ -38,77 +38,77 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
   const editionType = 1;
 
   const editionNumber1 = 100000;
-  const editionData1 = web3.utils.asciiToHex("editionData1");
-  const editionTokenUri1 = "edition1";
+  const editionData1 = web3.utils.asciiToHex('editionData1');
+  const editionTokenUri1 = 'edition1';
   const edition1Price = etherToWei(0.1);
 
   const editionNumber2 = 200000;
-  const editionData2 = web3.utils.asciiToHex("editionData2");
-  const editionTokenUri2 = "edition2";
+  const editionData2 = web3.utils.asciiToHex('editionData2');
+  const editionTokenUri2 = 'edition2';
   const edition2Price = etherToWei(0.2);
 
-  const BASE_URI = "https://ipfs.infura.io/ipfs/";
+  const BASE_URI = 'https://ipfs.infura.io/ipfs/';
   const MAX_UINT32 = 4294967295;
 
-  before(async function () {
+  before(async () => {
     // Advance to the next block to correctly read time in the solidity "now" function interpreted by testrpc
     await advanceBlock();
   });
 
-  beforeEach(async function () {
+  beforeEach(async () => {
     this.token = await KnownOriginDigitalAssetV2.new({from: _owner});
   });
 
-  describe('updateKoCommissionAccount', async function () {
-    it('is set on creation', async function () {
+  describe('updateKoCommissionAccount', async () => {
+    it('is set on creation', async () => {
       let koCommissionAccount = await this.token.koCommissionAccount();
       koCommissionAccount.should.be.equal(_owner);
     });
 
-    it('can be changed', async function () {
+    it('can be changed', async () => {
       await this.token.updateKoCommissionAccount(account1);
 
       let koCommissionAccount = await this.token.koCommissionAccount();
       koCommissionAccount.should.be.equal(account1);
     });
 
-    it('only invokable from KO', async function () {
+    it('only invokable from KO', async () => {
       await assertRevert(this.token.updateKoCommissionAccount(account1, {from: account1}));
     });
 
-    it('cannot set invalid address', async function () {
+    it('cannot set invalid address', async () => {
       await assertRevert(this.token.updateKoCommissionAccount(ZERO_ADDRESS));
     });
   });
 
-  describe('updateTokenBaseURI', function () {
-    it('is set on creation', async function () {
+  describe('updateTokenBaseURI', () => {
+    it('is set on creation', async () => {
       let tokenBaseURI = await this.token.tokenBaseURI();
       tokenBaseURI.should.be.equal('https://ipfs.infura.io/ipfs/');
     });
 
-    it('can be changed', async function () {
-      await this.token.updateTokenBaseURI("http://a-new-ipfs.com");
+    it('can be changed', async () => {
+      await this.token.updateTokenBaseURI('http://a-new-ipfs.com');
 
       let tokenBaseURI = await this.token.tokenBaseURI();
-      tokenBaseURI.should.be.equal("http://a-new-ipfs.com");
+      tokenBaseURI.should.be.equal('http://a-new-ipfs.com');
     });
 
-    it('only invokable from KO', async function () {
-      await assertRevert(this.token.updateTokenBaseURI("http://a-new-ipfs.com", {from: account1}));
+    it('only invokable from KO', async () => {
+      await assertRevert(this.token.updateTokenBaseURI('http://a-new-ipfs.com', {from: account1}));
     });
 
-    it('cannot set invalid address', async function () {
-      await assertRevert(this.token.updateTokenBaseURI(""));
+    it('cannot set invalid address', async () => {
+      await assertRevert(this.token.updateTokenBaseURI(''));
     });
   });
 
-  describe('edition setup and control', async function () {
+  describe('edition setup and control', async () => {
 
     let logs1;
     let logs2;
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       let {logs: edition1Logs} = await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
       logs1 = edition1Logs;
 
@@ -122,12 +122,12 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       highestEditionNumber.should.be.eq.BN(editionNumber2);
     });
 
-    it('highestEditionNumber updated correctly', async function () {
+    it('highestEditionNumber updated correctly', async () => {
       let highestEditionNumber = await this.token.highestEditionNumber();
       highestEditionNumber.should.be.eq.BN(editionNumber2);
     });
 
-    it('highestEditionNumber must be higher than previously used', async function () {
+    it('highestEditionNumber must be higher than previously used', async () => {
       let highestEditionNumber = await this.token.highestEditionNumber();
       await assertRevert(
         this.token.createActiveEdition(highestEditionNumber, editionData2, editionType, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, 4, {
@@ -136,26 +136,26 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       );
     });
 
-    describe('editionExists ', async function () {
-      it('returns true when edition does exist', async function () {
+    describe('editionExists ', async () => {
+      it('returns true when edition does exist', async () => {
         let exists = await this.token.editionExists(editionNumber1);
         exists.should.be.equal(true);
       });
 
-      it('returns false when zero', async function () {
+      it('returns false when zero', async () => {
         let exists = await this.token.editionExists(0);
         exists.should.be.equal(false);
       });
 
-      it('returns false when does not exist', async function () {
+      it('returns false when does not exist', async () => {
         let exists = await this.token.editionExists(99999);
         exists.should.be.equal(false);
       });
     });
 
-    describe('checking raw edition data on creation', function () {
+    describe('checking raw edition data on creation', () => {
 
-      it('edition 1 setup correctly', async function () {
+      it('edition 1 setup correctly', async () => {
         let edition = await this.token.detailsOfEdition(editionNumber1);
 
         bytesToString(edition[0]).should.be.equal(bytesToString(editionData1)); //_editionData
@@ -171,7 +171,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         edition[10].should.be.equal(true); // _active
       });
 
-      it('edition 2 setup correctly', async function () {
+      it('edition 2 setup correctly', async () => {
         let edition = await this.token.detailsOfEdition(editionNumber2);
 
         bytesToString(edition[0]).should.be.equal(bytesToString(editionData2)); //_editionData
@@ -187,104 +187,104 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         edition[10].should.be.equal(true); // _active
       });
 
-      it('editionsOfType', async function () {
+      it('editionsOfType', async () => {
         let editions = await this.token.editionsOfType(editionType);
         editions.map(e => e.toNumber()).should.be.deep.equal([editionNumber1, editionNumber2]);
       });
 
-      describe('edition 1 query methods', function () {
+      describe('edition 1 query methods', () => {
 
-        it('editionType', async function () {
+        it('editionType', async () => {
           let editionType = await this.token.editionType(editionNumber1);
           editionType.should.be.eq.BN(editionType);
         });
 
-        it('editionData', async function () {
+        it('editionData', async () => {
           let editionData = await this.token.editionData(editionNumber1);
-          bytesToString(editionData).should.be.equal("editionData1");
+          bytesToString(editionData).should.be.equal('editionData1');
         });
 
-        it('purchaseDatesEdition', async function () {
+        it('purchaseDatesEdition', async () => {
           let dates = await this.token.purchaseDatesEdition(editionNumber1);
           dates[0].should.be.eq.BN(0);
           dates[1].should.be.eq.BN(MAX_UINT32);
         });
 
-        it('priceInWeiEdition', async function () {
+        it('priceInWeiEdition', async () => {
           let priceInWei = await this.token.priceInWeiEdition(editionNumber1);
           priceInWei.should.be.eq.BN(edition1Price);
         });
 
-        it('tokensOfEdition', async function () {
+        it('tokensOfEdition', async () => {
           let tokensOfEdition = await this.token.tokensOfEdition(editionNumber1);
           tokensOfEdition.should.be.deep.equal([]);
         });
 
-        it('editionActive', async function () {
+        it('editionActive', async () => {
           let editionActive = await this.token.editionActive(editionNumber1);
           editionActive.should.be.equal(true);
         });
 
-        it('totalRemaining', async function () {
+        it('totalRemaining', async () => {
           let totalRemaining = await this.token.totalRemaining(editionNumber1);
           totalRemaining.should.be.eq.BN(3);
         });
 
-        it('totalSupplyEdition', async function () {
+        it('totalSupplyEdition', async () => {
           let totalSupplyEdition = await this.token.totalSupplyEdition(editionNumber1);
           totalSupplyEdition.should.be.eq.BN(0);
         });
 
-        it('totalAvailableEdition', async function () {
+        it('totalAvailableEdition', async () => {
           let totalAvailableEdition = await this.token.totalAvailableEdition(editionNumber1);
           totalAvailableEdition.should.be.eq.BN(3);
         });
 
-        it('tokenURIEdition', async function () {
+        it('tokenURIEdition', async () => {
           let tokenURIEdition = await this.token.tokenURIEdition(editionNumber1);
           tokenURIEdition.should.be.equal(`https://ipfs.infura.io/ipfs/${editionTokenUri1}`);
         });
 
       });
 
-      describe('updateStartDate', function () {
-        it('can be updated by whitelist', async function () {
+      describe('updateStartDate', () => {
+        it('can be updated by whitelist', async () => {
           await this.token.updateStartDate(editionNumber1, 123456);
           let dates = await this.token.purchaseDatesEdition(editionNumber1);
           dates[0].should.be.eq.BN(123456);
           dates[1].should.be.eq.BN(MAX_UINT32);
         });
 
-        it('should fail when not whitelisted', async function () {
+        it('should fail when not whitelisted', async () => {
           await assertRevert(this.token.updateStartDate(editionNumber1, 123456, {from: account1}));
         });
       });
 
-      describe('updateEndDate', function () {
-        it('can be updated by whitelist', async function () {
+      describe('updateEndDate', () => {
+        it('can be updated by whitelist', async () => {
           await this.token.updateEndDate(editionNumber1, 123456);
           let dates = await this.token.purchaseDatesEdition(editionNumber1);
           dates[0].should.be.eq.BN(0);
           dates[1].should.be.eq.BN(123456);
         });
 
-        it('should fail when not whitelisted', async function () {
+        it('should fail when not whitelisted', async () => {
           await assertRevert(this.token.updateEndDate(editionNumber1, 123456, {from: account1}));
         });
       });
 
-      describe('updateTotalAvailable', function () {
-        it('can be updated by whitelist', async function () {
+      describe('updateTotalAvailable', () => {
+        it('can be updated by whitelist', async () => {
           await this.token.updateTotalAvailable(editionNumber1, 100);
           let available = await this.token.totalAvailableEdition(editionNumber1);
           available.should.be.eq.BN(100);
         });
 
-        it('should fail when not whitelisted', async function () {
+        it('should fail when not whitelisted', async () => {
           await assertRevert(this.token.updateTotalAvailable(editionNumber1, 100, {from: account1}));
         });
 
-        it('reverts if updating available to below the minted amount', async function () {
+        it('reverts if updating available to below the minted amount', async () => {
           // Sell one
           await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
 
@@ -293,20 +293,20 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         });
       });
 
-      describe('updateActive', function () {
-        it('can be updated by whitelist', async function () {
+      describe('updateActive', () => {
+        it('can be updated by whitelist', async () => {
           await this.token.updateActive(editionNumber1, false);
           let active = await this.token.editionActive(editionNumber1);
           active.should.be.equal(false);
         });
 
-        it('should fail when not whitelisted', async function () {
+        it('should fail when not whitelisted', async () => {
           await assertRevert(this.token.updateActive(editionNumber1, false, {from: account1}));
         });
       });
 
-      describe('updateArtistsAccount', function () {
-        it('can be updated by whitelist', async function () {
+      describe('updateArtistsAccount', () => {
+        it('can be updated by whitelist', async () => {
           let currentArtistEditions = await this.token.artistsEditions(artistAccount);
           currentArtistEditions.map(e => e.toNumber()).should.be.deep.equal([editionNumber1, editionNumber2]);
 
@@ -322,13 +322,13 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
           newArtistEditions.map(e => e.toNumber()).should.be.deep.equal([editionNumber1]);
         });
 
-        it('should fail when not whitelisted', async function () {
+        it('should fail when not whitelisted', async () => {
           await assertRevert(this.token.updateArtistsAccount(editionNumber1, account3, {from: account1}));
         });
       });
 
-      describe('updateEditionType', function () {
-        it('can be updated by whitelist', async function () {
+      describe('updateEditionType', () => {
+        it('can be updated by whitelist', async () => {
           const type2 = 99;
 
           let currentEditions = await this.token.editionsOfType(editionType);
@@ -346,71 +346,71 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
           newEditions.map(e => e.toNumber()).should.be.deep.equal([editionNumber1]);
         });
 
-        it('should fail when not whitelisted', async function () {
+        it('should fail when not whitelisted', async () => {
           await assertRevert(this.token.updateArtistsAccount(editionNumber1, account3, {from: account1}));
         });
       });
 
-      describe('updatePriceInWei', function () {
-        it('can be updated by whitelist', async function () {
+      describe('updatePriceInWei', () => {
+        it('can be updated by whitelist', async () => {
           await this.token.updatePriceInWei(editionNumber1, etherToWei(1));
           let price = await this.token.priceInWeiEdition(editionNumber1);
           price.should.be.eq.BN(etherToWei(1));
         });
 
-        it('should fail when not whitelisted', async function () {
+        it('should fail when not whitelisted', async () => {
           await assertRevert(this.token.updatePriceInWei(editionNumber1, etherToWei(1), {from: account1}));
         });
 
-        it('should fail when edition not valid', async function () {
+        it('should fail when edition not valid', async () => {
           await assertRevert(this.token.updatePriceInWei(999, etherToWei(1)));
         });
       });
 
-      describe('updateArtistCommission', function () {
-        it('can be updated by whitelist', async function () {
+      describe('updateArtistCommission', () => {
+        it('can be updated by whitelist', async () => {
           await this.token.updateArtistCommission(editionNumber1, 10);
           let artistCommission = await this.token.artistCommission(editionNumber1);
           artistCommission[1].should.be.eq.BN(10);
         });
 
-        it('should fail when not whitelisted', async function () {
+        it('should fail when not whitelisted', async () => {
           await assertRevert(this.token.updateArtistCommission(editionNumber1, 10, {from: account1}));
         });
 
-        it('should fail when edition not valid', async function () {
+        it('should fail when edition not valid', async () => {
           await assertRevert(this.token.updateArtistCommission(999, 10));
         });
       });
 
-      describe('updateEditionTokenURI', function () {
-        it('can be updated by whitelist', async function () {
-          await this.token.updateEditionTokenURI(editionNumber1, "newUri");
+      describe('updateEditionTokenURI', () => {
+        it('can be updated by whitelist', async () => {
+          await this.token.updateEditionTokenURI(editionNumber1, 'newUri');
           let uri = await this.token.tokenURIEdition(editionNumber1);
-          uri.should.be.equal("https://ipfs.infura.io/ipfs/newUri");
+          uri.should.be.equal('https://ipfs.infura.io/ipfs/newUri');
         });
 
-        it('should fail when not whitelisted', async function () {
-          await assertRevert(this.token.updateEditionTokenURI(editionNumber1, "newUri", {from: account1}));
+        it('should fail when not whitelisted', async () => {
+          await assertRevert(this.token.updateEditionTokenURI(editionNumber1, 'newUri', {from: account1}));
         });
       });
     });
 
-    describe('creating disabled editions', function () {
+    describe('creating disabled editions', () => {
 
       const editionNumber3 = 300000;
-      const editionData3 = web3.utils.asciiToHex("editionData3");
-      const editionTokenUri3 = "edition3";
+      const editionData3 = web3.utils.asciiToHex('editionData3');
+      const editionTokenUri3 = 'edition3';
       const edition3Price = etherToWei(0.3);
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         await this.token.createInactiveEdition(editionNumber3, editionData3, editionType, 0, 0, artistAccount, artistShare, edition3Price, editionTokenUri3, 1, {from: _owner});
       });
 
-      it('edition 3 setup correctly', async function () {
+      it('edition 3 setup correctly', async () => {
         let edition = await this.token.detailsOfEdition(editionNumber3);
 
-        bytesToString(edition[0]).should.be.equal("editionData3"); //_editionData
+        bytesToString(edition[0]).should.be.equal('editionData3'); //_editionData
         edition[1].should.be.eq.BN(editionType); //_editionType
         edition[2].should.be.eq.BN(0); // _startDate
         edition[3].should.be.eq.BN(MAX_UINT32); // _endDate
@@ -423,33 +423,33 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         edition[10].should.be.equal(false); // _active
       });
 
-      it('editionActive', async function () {
+      it('editionActive', async () => {
         let active = await this.token.editionActive(editionNumber3);
         active.should.be.equal(false);
       });
 
     });
 
-    describe('creating disabled full edition', async function () {
+    describe('creating disabled full edition', async () => {
 
       const editionNumber3 = 300000;
-      const editionData3 = web3.utils.asciiToHex("editionData3");
-      const editionTokenUri3 = "edition3";
+      const editionData3 = web3.utils.asciiToHex('editionData3');
+      const editionTokenUri3 = 'edition3';
       const edition3Price = etherToWei(0.3);
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         await this.token.createInactivePreMintedEdition(editionNumber3, editionData3, editionType, 0, 0, artistAccount, artistShare, edition3Price, editionTokenUri3, 1, 3, {from: _owner});
       });
 
-      it('highestEditionNumber updated correctly', async function () {
+      it('highestEditionNumber updated correctly', async () => {
         let highestEditionNumber = await this.token.highestEditionNumber();
         highestEditionNumber.should.be.eq.BN(editionNumber3);
       });
 
-      it('edition setup correctly', async function () {
+      it('edition setup correctly', async () => {
         let edition = await this.token.detailsOfEdition(editionNumber3);
 
-        bytesToString(edition[0]).should.be.equal("editionData3"); //_editionData
+        bytesToString(edition[0]).should.be.equal('editionData3'); //_editionData
         edition[1].should.be.eq.BN(editionType); //_editionType
         edition[2].should.be.eq.BN(0); // _startDate
         edition[3].should.be.eq.BN(MAX_UINT32); // _endDate
@@ -462,50 +462,50 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         edition[10].should.be.equal(false); // _active
       });
 
-      it('editionActive', async function () {
+      it('editionActive', async () => {
         let active = await this.token.editionActive(editionNumber3);
         active.should.be.equal(false);
       });
 
-      describe('edition query methods', function () {
+      describe('edition query methods', () => {
 
-        it('purchaseDatesEdition', async function () {
+        it('purchaseDatesEdition', async () => {
           let dates = await this.token.purchaseDatesEdition(editionNumber3);
           dates[0].should.be.eq.BN(0);
           dates[1].should.be.eq.BN(MAX_UINT32);
         });
 
-        it('priceInWeiEdition', async function () {
+        it('priceInWeiEdition', async () => {
           let priceInWei = await this.token.priceInWeiEdition(editionNumber3);
           priceInWei.should.be.eq.BN(edition3Price);
         });
 
-        it('tokensOfEdition', async function () {
+        it('tokensOfEdition', async () => {
           let tokensOfEdition = await this.token.tokensOfEdition(editionNumber3);
           tokensOfEdition.should.be.deep.equal([]);
         });
 
-        it('editionActive', async function () {
+        it('editionActive', async () => {
           let editionActive = await this.token.editionActive(editionNumber3);
           editionActive.should.be.equal(false);
         });
 
-        it('totalRemaining', async function () {
+        it('totalRemaining', async () => {
           let totalRemaining = await this.token.totalRemaining(editionNumber3);
           totalRemaining.should.be.eq.BN(2);
         });
 
-        it('totalSupplyEdition', async function () {
+        it('totalSupplyEdition', async () => {
           let totalSupplyEdition = await this.token.totalSupplyEdition(editionNumber3);
           totalSupplyEdition.should.be.eq.BN(1);
         });
 
-        it('totalAvailableEdition', async function () {
+        it('totalAvailableEdition', async () => {
           let totalAvailableEdition = await this.token.totalAvailableEdition(editionNumber3);
           totalAvailableEdition.should.be.eq.BN(3);
         });
 
-        it('tokenURIEdition', async function () {
+        it('tokenURIEdition', async () => {
           let tokenURIEdition = await this.token.tokenURIEdition(editionNumber3);
           tokenURIEdition.should.be.equal(`https://ipfs.infura.io/ipfs/${editionTokenUri3}`);
         });
@@ -513,115 +513,115 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       });
     });
 
-    describe('edition creation validation', async function () {
+    describe('edition creation validation', async () => {
 
-      describe('createActiveEdition', async function () {
+      describe('createActiveEdition', async () => {
         const editionNumber3 = 300000;
 
-        it('reverts if editionNumber zero', async function () {
+        it('reverts if editionNumber zero', async () => {
           await assertRevert(
             this.token.createActiveEdition(0, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if editionType zero', async function () {
+        it('reverts if editionType zero', async () => {
           await assertRevert(
             this.token.createActiveEdition(editionNumber3, editionData1, 0, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if tokenURI is not provided', async function () {
+        it('reverts if tokenURI is not provided', async () => {
           await assertRevert(
-            this.token.createActiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, "", 3, {from: _owner})
+            this.token.createActiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, '', 3, {from: _owner})
           );
         });
 
-        it('reverts if artistAccount is not valid', async function () {
+        it('reverts if artistAccount is not valid', async () => {
           await assertRevert(
             this.token.createActiveEdition(editionNumber3, editionData1, editionType, 0, 0, ZERO_ADDRESS, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if artistShare is greater than 100%', async function () {
+        it('reverts if artistShare is greater than 100%', async () => {
           await assertRevert(
             this.token.createActiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, 101, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if artistShare is less than 0%', async function () {
+        it('reverts if artistShare is less than 0%', async () => {
           await assertRevert(
             this.token.createActiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, -1, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if editionNumber already defined', async function () {
+        it('reverts if editionNumber already defined', async () => {
           await assertRevert(
             this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if editionNumber less than previous created', async function () {
+        it('reverts if editionNumber less than previous created', async () => {
           await assertRevert(
             this.token.createActiveEdition(editionNumber1 - 1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
       });
 
-      describe('createInactiveEdition', async function () {
+      describe('createInactiveEdition', async () => {
         const editionNumber3 = 300000;
 
-        it('reverts if editionNumber zero', async function () {
+        it('reverts if editionNumber zero', async () => {
           await assertRevert(
             this.token.createInactiveEdition(0, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if editionType zero', async function () {
+        it('reverts if editionType zero', async () => {
           await assertRevert(
             this.token.createInactiveEdition(editionNumber3, editionData1, 0, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if tokenURI is not provided', async function () {
+        it('reverts if tokenURI is not provided', async () => {
           await assertRevert(
-            this.token.createInactiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, "", 3, {from: _owner})
+            this.token.createInactiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, '', 3, {from: _owner})
           );
         });
 
-        it('reverts if artistAccount is not valid', async function () {
+        it('reverts if artistAccount is not valid', async () => {
           await assertRevert(
             this.token.createInactiveEdition(editionNumber3, editionData1, editionType, 0, 0, ZERO_ADDRESS, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if artistShare is greater than 100%', async function () {
+        it('reverts if artistShare is greater than 100%', async () => {
           await assertRevert(
             this.token.createInactiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, 101, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if artistShare is less than 0%', async function () {
+        it('reverts if artistShare is less than 0%', async () => {
           await assertRevert(
             this.token.createInactiveEdition(editionNumber3, editionData1, editionType, 0, 0, artistAccount, -1, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if editionNumber already defined', async function () {
+        it('reverts if editionNumber already defined', async () => {
           await assertRevert(
             this.token.createInactiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
 
-        it('reverts if editionNumber less than previous created', async function () {
+        it('reverts if editionNumber less than previous created', async () => {
           await assertRevert(
             this.token.createInactiveEdition(editionNumber1 - 1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
         });
       });
 
-      describe('prevent clashing edition numbers', async function () {
+      describe('prevent clashing edition numbers', async () => {
 
-        it('successful if edition number greater than previous + total available', async function () {
+        it('successful if edition number greater than previous + total available', async () => {
           const editionNumber1HigherThanPrevious = editionNumber2 + 5;
           await this.token.createActiveEdition(editionNumber1HigherThanPrevious, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
 
@@ -629,7 +629,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
           highestEditionNumber.should.be.eq.BN(editionNumber1HigherThanPrevious);
         });
 
-        it('fails if edition number equal than previous + total available', async function () {
+        it('fails if edition number equal than previous + total available', async () => {
           await assertRevert(
             this.token.createActiveEdition(editionNumber2 + 4, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
@@ -637,7 +637,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
           highestEditionNumber.should.be.eq.BN(editionNumber2);
         });
 
-        it('fails if edition number less than previous + total available', async function () {
+        it('fails if edition number less than previous + total available', async () => {
           await assertRevert(
             this.token.createActiveEdition(editionNumber2 + 3, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner})
           );
@@ -648,66 +648,66 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       });
     });
 
-    describe('edition event emitted', async function () {
+    describe('edition event emitted', async () => {
 
-      it('edition 1 creation event', async function () {
+      it('edition 1 creation event', async () => {
         logs1.length.should.be.equal(1);
         logs1[0].event.should.be.equal('EditionCreated');
 
         logs1[0].args._editionNumber.should.be.eq.BN(editionNumber1);
-        bytesToString(logs1[0].args._editionData).should.be.equal("editionData1");
+        bytesToString(logs1[0].args._editionData).should.be.equal('editionData1');
         logs1[0].args._editionType.should.be.eq.BN(editionType);
       });
 
-      it('edition 2 creation event', async function () {
+      it('edition 2 creation event', async () => {
         logs2.length.should.be.equal(1);
         logs2[0].event.should.be.equal('EditionCreated');
 
         logs2[0].args._editionNumber.should.be.eq.BN(editionNumber2);
-        bytesToString(logs2[0].args._editionData).should.be.equal("editionData2");
+        bytesToString(logs2[0].args._editionData).should.be.equal('editionData2');
         logs2[0].args._editionType.should.be.eq.BN(editionType);
       });
     });
   });
 
-  describe('token setup and controls', async function () {
+  describe('token setup and controls', async () => {
 
     const tokenId1 = 100001;
     const tokenId2 = 200001;
     const tokenId3 = 100002;
     const tokenId4 = 200002;
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
       await this.token.createActiveEdition(editionNumber2, editionData2, editionType, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, 4, {from: _owner});
     });
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.purchase(editionNumber1, {from: account1, value: edition1Price}); // tokenId 100001
       await this.token.purchase(editionNumber2, {from: account2, value: edition2Price}); // tokenId 200001
       await this.token.purchase(editionNumber1, {from: account2, value: edition1Price}); // tokenId 100002
       await this.token.purchase(editionNumber2, {from: account3, value: edition2Price}); // tokenId 200002
     });
 
-    describe('setTokenURI', async function () {
-      it('can be changed by KO', async function () {
+    describe('setTokenURI', async () => {
+      it('can be changed by KO', async () => {
         let tokenURI = await this.token.tokenURI(tokenId1);
         tokenURI.should.be.equal(`${BASE_URI}${editionTokenUri1}`);
 
-        const newTokenUri = "my-new-token-uri";
+        const newTokenUri = 'my-new-token-uri';
         await this.token.setTokenURI(tokenId1, newTokenUri);
 
         tokenURI = await this.token.tokenURI(tokenId1);
         tokenURI.should.be.equal(`${BASE_URI}${newTokenUri}`);
       });
 
-      it('is rejected unless whitelisted', async function () {
-        await assertRevert(this.token.setTokenURI(tokenId1, "new-uri", {from: account3}));
+      it('is rejected unless whitelisted', async () => {
+        await assertRevert(this.token.setTokenURI(tokenId1, 'new-uri', {from: account3}));
       });
     });
 
-    describe('editionOfTokenId', async function () {
-      it('will return the correct edition ', async function () {
+    describe('editionOfTokenId', async () => {
+      it('will return the correct edition ', async () => {
         let result1 = await this.token.editionOfTokenId(tokenId1);
         result1.should.be.eq.BN(editionNumber1);
 
@@ -722,8 +722,8 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       });
     });
 
-    describe('tokenURI', async function () {
-      it('will return the correct edition ', async function () {
+    describe('tokenURI', async () => {
+      it('will return the correct edition ', async () => {
         let result1 = await this.token.tokenURI(tokenId1);
         result1.should.be.equal(`${BASE_URI}${editionTokenUri1}`);
 
@@ -737,14 +737,14 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         result4.should.be.equal(`${BASE_URI}${editionTokenUri2}`);
       });
 
-      it('will revert when invalid token ID', async function () {
+      it('will revert when invalid token ID', async () => {
         await assertRevert(this.token.tokenURI(99));
       });
     });
 
-    describe('tokenURISafe', async function () {
+    describe('tokenURISafe', async () => {
 
-      it('will return the correct edition ', async function () {
+      it('will return the correct edition ', async () => {
         let result1 = await this.token.tokenURISafe(tokenId1);
         result1.should.be.equal(`${BASE_URI}${editionTokenUri1}`);
 
@@ -758,16 +758,16 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         result4.should.be.equal(`${BASE_URI}${editionTokenUri2}`);
       });
 
-      it('will NOT revert when invalid token ID', async function () {
+      it('will NOT revert when invalid token ID', async () => {
         let result = await this.token.tokenURISafe(99);
         result.should.be.equal(`${BASE_URI}`);
       });
 
     });
 
-    describe('tokensOfEdition', async function () {
+    describe('tokensOfEdition', async () => {
 
-      it('will return the correct edition ', async function () {
+      it('will return the correct edition ', async () => {
         let result1 = await this.token.tokensOfEdition(editionNumber1);
         result1.map(e => e.toNumber()).should.be.deep.equal([tokenId1, tokenId3]);
 
@@ -776,9 +776,9 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       });
     });
 
-    describe('purchaseDatesToken', async function () {
+    describe('purchaseDatesToken', async () => {
 
-      it('will return the correct edition ', async function () {
+      it('will return the correct edition ', async () => {
         [tokenId1, tokenId2, tokenId3, tokenId4].forEach(async (tokenId) => {
           let {_startDate, _endDate} = await this.token.purchaseDatesToken(tokenId);
           _startDate.should.be.eq.BN(0);
@@ -788,9 +788,9 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
     });
 
-    describe('priceInWeiToken', async function () {
+    describe('priceInWeiToken', async () => {
 
-      it('will return the correct edition ', async function () {
+      it('will return the correct edition ', async () => {
         let result1 = await this.token.priceInWeiToken(tokenId1);
         result1.should.be.eq.BN(edition1Price);
 
@@ -806,9 +806,9 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
     });
 
-    describe('artistsEditions', async function () {
+    describe('artistsEditions', async () => {
 
-      it('will return the correct data ', async function () {
+      it('will return the correct data ', async () => {
         let editions = await this.token.artistsEditions(artistAccount);
         editions.map(e => e.toNumber())
           .should.be.deep.equal([editionNumber1, editionNumber2]);
@@ -817,15 +817,15 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
     });
   });
 
-  describe('mint', async function () {
+  describe('mint', async () => {
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
       await this.token.createActiveEdition(editionNumber2, editionData2, editionType, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, 4, {from: _owner});
     });
 
-    describe('validation', async function () {
-      it('reverts if edition sold out', async function () {
+    describe('validation', async () => {
+      it('reverts if edition sold out', async () => {
         await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
         await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
         await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
@@ -834,26 +834,26 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         await assertRevert(this.token.purchase(editionNumber1, {from: account1, value: edition1Price}));
       });
 
-      it('reverts if edition not active', async function () {
+      it('reverts if edition not active', async () => {
         await this.token.updateActive(editionNumber1, false, {from: _owner});
 
         // reverts as inactive
         await assertRevert(this.token.purchase(editionNumber1, {from: account1, value: edition1Price}));
       });
 
-      it('reverts if edition invalid', async function () {
+      it('reverts if edition invalid', async () => {
         await this.token.updateTotalAvailable(editionNumber1, 0, {from: _owner});
 
         // reverts as edition sat to zero available
         await assertRevert(this.token.purchase(editionNumber1, {from: account1, value: edition1Price}));
       });
 
-      it('reverts if purchase price not provided', async function () {
+      it('reverts if purchase price not provided', async () => {
         await assertRevert(this.token.purchase(editionNumber1, {from: account1, value: 0}));
       });
     });
 
-    describe('purchase successful', async function () {
+    describe('purchase successful', async () => {
       const tokenId1_1 = 100001;
       const tokenId1_2 = 100002;
       const tokenId1_3 = 100003;
@@ -862,7 +862,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       const tokenId2_2 = 200002;
       const tokenId2_3 = 200003;
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         // 3 from edition 2
         await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
         await this.token.purchase(editionNumber1, {from: account2, value: edition1Price});
@@ -874,7 +874,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         await this.token.purchase(editionNumber2, {from: account3, value: edition2Price});
       });
 
-      it('sets token Uri', async function () {
+      it('sets token Uri', async () => {
         [tokenId1_1, tokenId1_2, tokenId1_3].forEach(async (id) => {
           let result = await this.token.tokenURI(id);
           result.should.be.equal(`${BASE_URI}${editionTokenUri1}`);
@@ -886,19 +886,19 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         });
       });
 
-      it('adds to the number minted counter', async function () {
+      it('adds to the number minted counter', async () => {
         let totalNumberMinted = await this.token.totalNumberMinted();
         totalNumberMinted.should.be.eq.BN(6);
       });
 
-      it('adds to the number of wei collected', async function () {
+      it('adds to the number of wei collected', async () => {
         let expect = edition1Price.mul(toBN(3)).add(edition2Price.mul(toBN(3)));
 
         let totalPurchaseValueInWei = await this.token.totalPurchaseValueInWei();
         totalPurchaseValueInWei.should.be.eq.BN(expect);
       });
 
-      it('adds to edition <-> tokenId[] mappings', async function () {
+      it('adds to edition <-> tokenId[] mappings', async () => {
         let edition1Tokens = await this.token.tokensOfEdition(editionNumber1);
         edition1Tokens
           .map(e => e.toNumber())
@@ -910,7 +910,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
           .should.be.deep.equal([tokenId2_1, tokenId2_2, tokenId2_3]);
       });
 
-      it('adds to tokenId <-> edition mappings', async function () {
+      it('adds to tokenId <-> edition mappings', async () => {
         [tokenId1_1, tokenId1_2, tokenId1_3].forEach(async (id) => {
           let result = await this.token.editionOfTokenId(id);
           result.should.be.eq.BN(editionNumber1);
@@ -922,7 +922,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         });
       });
 
-      it('tokensOf', async function () {
+      it('tokensOf', async () => {
         let account1Results = await this.token.tokensOf(account1);
         account1Results
           .map(e => e.toNumber())
@@ -941,7 +941,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
     });
 
-    describe('handling of funds without optional commission', async function () {
+    describe('handling of funds without optional commission', async () => {
       let originalAccount1Balance;
       let originalAccount2Balance;
       let originalKoAccountBalance;
@@ -958,7 +958,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       let account1GasFees;
       let account2GasFees;
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         // pre balances
         originalAccount1Balance = await getBalance(account1);
         originalAccount2Balance = await getBalance(account2);
@@ -980,7 +980,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         postArtistAccountBalance = await getBalance(artistAccount);
       });
 
-      it('splits funds between artist and KO account', async function () {
+      it('splits funds between artist and KO account', async () => {
         console.log(`GasUsed Account 1: ${account1GasFees}`);
         console.log(`GasUsed Account 2: ${account2GasFees}`);
 
@@ -1019,7 +1019,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         );
       });
 
-      it('Transfer event emitted', async function () {
+      it('Transfer event emitted', async () => {
         let {logs} = receiptAccount1;
 
         let transferEvent = logs[0];
@@ -1032,7 +1032,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         _tokenId.should.be.eq.BN(editionNumber1 + 1);
       });
 
-      it('Minted event emitted', async function () {
+      it('Minted event emitted', async () => {
         let {logs} = receiptAccount1;
 
         let mintedEvent = logs[1];
@@ -1045,7 +1045,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         _tokenId.should.be.eq.BN(editionNumber1 + 1);
       });
 
-      it('Purchase event emitted', async function () {
+      it('Purchase event emitted', async () => {
         let {logs} = receiptAccount1;
 
         let purchasedEvent = logs[2];
@@ -1060,100 +1060,100 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
     });
 
-    describe('tokenData', async function () {
+    describe('tokenData', async () => {
       const tokenId1 = editionNumber1 + 1;
       const tokenId2 = editionNumber2 + 1;
       const tokenIdInvalid = 999;
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
         await this.token.purchase(editionNumber2, {from: account2, value: edition2Price});
       });
 
-      it('should revert is token ID not valid', async function () {
+      it('should revert is token ID not valid', async () => {
         await assertRevert(this.token.tokenData(tokenIdInvalid));
       });
 
-      it(`token id [${tokenId1}]`, async function () {
+      it(`token id [${tokenId1}]`, async () => {
         let results = await this.token.tokenData(tokenId1);
 
         results[0].should.be.eq.BN(editionNumber1);
         results[1].should.be.eq.BN(editionType);
-        bytesToString(results[2]).should.be.equal("editionData1");
+        bytesToString(results[2]).should.be.equal('editionData1');
         results[3].should.be.equal(`https://ipfs.infura.io/ipfs/edition1`);
         results[4].should.be.equal(account1);
       });
 
-      it(`token id [${tokenId2}]`, async function () {
+      it(`token id [${tokenId2}]`, async () => {
         let results = await this.token.tokenData(tokenId2);
 
         results[0].should.be.eq.BN(editionNumber2);
         results[1].should.be.eq.BN(editionType);
-        bytesToString(results[2]).should.be.equal("editionData2");
+        bytesToString(results[2]).should.be.equal('editionData2');
         results[3].should.be.equal(`https://ipfs.infura.io/ipfs/edition2`);
         results[4].should.be.equal(account2);
       });
     });
 
-    describe('tokenData', async function () {
+    describe('tokenData', async () => {
       const tokenId1 = editionNumber1 + 1;
       const tokenId2 = editionNumber2 + 1;
       const tokenIdInvalid = 999;
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
         await this.token.purchase(editionNumber2, {from: account2, value: edition2Price});
       });
 
-      it('should revert is token ID not valid', async function () {
+      it('should revert is token ID not valid', async () => {
         await assertRevert(this.token.tokenData(tokenIdInvalid));
       });
 
-      it(`token id [${tokenId1}]`, async function () {
+      it(`token id [${tokenId1}]`, async () => {
         let results = await this.token.tokenData(tokenId1);
 
         results[0].should.be.eq.BN(editionNumber1);
         results[1].should.be.eq.BN(editionType);
-        bytesToString(results[2]).should.be.equal("editionData1");
+        bytesToString(results[2]).should.be.equal('editionData1');
         results[3].should.be.equal(`${BASE_URI}${editionTokenUri1}`);
         results[4].should.be.equal(account1);
       });
 
-      it(`token id [${tokenId2}]`, async function () {
+      it(`token id [${tokenId2}]`, async () => {
         let results = await this.token.tokenData(tokenId2);
 
         results[0].should.be.eq.BN(editionNumber2);
         results[1].should.be.eq.BN(editionType);
-        bytesToString(results[2]).should.be.equal("editionData2");
+        bytesToString(results[2]).should.be.equal('editionData2');
         results[3].should.be.equal(`${BASE_URI}${editionTokenUri2}`);
         results[4].should.be.equal(account2);
       });
     });
   });
 
-  describe('handle start & end dates', async function () {
+  describe('handle start & end dates', async () => {
 
     let startDate = 0;
     let endDate = 0; // set to zero to be set to default max uint32
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       let tokens = await this.token.tokensOf(account1);
       tokens.map(e => e.toNumber()).should.be.deep.equal([]);
     });
 
-    describe('starts in the future', async function () {
-      beforeEach(async function () {
+    describe('starts in the future', async () => {
+      beforeEach(async () => {
         // starts in 30 seconds
         startDate = (await latest()) + duration.seconds(30);
 
         await this.token.createActiveEdition(editionNumber1, editionData1, editionType, startDate, endDate, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
       });
 
-      it('reverts if edition auction not started', async function () {
+      it('reverts if edition auction not started', async () => {
         await assertRevert(this.token.purchase(editionNumber1, {from: account1, value: edition1Price}));
       });
 
-      it('once updated the purchase will succeed', async function () {
+      it('once updated the purchase will succeed', async () => {
         startDate = (await latest()) - duration.seconds(30); // lower start time to in the past
         await this.token.updateStartDate(editionNumber1, startDate, {from: _owner});
 
@@ -1166,8 +1166,8 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       });
     });
 
-    describe('ends before being purchased', async function () {
-      beforeEach(async function () {
+    describe('ends before being purchased', async () => {
+      beforeEach(async () => {
         // ends in 30 seconds
         endDate = (await latest()) + duration.seconds(30);
 
@@ -1177,11 +1177,11 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         await increaseTo((await latest()) + duration.minutes(1));
       });
 
-      it('reverts if edition auction closed', async function () {
+      it('reverts if edition auction closed', async () => {
         await assertRevert(this.token.purchase(editionNumber1, {from: account1, value: edition1Price}));
       });
 
-      it('once updated the purchase will succeed', async function () {
+      it('once updated the purchase will succeed', async () => {
         endDate = (await latest()) + duration.minutes(2); // increase start time to in the future
         await this.token.updateEndDate(editionNumber1, endDate, {from: _owner});
 
@@ -1195,13 +1195,13 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
     });
   });
 
-  describe('handling optional commission splits on purchase', async function () {
+  describe('handling optional commission splits on purchase', async () => {
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
     });
 
-    describe('optional commissions are applied when found', async function () {
+    describe('optional commissions are applied when found', async () => {
 
       let originalAccount1Balance;
       let originalKoAccountBalance;
@@ -1219,11 +1219,11 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       let optionalAccount = account2;
       let optionalRate = 5;
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         await this.token.updateOptionalCommission(editionNumber1, optionalRate, optionalAccount, {from: _owner});
       });
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         // pre balances
         originalAccount1Balance = await getBalance(account1);
         originalOptionalAccountBalance = await getBalance(optionalAccount);
@@ -1241,7 +1241,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         postArtistAccountBalance = await getBalance(artistAccount);
       });
 
-      it('splits funds between artist, optional & KO account', async function () {
+      it('splits funds between artist, optional & KO account', async () => {
         console.log(`GasUsed Account 1: ${account1GasFees}`);
 
         // account 1 should be equal the cost of transaction, minus the edition cost
@@ -1281,7 +1281,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
     });
 
-    describe('over spends are absorbed by KO', async function () {
+    describe('over spends are absorbed by KO', async () => {
 
       let originalAccount1Balance;
       let originalKoAccountBalance;
@@ -1296,7 +1296,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
       const overspend = etherToWei(0.1);
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         // pre balances
         originalAccount1Balance = await getBalance(account1);
         originalKoAccountBalance = await getBalance(await this.token.koCommissionAccount());
@@ -1315,7 +1315,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         postArtistAccountBalance = await getBalance(artistAccount);
       });
 
-      it('splits funds between artist, optional & KO account', async function () {
+      it('splits funds between artist, optional & KO account', async () => {
         // account 1 should be equal the cost of transaction, minus the edition cost
         postAccount1Balance.should.be.eq.BN(
           originalAccount1Balance.sub(
@@ -1348,45 +1348,45 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
     });
 
-    describe('commission can be updated', async function () {
-      beforeEach(async function () {
+    describe('commission can be updated', async () => {
+      beforeEach(async () => {
         await this.token.updateOptionalCommission(editionNumber1, 5, account1, {from: _owner});
       });
 
-      it('correct values are set', async function () {
+      it('correct values are set', async () => {
         let commission = await this.token.editionOptionalCommission(editionNumber1);
         commission[0].should.be.eq.BN(5);
         commission[1].should.be.equal(account1);
       });
     });
 
-    describe('validation', async function () {
-      it('should prevent setting commission rate without a invalid address', async function () {
+    describe('validation', async () => {
+      it('should prevent setting commission rate without a invalid address', async () => {
         await assertRevert(this.token.updateOptionalCommission(editionNumber1, 1, ZERO_ADDRESS, {
           from: _owner
         }));
       });
 
-      it('should prevent setting commission rate without a invalid edition', async function () {
+      it('should prevent setting commission rate without a invalid edition', async () => {
         await assertRevert(this.token.updateOptionalCommission(999, 1, account1, {
           from: _owner
         }));
       });
 
-      it('should prevent setting commission with more than 100%', async function () {
+      it('should prevent setting commission with more than 100%', async () => {
         await assertRevert(this.token.updateOptionalCommission(editionNumber1, 25, account1, {
           from: _owner
         }));
       });
     });
 
-    describe('commission can be cleared', async function () {
+    describe('commission can be cleared', async () => {
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         await this.token.updateOptionalCommission(editionNumber1, 5, account1, {from: _owner});
       });
 
-      it('reset to zero', async function () {
+      it('reset to zero', async () => {
         let commission = await this.token.editionOptionalCommission(editionNumber1);
         commission[0].should.be.eq.BN(5);
         commission[1].should.be.equal(account1);
@@ -1401,18 +1401,18 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
   });
 
-  describe('mint', async function () {
+  describe('mint', async () => {
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
       await this.token.createActiveEdition(editionNumber2, editionData2, editionType, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, 4, {from: _owner});
     });
 
-    it('will revert if not called by whitelist', async function () {
+    it('will revert if not called by whitelist', async () => {
       await assertRevert(this.token.mint(account3, editionNumber1, {from: account1}));
     });
 
-    it('once added to whitelist can mint successfully', async function () {
+    it('once added to whitelist can mint successfully', async () => {
       let tokens = await this.token.tokensOf(account3);
       tokens
         .map(e => e.toNumber())
@@ -1430,49 +1430,49 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         .should.be.deep.equal([editionNumber1 + 1]);
     });
 
-    describe('successful mint without paying fee', async function () {
+    describe('successful mint without paying fee', async () => {
 
       const tokenId1 = editionNumber1 + 1;
       const tokenId2 = editionNumber2 + 1;
 
       let receipt;
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         receipt = await this.token.mint(account3, editionNumber1, {from: _owner});
         await this.token.mint(account4, editionNumber2, {from: _owner});
       });
 
-      describe('tokenData', async function () {
-        it(`token id [${tokenId1}]`, async function () {
+      describe('tokenData', async () => {
+        it(`token id [${tokenId1}]`, async () => {
           let results = await this.token.tokenData(tokenId1);
 
           results[0].should.be.eq.BN(editionNumber1);
           results[1].should.be.eq.BN(editionType);
-          bytesToString(results[2]).should.be.equal("editionData1");
+          bytesToString(results[2]).should.be.equal('editionData1');
           results[3].should.be.equal(`https://ipfs.infura.io/ipfs/edition1`);
           results[4].should.be.equal(account3);
         });
 
-        it(`token id [${tokenId2}]`, async function () {
+        it(`token id [${tokenId2}]`, async () => {
           let results = await this.token.tokenData(tokenId2);
 
           results[0].should.be.eq.BN(editionNumber2);
           results[1].should.be.eq.BN(editionType);
-          bytesToString(results[2]).should.be.equal("editionData2");
+          bytesToString(results[2]).should.be.equal('editionData2');
           results[3].should.be.equal(`https://ipfs.infura.io/ipfs/edition2`);
           results[4].should.be.equal(account4);
         });
       });
 
-      describe('tokensOf', async function () {
-        it(`ownership of [${tokenId1}] is defined`, async function () {
+      describe('tokensOf', async () => {
+        it(`ownership of [${tokenId1}] is defined`, async () => {
           let tokens = await this.token.tokensOf(account3);
           tokens
             .map(e => e.toNumber())
             .should.be.deep.equal([tokenId1]);
         });
 
-        it(`ownership of [${tokenId2}] is defined`, async function () {
+        it(`ownership of [${tokenId2}] is defined`, async () => {
           let tokens = await this.token.tokensOf(account4);
           tokens
             .map(e => e.toNumber())
@@ -1480,9 +1480,9 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         });
       });
 
-      describe(`events emitted [${tokenId1}]`, async function () {
+      describe(`events emitted [${tokenId1}]`, async () => {
 
-        it('Transfer event emitted', async function () {
+        it('Transfer event emitted', async () => {
           let {logs} = receipt;
 
           let transferEvent = logs[0];
@@ -1495,7 +1495,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
           _tokenId.should.be.eq.BN(tokenId1);
         });
 
-        it('Minted event emitted', async function () {
+        it('Minted event emitted', async () => {
           let {logs} = receipt;
 
           let mintedEvent = logs[1];
@@ -1513,23 +1513,23 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
   });
 
-  describe('Under mint', async function () {
+  describe('Under mint', async () => {
 
     const editionNumber3 = 300000;
-    const editionData3 = web3.utils.asciiToHex("editionData3");
-    const editionTokenUri3 = "edition3";
+    const editionData3 = web3.utils.asciiToHex('editionData3');
+    const editionTokenUri3 = 'edition3';
     const edition3Price = etherToWei(0.3);
     const minted = 2;
     const available = 4;
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.createActivePreMintedEdition(editionNumber3, editionData3, editionType, 0, 0, artistAccount, artistShare, edition3Price, editionTokenUri3, minted, available, {from: _owner});
     });
 
-    it('under mint edition 3 is setup correctly', async function () {
+    it('under mint edition 3 is setup correctly', async () => {
       let edition = await this.token.detailsOfEdition(editionNumber3);
 
-      bytesToString(edition[0]).should.be.equal("editionData3"); //_editionData
+      bytesToString(edition[0]).should.be.equal('editionData3'); //_editionData
       edition[1].should.be.eq.BN(editionType); //_editionType
       edition[2].should.be.eq.BN(0); // _startDate
       edition[3].should.be.eq.BN(MAX_UINT32); // _endDate
@@ -1542,60 +1542,60 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       edition[10].should.be.equal(true); // _active
     });
 
-    describe('edition 3 query methods', function () {
-      it('editionsOfType', async function () {
+    describe('edition 3 query methods', () => {
+      it('editionsOfType', async () => {
         let editions = await this.token.editionsOfType(editionType);
         editions.map(e => e.toNumber()).should.be.deep.equal([editionNumber3]);
       });
 
-      it('artistsEditions', async function () {
+      it('artistsEditions', async () => {
         let currentArtistEditions = await this.token.artistsEditions(artistAccount);
         currentArtistEditions.map(e => e.toNumber()).should.be.deep.equal([editionNumber3]);
       });
 
-      it('purchaseDatesEdition', async function () {
+      it('purchaseDatesEdition', async () => {
         let dates = await this.token.purchaseDatesEdition(editionNumber3);
         dates[0].should.be.eq.BN(0);
         dates[1].should.be.eq.BN(MAX_UINT32);
       });
 
-      it('priceInWeiEdition', async function () {
+      it('priceInWeiEdition', async () => {
         let priceInWei = await this.token.priceInWeiEdition(editionNumber3);
         priceInWei.should.be.eq.BN(edition3Price);
       });
 
-      it('tokensOfEdition', async function () {
+      it('tokensOfEdition', async () => {
         let tokensOfEdition = await this.token.tokensOfEdition(editionNumber3);
         tokensOfEdition.should.be.deep.equal([]);
       });
 
-      it('editionActive', async function () {
+      it('editionActive', async () => {
         let editionActive = await this.token.editionActive(editionNumber3);
         editionActive.should.be.equal(true);
       });
 
-      it('totalRemaining', async function () {
+      it('totalRemaining', async () => {
         let totalRemaining = await this.token.totalRemaining(editionNumber3);
         totalRemaining.should.be.eq.BN(available - minted);
       });
 
-      it('totalSupplyEdition', async function () {
+      it('totalSupplyEdition', async () => {
         let totalSupplyEdition = await this.token.totalSupplyEdition(editionNumber3);
         totalSupplyEdition.should.be.eq.BN(minted);
       });
 
-      it('totalAvailableEdition', async function () {
+      it('totalAvailableEdition', async () => {
         let totalAvailableEdition = await this.token.totalAvailableEdition(editionNumber3);
         totalAvailableEdition.should.be.eq.BN(available);
       });
 
-      it('tokenURIEdition', async function () {
+      it('tokenURIEdition', async () => {
         let tokenURIEdition = await this.token.tokenURIEdition(editionNumber3);
         tokenURIEdition.should.be.equal(`https://ipfs.infura.io/ipfs/${editionTokenUri3}`);
       });
     });
 
-    it('should handle under mint and normal mints', async function () {
+    it('should handle under mint and normal mints', async () => {
       const firstMinted = editionNumber3 + 3; // 300003
       const secondMinted = editionNumber3 + 4; // 300004
       const thirdMinted = editionNumber3 + 1;  // 300001
@@ -1650,13 +1650,13 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
     });
   });
 
-  describe('updateTotalSupply', async function () {
+  describe('updateTotalSupply', async () => {
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
     });
 
-    it('should allow updating minted number of editions', async function () {
+    it('should allow updating minted number of editions', async () => {
       let totalSupplyEdition = await this.token.totalSupplyEdition(editionNumber1);
       totalSupplyEdition.should.be.eq.BN(0);
 
@@ -1666,7 +1666,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       totalSupplyEdition.should.be.eq.BN(2);
     });
 
-    it('should prevent updating minted number if tokens sold outways update', async function () {
+    it('should prevent updating minted number if tokens sold outways update', async () => {
       // Sell two
       await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
       await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
@@ -1678,18 +1678,18 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       await assertRevert(this.token.updateTotalSupply(editionNumber1, 1, {from: _owner}));
     });
 
-    it('should prevent updating minted if not KO', async function () {
+    it('should prevent updating minted if not KO', async () => {
       await assertRevert(this.token.updateTotalSupply(editionNumber1, 2, {from: account1}));
     });
   });
 
-  describe('updateTotalAvailable', async function () {
+  describe('updateTotalAvailable', async () => {
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
     });
 
-    it('should allow updating available number of editions', async function () {
+    it('should allow updating available number of editions', async () => {
       let totalAvailableEdition = await this.token.totalAvailableEdition(editionNumber1);
       totalAvailableEdition.should.be.eq.BN(3);
 
@@ -1699,7 +1699,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       totalAvailableEdition.should.be.eq.BN(2);
     });
 
-    it('should reduce totalNumberAvailable when lowering edition config', async function () {
+    it('should reduce totalNumberAvailable when lowering edition config', async () => {
       let totalNumberAvailable = await this.token.totalNumberAvailable();
       totalNumberAvailable.should.be.eq.BN(3);
 
@@ -1712,7 +1712,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       totalNumberAvailable.should.be.eq.BN(2);
     });
 
-    it('should prevent updating available number if tokens sold outways update', async function () {
+    it('should prevent updating available number if tokens sold outways update', async () => {
       // Sell two
       await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
       await this.token.purchase(editionNumber1, {from: account1, value: edition1Price});
@@ -1724,31 +1724,31 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       await assertRevert(this.token.updateTotalAvailable(editionNumber1, 1, {from: _owner}));
     });
 
-    it('should prevent updating available if not KO', async function () {
+    it('should prevent updating available if not KO', async () => {
       await assertRevert(this.token.updateTotalAvailable(editionNumber1, 2, {from: account1}));
     });
   });
 
-  describe('totalNumberAvailable', async function () {
+  describe('totalNumberAvailable', async () => {
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
       await this.token.createActiveEdition(editionNumber2, editionData2, editionType, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, 4, {from: _owner});
     });
 
-    it('should marry up to the number defined in the edition confi', async function () {
+    it('should marry up to the number defined in the edition confi', async () => {
       let totalNumberAvailable = await this.token.totalNumberAvailable();
       totalNumberAvailable.should.be.eq.BN(3 + 4);
     });
   });
 
-  describe('burn', async function () {
+  describe('burn', async () => {
 
-    describe('validation', async function () {
+    describe('validation', async () => {
       const unknownTokenId = 9999;
       const tokenId = editionNumber1 + 1;
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         // Create edition
         await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
 
@@ -1760,25 +1760,25 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         tokensOf.map(e => e.toNumber()).should.be.deep.equal([tokenId]);
       });
 
-      it('cant burn a token which does not exist', async function () {
+      it('cant burn a token which does not exist', async () => {
         await assertRevert(this.token.burn(unknownTokenId, {from: _owner}));
       });
 
-      it('cant burn a token which is already burnt', async function () {
+      it('cant burn a token which is already burnt', async () => {
         await this.token.burn(tokenId, {from: _owner});
         await assertRevert(this.token.burn(tokenId, {from: _owner}));
       });
 
-      it('cant burn a token when not KO', async function () {
+      it('cant burn a token when not KO', async () => {
         await assertRevert(this.token.burn(tokenId, {from: account1}));
       });
 
-      it('can burn token if you are the owner', async function () {
+      it('can burn token if you are the owner', async () => {
         await this.token.burn(tokenId, {from: _owner});
       });
     });
 
-    describe('once minted', async function () {
+    describe('once minted', async () => {
 
       const edition1Available = 3;
 
@@ -1794,7 +1794,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       const _200003 = editionNumber2 + 3;
       const _200004 = editionNumber2 + 4;
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         // Create normal edition with no pre-minted (type 1)
         await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, edition1Available, {from: _owner});
 
@@ -1802,7 +1802,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         await this.token.createActivePreMintedEdition(editionNumber2, editionData2, editionType2, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, edition2Minted, edition2Available, {from: _owner});
       });
 
-      beforeEach(async function () {
+      beforeEach(async () => {
         // Mint token - account 3
         await this.token.purchase(editionNumber1, {from: account3, value: edition1Price});
         let tokensOf = await this.token.tokensOf(account3);
@@ -1824,15 +1824,15 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         tokensOf.map(e => e.toNumber()).should.be.deep.equal([_100001, _200001]);
       });
 
-      describe('once burnt', async function () {
+      describe('once burnt', async () => {
 
-        beforeEach(async function () {
+        beforeEach(async () => {
           // Burn two of the created tokens
           await this.token.burn(_100002, {from: _owner});
           await this.token.burn(_200001, {from: _owner});
         });
 
-        it('tokensOfEdition leaves zero in place of burnt token', async function () {
+        it('tokensOfEdition leaves zero in place of burnt token', async () => {
           let tokensOfEdition = await this.token.tokensOfEdition(editionNumber1);
           tokensOfEdition.map(e => e.toNumber()).should.be.deep.equal([_100001, 0]);
 
@@ -1840,7 +1840,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
           tokensOfEdition.map(e => e.toNumber()).should.be.deep.equal([_200003, 0]);
         });
 
-        it('editionOfTokenId returns zero once burnt', async function () {
+        it('editionOfTokenId returns zero once burnt', async () => {
           let editionOfTokenId = await this.token.editionOfTokenId(_100002);
           editionOfTokenId.should.be.eq.BN(0);
 
@@ -1848,59 +1848,59 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
           editionOfTokenId.should.be.eq.BN(0);
         });
 
-        it('totalNumberAvailable remains the same', async function () {
+        it('totalNumberAvailable remains the same', async () => {
           let totalNumberAvailable = await this.token.totalNumberAvailable();
           totalNumberAvailable.should.be.eq.BN(edition1Available + edition2Available);
         });
 
-        it('totalNumberMinted remains the same', async function () {
+        it('totalNumberMinted remains the same', async () => {
           let totalNumberMinted = await this.token.totalNumberMinted();
           totalNumberMinted.should.be.eq.BN(edition2Minted + 2); // + 2 as we minted 2 from edition 1
         });
 
-        it('tokenURI throws as required by the spec', async function () {
+        it('tokenURI throws as required by the spec', async () => {
           await assertRevert(this.token.tokenURI(_100002));
         });
 
-        it('tokenURISafe returns only the base when token burnt', async function () {
+        it('tokenURISafe returns only the base when token burnt', async () => {
           let tokenURISafe = await this.token.tokenURISafe(_100002);
           tokenURISafe.should.be.equal(BASE_URI);
         });
 
-        it('edition 1 - totalAvailableEdition remains the same after burnt', async function () {
+        it('edition 1 - totalAvailableEdition remains the same after burnt', async () => {
           let editionNumber1Available = await this.token.totalAvailableEdition(editionNumber1);
           editionNumber1Available.should.be.eq.BN(edition1Available);
         });
 
-        it('edition 2 - totalAvailableEdition remains the same after burnt', async function () {
+        it('edition 2 - totalAvailableEdition remains the same after burnt', async () => {
           let editionNumber2Available = await this.token.totalAvailableEdition(editionNumber2);
           editionNumber2Available.should.be.eq.BN(edition2Available);
         });
 
-        it('edition 1 - totalSupplyEdition remains the same after burnt', async function () {
+        it('edition 1 - totalSupplyEdition remains the same after burnt', async () => {
           let editionNumber1TotalSupply = await this.token.totalSupplyEdition(editionNumber1);
           editionNumber1TotalSupply.should.be.eq.BN(2); // 2 tokens sold from edition 1
         });
 
-        it('edition 2 - totalSupplyEdition remains the same after burnt', async function () {
+        it('edition 2 - totalSupplyEdition remains the same after burnt', async () => {
           let editionNumber2TotalSupply = await this.token.totalSupplyEdition(editionNumber2);
           editionNumber2TotalSupply.should.be.eq.BN(edition2Minted + 1); // 1 under mint + 1 normal mint
         });
 
-        it('edition 1 - totalRemaining remains the same after burnt', async function () {
+        it('edition 1 - totalRemaining remains the same after burnt', async () => {
           let editionNumber1Remaining = await this.token.totalRemaining(editionNumber1);
           editionNumber1Remaining.should.be.eq.BN(edition1Available - 2); // 2 tokens sold from edition 1
         });
 
-        it('edition 2 - totalRemaining remains the same after burnt', async function () {
+        it('edition 2 - totalRemaining remains the same after burnt', async () => {
           let editionNumber2Remaining = await this.token.totalRemaining(editionNumber2);
           editionNumber2Remaining.should.be.eq.BN(edition2Available - edition2Minted - 1); // 1 under mint + 1 normal mint
         });
 
-        it('edition 1 setup remains correct', async function () {
+        it('edition 1 setup remains correct', async () => {
           let edition = await this.token.detailsOfEdition(editionNumber1);
 
-          bytesToString(edition[0]).should.be.equal("editionData1"); //_editionData
+          bytesToString(edition[0]).should.be.equal('editionData1'); //_editionData
           edition[1].should.be.eq.BN(editionType); //_editionType
           edition[2].should.be.eq.BN(0); // _startDate
           edition[3].should.be.eq.BN(MAX_UINT32); // _endDate
@@ -1913,42 +1913,42 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
           edition[10].should.be.equal(true); // _active
         });
 
-        it(`tokenData reverts when burnt`, async function () {
-          [_200001, _100002].forEach(async function (token) {
+        it(`tokenData reverts when burnt`, async () => {
+          [_200001, _100002].forEach(async (token) => {
             await assertRevert(this.token.tokenData(token));
           });
         });
 
-        it(`tokenData reverts when burnt`, async function () {
-          [_200001, _100002].forEach(async function (token) {
+        it(`tokenData reverts when burnt`, async () => {
+          [_200001, _100002].forEach(async (token) => {
             await assertRevert(this.token.tokenData(token));
           });
         });
 
-        it('purchaseDatesToken is cleared when burnt', async function () {
-          [_200001, _100002].forEach(async function (token) {
-            let result1 = await this.token.purchaseDatesToken(token);
-            result1.map(e => e.toNumber())
-              .should.be.deep.equal([0, 0]);
-          });
+        it('purchaseDatesToken is cleared when burnt', async () => {
+          for (const token of [_200001, _100002]) {
+            let {_startDate, _endDate} = await this.token.purchaseDatesToken(token);
+            _endDate.toNumber().should.be.deep.equal(0);
+            _startDate.toNumber().should.be.deep.equal(0);
+          }
         });
 
-        it('priceInWeiToken is cleared when burnt', async function () {
-          [_200001, _100002].forEach(async function (token) {
+        it('priceInWeiToken is cleared when burnt', async () => {
+          [_200001, _100002].forEach(async (token) => {
             let result1 = await this.token.priceInWeiToken(token);
             result1.should.be.eq.BN(0);
           });
         });
 
-        it('setTokenURI cant be changed once burnt', async function () {
-          await assertRevert(this.token.setTokenURI(_200001, "123", {from: _owner}));
+        it('setTokenURI cant be changed once burnt', async () => {
+          await assertRevert(this.token.setTokenURI(_200001, '123', {from: _owner}));
         });
 
       });
 
-      describe('once burnt - undermint should re-populate burnt token ID', async function () {
+      describe('once burnt - undermint should re-populate burnt token ID', async () => {
 
-        beforeEach(async function () {
+        beforeEach(async () => {
           // Burn a token from edition 2 (under-mint edition)
           await this.token.burn(_200001, {from: _owner});
 
@@ -1956,7 +1956,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
           tokensOfEdition.map(e => e.toNumber()).should.be.deep.equal([_200003, 0]);
         });
 
-        it('should be able to mint more tokens once burnt', async function () {
+        it('should be able to mint more tokens once burnt', async () => {
 
           // mint the last three remaining tokens
           await this.token.mint(account3, editionNumber2, {from: _owner});
@@ -1978,9 +1978,9 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
       });
 
-      describe('once burnt - purchasing the remaining tokens will re-mint burnt token ID', async function () {
+      describe('once burnt - purchasing the remaining tokens will re-mint burnt token ID', async () => {
 
-        beforeEach(async function () {
+        beforeEach(async () => {
           // Burn a token from edition 2 (under-mint edition)
           await this.token.burn(_200001, {from: _owner});
 
@@ -1988,7 +1988,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
           tokensOfEdition.map(e => e.toNumber()).should.be.deep.equal([_200003, 0]);
         });
 
-        it('should be able to mint more tokens once burnt', async function () {
+        it('should be able to mint more tokens once burnt', async () => {
 
           // purchase the remaining token
           await this.token.purchase(editionNumber2, {from: account1, value: edition2Price});
@@ -2021,13 +2021,13 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
     // TODO tests for token swap after a burn
   });
 
-  describe('batchTransfer', async function () {
+  describe('batchTransfer', async () => {
 
     const _100001 = editionNumber1 + 1;
     const _100002 = editionNumber1 + 2;
     const _100003 = editionNumber1 + 3;
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
 
       // Account2 owns first 2 tokens
@@ -2038,7 +2038,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       await this.token.purchase(editionNumber1, {from: account3, value: edition1Price});
     });
 
-    it('should transfer all tokens defined', async function () {
+    it('should transfer all tokens defined', async () => {
       let tokensOf = await this.token.tokensOf(account2);
       tokensOf.map(e => e.toNumber())
         .should.be.deep.equal([_100001, _100002]);
@@ -2056,7 +2056,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         .should.be.deep.equal([_100001, _100002]);
     });
 
-    it('should fail if one of the tokens is not owner by the caller', async function () {
+    it('should fail if one of the tokens is not owner by the caller', async () => {
       await assertRevert(this.token.batchTransfer(account4, [_100001, _100003], {from: account2}));
 
       // confirm account2 still owns both
@@ -2070,7 +2070,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         .should.be.deep.equal([]);
     });
 
-    it('should allow transfer to someone from approved account even if they dont own them', async function () {
+    it('should allow transfer to someone from approved account even if they dont own them', async () => {
       // Fails
       await assertRevert(this.token.batchTransfer(account4, [_100001, _100002], {from: account3}));
 
@@ -2093,13 +2093,13 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
   });
 
-  describe('batchTransferFrom', async function () {
+  describe('batchTransferFrom', async () => {
 
     const _100001 = editionNumber1 + 1;
     const _100002 = editionNumber1 + 2;
     const _100003 = editionNumber1 + 3;
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
 
       // Account2 owns first 2 tokens
@@ -2110,7 +2110,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       await this.token.purchase(editionNumber1, {from: account3, value: edition1Price});
     });
 
-    it('should transfer all tokens defined', async function () {
+    it('should transfer all tokens defined', async () => {
       let tokensOf = await this.token.tokensOf(account2);
       tokensOf.map(e => e.toNumber())
         .should.be.deep.equal([_100001, _100002]);
@@ -2128,7 +2128,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         .should.be.deep.equal([_100001, _100002]);
     });
 
-    it('should fail if one of the tokens is not owner by the caller', async function () {
+    it('should fail if one of the tokens is not owner by the caller', async () => {
       await assertRevert(this.token.batchTransferFrom(account2, account4, [_100001, _100003], {from: account2}));
 
       // confirm account2 still owns both
@@ -2142,7 +2142,7 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
         .should.be.deep.equal([]);
     });
 
-    it('should allow transfer to someone from approved account even if they dont own them', async function () {
+    it('should allow transfer to someone from approved account even if they dont own them', async () => {
       // Fails
       await assertRevert(this.token.batchTransferFrom(account2, account4, [_100001, _100002], {from: account3}));
 
@@ -2165,18 +2165,18 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
 
   });
 
-  describe('access control', async function () {
+  describe('access control', async () => {
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       await this.token.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: _owner});
     });
 
-    describe('minting editions', async function () {
-      it('unable to mint() when not part of ROLE_MINTER', async function () {
+    describe('minting editions', async () => {
+      it('unable to mint() when not part of ROLE_MINTER', async () => {
         await assertRevert(this.token.mint(account3, editionNumber1, {from: account1}));
       });
 
-      it('can successfully call mint() when part of ROLE_MINTER', async function () {
+      it('can successfully call mint() when part of ROLE_MINTER', async () => {
         let tokens = await this.token.tokensOf(account3);
         tokens.map(e => e.toNumber()).should.be.deep.equal([]);
 
@@ -2191,12 +2191,12 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       });
     });
 
-    describe('under minting editions', async function () {
-      it('unable to underMint() when not part of ROLE_UNDER_MINTER', async function () {
+    describe('under minting editions', async () => {
+      it('unable to underMint() when not part of ROLE_UNDER_MINTER', async () => {
         await assertRevert(this.token.underMint(account3, editionNumber1, {from: account1}));
       });
 
-      it('can successfully call underMint() when part of ROLE_UNDER_MINTER', async function () {
+      it('can successfully call underMint() when part of ROLE_UNDER_MINTER', async () => {
         let tokens = await this.token.tokensOf(account3);
         tokens.map(e => e.toNumber()).should.be.deep.equal([]);
 
@@ -2211,14 +2211,14 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       });
     });
 
-    describe('createActiveEdition()', async function () {
-      it('unable to createActiveEdition() when not part of ROLE_KNOWN_ORIGIN', async function () {
+    describe('createActiveEdition()', async () => {
+      it('unable to createActiveEdition() when not part of ROLE_KNOWN_ORIGIN', async () => {
         await assertRevert(this.token.createActiveEdition(editionNumber2, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: account1}));
         let exists = await this.token.editionExists(editionNumber2);
         exists.should.be.equal(false);
       });
 
-      it('can successfully call createActiveEdition() when part of ROLE_KNOWN_ORIGIN', async function () {
+      it('can successfully call createActiveEdition() when part of ROLE_KNOWN_ORIGIN', async () => {
         await this.token.addAddressToAccessControl(account1, ROLE_KNOWN_ORIGIN, {from: _owner});
 
         await this.token.createActiveEdition(editionNumber2, editionData1, editionType, 0, 0, artistAccount, artistShare, edition1Price, editionTokenUri1, 3, {from: account1});
@@ -2228,14 +2228,14 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       });
     });
 
-    describe('createInactiveEdition()', async function () {
-      it('unable to createInactiveEdition() when not part of ROLE_KNOWN_ORIGIN', async function () {
+    describe('createInactiveEdition()', async () => {
+      it('unable to createInactiveEdition() when not part of ROLE_KNOWN_ORIGIN', async () => {
         await assertRevert(this.token.createInactiveEdition(editionNumber2, editionData2, editionType, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, 1, {from: account1}));
         let exists = await this.token.editionExists(editionNumber2);
         exists.should.be.equal(false);
       });
 
-      it('can successfully call createInactiveEdition() when part of ROLE_KNOWN_ORIGIN', async function () {
+      it('can successfully call createInactiveEdition() when part of ROLE_KNOWN_ORIGIN', async () => {
         await this.token.addAddressToAccessControl(account1, ROLE_KNOWN_ORIGIN, {from: _owner});
 
         await this.token.createInactiveEdition(editionNumber2, editionData2, editionType, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, 1, {from: account1});
@@ -2245,14 +2245,14 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       });
     });
 
-    describe('createActivePreMintedEdition()', async function () {
-      it('unable to createActivePreMintedEdition() when not part of ROLE_KNOWN_ORIGIN', async function () {
+    describe('createActivePreMintedEdition()', async () => {
+      it('unable to createActivePreMintedEdition() when not part of ROLE_KNOWN_ORIGIN', async () => {
         await assertRevert(this.token.createActivePreMintedEdition(editionNumber2, editionData2, editionType, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, 2, 4, {from: account1}));
         let exists = await this.token.editionExists(editionNumber2);
         exists.should.be.equal(false);
       });
 
-      it('can successfully call createActivePreMintedEdition() when part of ROLE_KNOWN_ORIGIN', async function () {
+      it('can successfully call createActivePreMintedEdition() when part of ROLE_KNOWN_ORIGIN', async () => {
         await this.token.addAddressToAccessControl(account1, ROLE_KNOWN_ORIGIN, {from: _owner});
 
         this.token.createActivePreMintedEdition(editionNumber2, editionData2, editionType, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, 2, 5, {from: account1});
@@ -2262,14 +2262,14 @@ contract('KnownOriginDigitalAssetV2 - custom', function (accounts) {
       });
     });
 
-    describe('createInactivePreMintedEdition()', async function () {
-      it('unable to createInactivePreMintedEdition() when not part of ROLE_KNOWN_ORIGIN', async function () {
+    describe('createInactivePreMintedEdition()', async () => {
+      it('unable to createInactivePreMintedEdition() when not part of ROLE_KNOWN_ORIGIN', async () => {
         await assertRevert(this.token.createInactivePreMintedEdition(editionNumber2, editionData2, editionType, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, 2, 4, {from: account1}));
         let exists = await this.token.editionExists(editionNumber2);
         exists.should.be.equal(false);
       });
 
-      it('can successfully call createInactivePreMintedEdition() when part of ROLE_KNOWN_ORIGIN', async function () {
+      it('can successfully call createInactivePreMintedEdition() when part of ROLE_KNOWN_ORIGIN', async () => {
         await this.token.addAddressToAccessControl(account1, ROLE_KNOWN_ORIGIN, {from: _owner});
 
         this.token.createInactivePreMintedEdition(editionNumber2, editionData2, editionType, 0, 0, artistAccount, artistShare, edition2Price, editionTokenUri2, 2, 4, {from: account1});

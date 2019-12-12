@@ -171,7 +171,7 @@ library SafeMath {
   }
 }
 
-// File: contracts/v2/tools/IKODAV2Controls.sol
+// File: contracts/v2/interfaces/IKODAV2Controls.sol
 
 pragma solidity 0.4.24;
 
@@ -192,10 +192,9 @@ interface IKODAV2Controls {
   function updateActive(uint256 _editionNumber, bool _active) external;
 }
 
-// File: contracts/v2/tools/ArtistEditionControlsV2.sol
+// File: contracts/v2/artist-controls/ArtistEditionControlsV2.sol
 
 pragma solidity 0.4.24;
-
 
 
 

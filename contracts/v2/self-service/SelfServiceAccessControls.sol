@@ -1,6 +1,7 @@
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../interfaces/ISelfServiceAccessControls.sol";
 
-contract SelfServiceAccessControls is Ownable {
+contract SelfServiceAccessControls is Ownable, ISelfServiceAccessControls {
 
   // Simple map to only allow certain artist create editions at first
   mapping(address => bool) public allowedArtists;
