@@ -2251,7 +2251,39 @@
   },
   "networks": {
     "1": {
-      "events": {},
+      "events": {
+        "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipRenounced",
+          "type": "event",
+          "signature": "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
       "links": {},
       "address": "0xec133DF5d806a9069Aee513B8bE01eeee2F03Ff0",
       "transactionHash": "0x1151f96a9a088d4585bb14a7b8781ceeb0bea75bb91fd5937789e01fc8bb8791"
@@ -2333,8 +2365,9 @@
       "transactionHash": "0x18106577ed52b6b1de93872ce160e284f8e6a62092a71d1903780c8f8a994afb"
     }
   },
-  "schemaVersion": "3.0.16",
-  "updatedAt": "2019-12-06T10:33:32.431Z",
+  "schemaVersion": "3.0.19",
+  "updatedAt": "2019-12-12T09:46:55.104Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {
       "isEnabledForAccount(address)": {

@@ -56912,8 +56912,9 @@
       "transactionHash": "0x72efe83e5ca6d7c2ceea9d2ea5ca3863c64580b4df99d4e5462eabea02bd44f4"
     }
   },
-  "schemaVersion": "3.0.16",
-  "updatedAt": "2019-12-06T10:33:32.332Z",
+  "schemaVersion": "3.0.19",
+  "updatedAt": "2019-12-12T09:46:54.920Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {
       "approve(address,uint256)": {

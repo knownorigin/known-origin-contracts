@@ -21,7 +21,7 @@ module.exports = async function (deployer, network, accounts) {
   }
 
   if (network === 'live' || network === 'live-fork') {
-    _koAccount = new HDWalletProvider(require('../../known-origin-web3-marketplace/mnemonic_live'), `https://mainnet.infura.io/v3/${infuraApikey}`, 0).getAddress();
+    _koAccount = new HDWalletProvider(require('../mnemonic_live'), `https://mainnet.infura.io/v3/${infuraApikey}`, 0).getAddress();
   }
 
   const koda = await KnownOriginDigitalAssetV2.deployed();

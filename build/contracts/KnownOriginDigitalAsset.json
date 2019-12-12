@@ -27823,8 +27823,8 @@
       "transactionHash": "0x7ec4b4c7d3c3d4fd87b29d7f5cd16dd54d399c2cd1baa6fbd654521b07451c48"
     }
   },
-  "schemaVersion": "3.0.16",
-  "updatedAt": "2019-12-06T10:31:18.819Z",
+  "schemaVersion": "3.0.19",
+  "updatedAt": "2019-12-12T09:43:17.647Z",
   "devdoc": {
     "methods": {
       "approve(address,uint256)": {

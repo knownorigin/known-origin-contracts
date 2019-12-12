@@ -34666,8 +34666,9 @@
       "transactionHash": "0xb97ce9c92d12e313658d70d118a7a11c921225b1e0b156a7d998eff619db9fc5"
     }
   },
-  "schemaVersion": "3.0.16",
-  "updatedAt": "2019-12-06T10:33:32.386Z",
+  "schemaVersion": "3.0.19",
+  "updatedAt": "2019-12-12T09:46:55.015Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {
       "acceptBid(uint256)": {
