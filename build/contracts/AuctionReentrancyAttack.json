@@ -157,7 +157,7 @@
         "id": 352,
         "nodeType": "ImportDirective",
         "scope": 427,
-        "sourceUnit": 12581,
+        "sourceUnit": 12615,
         "src": "0:63:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -182,10 +182,10 @@
               "id": 354,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 12580,
+              "referencedDeclaration": 12614,
               "src": "151:7:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$12580",
+                "typeIdentifier": "t_contract$_Ownable_$12614",
                 "typeString": "contract Ownable"
               }
             },
@@ -195,7 +195,7 @@
           }
         ],
         "contractDependencies": [
-          12580
+          12614
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -203,7 +203,7 @@
         "id": 426,
         "linearizedBaseContracts": [
           426,
-          12580
+          12614
         ],
         "name": "AuctionReentrancyAttack",
         "nodeType": "ContractDefinition",
@@ -328,7 +328,7 @@
                       "name": "owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 12498,
+                      "referencedDeclaration": 12532,
                       "src": "375:5:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -345,7 +345,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 13711,
+                        "referencedDeclaration": 13745,
                         "src": "383:3:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -730,7 +730,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 13711,
+                            "referencedDeclaration": 13745,
                             "src": "880:3:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -851,7 +851,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 12528,
+                  "referencedDeclaration": 12562,
                   "src": "804:9:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -976,7 +976,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 12528,
+                  "referencedDeclaration": 12562,
                   "src": "941:9:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1031,7 +1031,7 @@
         "id": 352,
         "nodeType": "ImportDirective",
         "scope": 427,
-        "sourceUnit": 12581,
+        "sourceUnit": 12615,
         "src": "0:63:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1056,10 +1056,10 @@
               "id": 354,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 12580,
+              "referencedDeclaration": 12614,
               "src": "151:7:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$12580",
+                "typeIdentifier": "t_contract$_Ownable_$12614",
                 "typeString": "contract Ownable"
               }
             },
@@ -1069,7 +1069,7 @@
           }
         ],
         "contractDependencies": [
-          12580
+          12614
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -1077,7 +1077,7 @@
         "id": 426,
         "linearizedBaseContracts": [
           426,
-          12580
+          12614
         ],
         "name": "AuctionReentrancyAttack",
         "nodeType": "ContractDefinition",
@@ -1202,7 +1202,7 @@
                       "name": "owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 12498,
+                      "referencedDeclaration": 12532,
                       "src": "375:5:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1219,7 +1219,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 13711,
+                        "referencedDeclaration": 13745,
                         "src": "383:3:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -1604,7 +1604,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 13711,
+                            "referencedDeclaration": 13745,
                             "src": "880:3:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -1725,7 +1725,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 12528,
+                  "referencedDeclaration": 12562,
                   "src": "804:9:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1850,7 +1850,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 12528,
+                  "referencedDeclaration": 12562,
                   "src": "941:9:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1895,7 +1895,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.19",
-  "updatedAt": "2020-03-13T15:54:12.743Z",
+  "updatedAt": "2020-03-13T16:17:40.226Z",
   "devdoc": {
     "methods": {
       "renounceOwnership()": {

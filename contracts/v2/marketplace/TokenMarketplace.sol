@@ -182,6 +182,7 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
   whenNotPaused
   onlyWhenOfferOwner(_tokenId)
   onlyWhenBidOverMinAmount(_tokenId)
+  onlyWhenTokenAuctionEnabled(_tokenId)
   {
     offers[_tokenId].offer = offers[_tokenId].offer.add(msg.value);
 
@@ -191,7 +192,9 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
   function withdrawBid(uint256 _tokenId)
   public
   whenNotPaused
+  onlyWhenTokenExists(_tokenId)
   onlyWhenOfferOwner(_tokenId)
+  onlyWhenTokenAuctionEnabled(_tokenId)
   {
 
     _refundHighestBidder(_tokenId);
@@ -204,6 +207,8 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
   whenNotPaused
   onlyTokenOwner(_tokenId)
   {
+    // FIXME - check open offer set
+
     address currentHighestBidder = offers[_tokenId].bidder;
     uint256 currentHighestBiddersAmount = offers[_tokenId].offer;
 
@@ -216,6 +221,8 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
   public
   whenNotPaused
   {
+    // FIXME - check open offer set
+
     address currentOwner = kodaAddress.ownerOf(_tokenId);
     require(currentOwner == msg.sender, "Not token owner");
 
@@ -232,6 +239,17 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
     emit BidAccepted(winningBidder, _tokenId, winningOffer);
 
     delete offers[_tokenId];
+  }
+
+  function tokenOffer(uint256 _tokenId) external view returns (address _bidder, uint256 _offer, address _owner, bool _enabled, bool _paused) {
+    Offer memory offer = offers[_tokenId];
+    return (
+    offer.bidder,
+    offer.offer,
+    kodaAddress.ownerOf(_tokenId),
+    !disabledTokens[_tokenId],
+    paused
+    );
   }
 
   /**
