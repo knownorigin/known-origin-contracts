@@ -222,8 +222,8 @@
   "metadata": "{\"compiler\":{\"version\":\"0.4.24+commit.e67f0147\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[],\"name\":\"unpause\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"paused\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"pause\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_editionNumber\",\"type\":\"uint256\"},{\"name\":\"_priceInWei\",\"type\":\"uint256\"}],\"name\":\"updateEditionPrice\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_kodaAddress\",\"type\":\"address\"}],\"name\":\"setKodavV2\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_receivingAddress\",\"type\":\"address\"},{\"name\":\"_editionNumber\",\"type\":\"uint256\"}],\"name\":\"gift\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"kodaAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"name\":\"_kodaAddress\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"_editionNumber\",\"type\":\"uint256\"},{\"indexed\":true,\"name\":\"_artist\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"_priceInWei\",\"type\":\"uint256\"}],\"name\":\"PriceChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Pause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"Unpause\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"}],\"name\":\"OwnershipRenounced\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{\"gift(address,uint256)\":{\"details\":\"Ability to gift new NFTs to an address, from a KODA editionOnly callable from edition artists defined in KODA NFT contractOnly callable when contract is not pausedReverts if edition is invalidReverts if edition is not active in KDOA NFT contract\"},\"pause()\":{\"details\":\"called by the owner to pause, triggers stopped state\"},\"renounceOwnership()\":{\"details\":\"Allows the current owner to relinquish control of the contract.\"},\"setKodavV2(address)\":{\"details\":\"Sets the KODA addressOnly callable from owner\"},\"transferOwnership(address)\":{\"details\":\"Allows the current owner to transfer control of the contract to a newOwner.\",\"params\":{\"_newOwner\":\"The address to transfer ownership to.\"}},\"unpause()\":{\"details\":\"called by the owner to unpause, returns to normal state\"},\"updateEditionPrice(uint256,uint256)\":{\"details\":\"Sets the price of the provided edition in the WEIOnly callable from edition artists defined in KODA NFT contractOnly callable when contract is not pausedReverts if edition is invalidReverts if edition is not active in KDOA NFT contract\"}},\"title\":\"Artists self minting for KnownOrigin (KODA) * Allows for the edition artists to mint there own assets and control the price of an edition * https://www.knownorigin.io/ * BE ORIGINAL. BUY ORIGINAL.\"},\"userdoc\":{\"methods\":{\"renounceOwnership()\":{\"notice\":\"Renouncing to ownership will leave the contract without an owner. It will not be possible to call the functions with the `onlyOwner` modifier anymore.\"}}}},\"settings\":{\"compilationTarget\":{\"/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/artist-controls/ArtistEditionControls.sol\":\"ArtistEditionControls\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/artist-controls/ArtistEditionControls.sol\":{\"keccak256\":\"0x530070bd55f094da45b6e8ba14b4f826db1d63227ef284b98123f557999313b0\",\"urls\":[\"bzzr://a6c12efda5a612d9dd3026f9e785786bb5fad169501806cd89e8bb2f2c8458d0\"]},\"/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/IKODAV2Controls.sol\":{\"keccak256\":\"0x2e622ee2b345f35d8094865eb0cfb9c009541377fdce5765e7cc5b4d2bc744c0\",\"urls\":[\"bzzr://d671319328cbfbd54dab1a0c83d3f90d1c0805a83d78d1af17c4b745a75dc9be\"]},\"openzeppelin-solidity/contracts/lifecycle/Pausable.sol\":{\"keccak256\":\"0xc7e4c07a9b6ec87a56d4725c53bea9853ebdb36b50e233346da1c19a29f5fcc9\",\"urls\":[\"bzzr://00c60a2ceaeaea22950f100de0da8af10de31f66db76604b3b70c47f883eb570\"]},\"openzeppelin-solidity/contracts/math/SafeMath.sol\":{\"keccak256\":\"0xa1c5e1d9ebbf654d332ca8e7a5c04a6a6a9d142eeaab3b988c2c909c81a62bef\",\"urls\":[\"bzzr://d062fb4a1b6de1f036ee0e73364a2532c4757eb68e95dd8c5cbb2d17b8732c6a\"]},\"openzeppelin-solidity/contracts/ownership/Ownable.sol\":{\"keccak256\":\"0x84c7090c27cf3657b73d9e26b6b316975fa0bd233b8169f254de0c3b3acfaefc\",\"urls\":[\"bzzr://b983355647976c1daa5de581a1b6a41be9c5adc17cce257b8679649db78f8a11\"]}},\"version\":1}",
   "bytecode": "0x60806040526000805460a060020a60ff021916905534801561002057600080fd5b50604051602080610b48833981016040525160008054600160a060020a0319908116331790915560018054600160a060020a0390931692909116919091179055610ad98061006f6000396000f3006080604052600436106100a35763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633f4ba83a81146100a85780635c975abb146100bf578063715018a6146100e85780638456cb59146100fd5780638da5cb5b146101125780639e0fd99814610143578063bbee17a31461015e578063cbce4c971461017f578063e0758c9d146101b5578063f2fde38b146101ca575b600080fd5b3480156100b457600080fd5b506100bd6101eb565b005b3480156100cb57600080fd5b506100d4610261565b604080519115158252519081900360200190f35b3480156100f457600080fd5b506100bd610271565b34801561010957600080fd5b506100bd6102dd565b34801561011e57600080fd5b50610127610358565b60408051600160a060020a039092168252519081900360200190f35b34801561014f57600080fd5b506100d4600435602435610367565b34801561016a57600080fd5b506100bd600160a060020a0360043516610671565b34801561018b57600080fd5b506101a3600160a060020a03600435166024356106b7565b60408051918252519081900360200190f35b3480156101c157600080fd5b506101276109fe565b3480156101d657600080fd5b506100bd600160a060020a0360043516610a0d565b600054600160a060020a0316331461020257600080fd5b60005460a060020a900460ff16151561021a57600080fd5b6000805474ff0000000000000000000000000000000000000000191681556040517f7805862f689e2f13df9f062ff482ad3ad112aca9e0847911ed832e158c525b339190a1565b60005460a060020a900460ff1681565b600054600160a060020a0316331461028857600080fd5b60008054604051600160a060020a03909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031633146102f457600080fd5b60005460a060020a900460ff161561030b57600080fd5b6000805474ff0000000000000000000000000000000000000000191660a060020a1781556040517f6985a02210a168e66602d3235cb6db0e70f92b3ba4d376a33c0f3d9434bff6259190a1565b600054600160a060020a031681565b6000805481908190819060a060020a900460ff161561038557600080fd5b600154604080517f32fd8478000000000000000000000000000000000000000000000000000000008152600481018990528151600160a060020a03909316926332fd8478926024808401939192918290030181600087803b1580156103e957600080fd5b505af11580156103fd573d6000803e3d6000fd5b505050506040513d604081101561041357600080fd5b508051602090910151909350915033600160a060020a03841614806104425750600054600160a060020a031633145b15156104bd576040805160e560020a62461bcd028152602060048201526024808201527f4f6e6c792066726f6d207468652065646974696f6e206172746973742061636360448201527f6f756e7400000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b600154604080517fbbd1e1fc000000000000000000000000000000000000000000000000000000008152600481018990529051600160a060020a039092169163bbd1e1fc916024808201926020929091908290030181600087803b15801561052457600080fd5b505af1158015610538573d6000803e3d6000fd5b505050506040513d602081101561054e57600080fd5b505190508015156105a9576040805160e560020a62461bcd02815260206004820152601b60248201527f4f6e6c79207768656e2065646974696f6e206973206163746976650000000000604482015290519081900360640190fd5b600154604080517f7eb9f04a00000000000000000000000000000000000000000000000000000000815260048101899052602481018890529051600160a060020a0390921691637eb9f04a9160448082019260009290919082900301818387803b15801561061657600080fd5b505af115801561062a573d6000803e3d6000fd5b50506040805188815290513393508992507f7b9e70728348c5a660506950e5eeb19dee00e0a53e8ce602353738185a8cd3729181900360200190a350600195945050505050565b600054600160a060020a0316331461068857600080fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b6000805481908190819060a060020a900460ff16156106d557600080fd5b600160a060020a0386161515610735576040805160e560020a62461bcd02815260206004820152601e60248201527f556e61626c6520746f2073656e6420746f207a65726f20616464726573730000604482015290519081900360640190fd5b600154604080517f32fd8478000000000000000000000000000000000000000000000000000000008152600481018890528151600160a060020a03909316926332fd8478926024808401939192918290030181600087803b15801561079957600080fd5b505af11580156107ad573d6000803e3d6000fd5b505050506040513d60408110156107c357600080fd5b508051602090910151909350915033600160a060020a03841614806107f25750600054600160a060020a031633145b151561086d576040805160e560020a62461bcd028152602060048201526024808201527f4f6e6c792066726f6d207468652065646974696f6e206172746973742061636360448201527f6f756e7400000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b600154604080517fbbd1e1fc000000000000000000000000000000000000000000000000000000008152600481018890529051600160a060020a039092169163bbd1e1fc916024808201926020929091908290030181600087803b1580156108d457600080fd5b505af11580156108e8573d6000803e3d6000fd5b505050506040513d60208110156108fe57600080fd5b50519050801515610959576040805160e560020a62461bcd02815260206004820152601b60248201527f4f6e6c79207768656e2065646974696f6e206973206163746976650000000000604482015290519081900360640190fd5b600154604080517f40c10f19000000000000000000000000000000000000000000000000000000008152600160a060020a03898116600483015260248201899052915191909216916340c10f199160448083019260209291908290030181600087803b1580156109c857600080fd5b505af11580156109dc573d6000803e3d6000fd5b505050506040513d60208110156109f257600080fd5b50519695505050505050565b600154600160a060020a031681565b600054600160a060020a03163314610a2457600080fd5b610a2d81610a30565b50565b600160a060020a0381161515610a4557600080fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820245f6fc2a3d67fcbcce310068a4eb6f95eae0353114ba651d3056c191b5af9520029",
   "deployedBytecode": "0x6080604052600436106100a35763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633f4ba83a81146100a85780635c975abb146100bf578063715018a6146100e85780638456cb59146100fd5780638da5cb5b146101125780639e0fd99814610143578063bbee17a31461015e578063cbce4c971461017f578063e0758c9d146101b5578063f2fde38b146101ca575b600080fd5b3480156100b457600080fd5b506100bd6101eb565b005b3480156100cb57600080fd5b506100d4610261565b604080519115158252519081900360200190f35b3480156100f457600080fd5b506100bd610271565b34801561010957600080fd5b506100bd6102dd565b34801561011e57600080fd5b50610127610358565b60408051600160a060020a039092168252519081900360200190f35b34801561014f57600080fd5b506100d4600435602435610367565b34801561016a57600080fd5b506100bd600160a060020a0360043516610671565b34801561018b57600080fd5b506101a3600160a060020a03600435166024356106b7565b60408051918252519081900360200190f35b3480156101c157600080fd5b506101276109fe565b3480156101d657600080fd5b506100bd600160a060020a0360043516610a0d565b600054600160a060020a0316331461020257600080fd5b60005460a060020a900460ff16151561021a57600080fd5b6000805474ff0000000000000000000000000000000000000000191681556040517f7805862f689e2f13df9f062ff482ad3ad112aca9e0847911ed832e158c525b339190a1565b60005460a060020a900460ff1681565b600054600160a060020a0316331461028857600080fd5b60008054604051600160a060020a03909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a26000805473ffffffffffffffffffffffffffffffffffffffff19169055565b600054600160a060020a031633146102f457600080fd5b60005460a060020a900460ff161561030b57600080fd5b6000805474ff0000000000000000000000000000000000000000191660a060020a1781556040517f6985a02210a168e66602d3235cb6db0e70f92b3ba4d376a33c0f3d9434bff6259190a1565b600054600160a060020a031681565b6000805481908190819060a060020a900460ff161561038557600080fd5b600154604080517f32fd8478000000000000000000000000000000000000000000000000000000008152600481018990528151600160a060020a03909316926332fd8478926024808401939192918290030181600087803b1580156103e957600080fd5b505af11580156103fd573d6000803e3d6000fd5b505050506040513d604081101561041357600080fd5b508051602090910151909350915033600160a060020a03841614806104425750600054600160a060020a031633145b15156104bd576040805160e560020a62461bcd028152602060048201526024808201527f4f6e6c792066726f6d207468652065646974696f6e206172746973742061636360448201527f6f756e7400000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b600154604080517fbbd1e1fc000000000000000000000000000000000000000000000000000000008152600481018990529051600160a060020a039092169163bbd1e1fc916024808201926020929091908290030181600087803b15801561052457600080fd5b505af1158015610538573d6000803e3d6000fd5b505050506040513d602081101561054e57600080fd5b505190508015156105a9576040805160e560020a62461bcd02815260206004820152601b60248201527f4f6e6c79207768656e2065646974696f6e206973206163746976650000000000604482015290519081900360640190fd5b600154604080517f7eb9f04a00000000000000000000000000000000000000000000000000000000815260048101899052602481018890529051600160a060020a0390921691637eb9f04a9160448082019260009290919082900301818387803b15801561061657600080fd5b505af115801561062a573d6000803e3d6000fd5b50506040805188815290513393508992507f7b9e70728348c5a660506950e5eeb19dee00e0a53e8ce602353738185a8cd3729181900360200190a350600195945050505050565b600054600160a060020a0316331461068857600080fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b6000805481908190819060a060020a900460ff16156106d557600080fd5b600160a060020a0386161515610735576040805160e560020a62461bcd02815260206004820152601e60248201527f556e61626c6520746f2073656e6420746f207a65726f20616464726573730000604482015290519081900360640190fd5b600154604080517f32fd8478000000000000000000000000000000000000000000000000000000008152600481018890528151600160a060020a03909316926332fd8478926024808401939192918290030181600087803b15801561079957600080fd5b505af11580156107ad573d6000803e3d6000fd5b505050506040513d60408110156107c357600080fd5b508051602090910151909350915033600160a060020a03841614806107f25750600054600160a060020a031633145b151561086d576040805160e560020a62461bcd028152602060048201526024808201527f4f6e6c792066726f6d207468652065646974696f6e206172746973742061636360448201527f6f756e7400000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b600154604080517fbbd1e1fc000000000000000000000000000000000000000000000000000000008152600481018890529051600160a060020a039092169163bbd1e1fc916024808201926020929091908290030181600087803b1580156108d457600080fd5b505af11580156108e8573d6000803e3d6000fd5b505050506040513d60208110156108fe57600080fd5b50519050801515610959576040805160e560020a62461bcd02815260206004820152601b60248201527f4f6e6c79207768656e2065646974696f6e206973206163746976650000000000604482015290519081900360640190fd5b600154604080517f40c10f19000000000000000000000000000000000000000000000000000000008152600160a060020a03898116600483015260248201899052915191909216916340c10f199160448083019260209291908290030181600087803b1580156109c857600080fd5b505af11580156109dc573d6000803e3d6000fd5b505050506040513d60208110156109f257600080fd5b50519695505050505050565b600154600160a060020a031681565b600054600160a060020a03163314610a2457600080fd5b610a2d81610a30565b50565b600160a060020a0381161515610a4557600080fd5b60008054604051600160a060020a03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a36000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a03929092169190911790555600a165627a7a72305820245f6fc2a3d67fcbcce310068a4eb6f95eae0353114ba651d3056c191b5af9520029",
-  "sourceMap": "479:2443:20:-;;;268:5:42;247:26;;-1:-1:-1;;;;;;247:26:42;;;757:86:20;5:2:-1;;;;30:1;27;20:12;5:2;757:86:20;;;;;;;;;;;;;567:5:45;:18;;-1:-1:-1;;;;;;567:18:45;;;575:10;567:18;;;;;812:26:20;;-1:-1:-1;;;;;812:26:20;;;;;;;;;;;;;479:2443;;;;;;",
-  "deployedSourceMap": "479:2443:20:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;838:92:42;;8:9:-1;5:2;;;30:1;27;20:12;5:2;838:92:42;;;;;;247:26;;8:9:-1;5:2;;;30:1;27;20:12;5:2;247:26:42;;;;;;;;;;;;;;;;;;;;;;1001:111:45;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1001:111:45;;;;666:90:42;;8:9:-1;5:2;;;30:1;27;20:12;5:2;666:90:42;;;;238:20:45;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:45;;;;;;;;-1:-1:-1;;;;;238:20:45;;;;;;;;;;;;;;2096:637:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;2096:637:20;;;;;;;2816:104;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;2816:104:20;-1:-1:-1;;;;;2816:104:20;;;;;1159:631;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1159:631:20;-1:-1:-1;;;;;1159:631:20;;;;;;;;;;;;;;;;;;;;;;;601:34;;8:9:-1;5:2;;;30:1;27;20:12;5:2;601:34:20;;;;1274:103:45;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1274:103:45;-1:-1:-1;;;;;1274:103:45;;;;;838:92:42;719:5:45;;-1:-1:-1;;;;;719:5:45;705:10;:19;697:28;;;;;;568:6:42;;-1:-1:-1;;;568:6:42;;;;560:15;;;;;;;;900:5;891:14;;-1:-1:-1;;891:14:42;;;916:9;;;;900:5;916:9;838:92::o;247:26::-;;;-1:-1:-1;;;247:26:42;;;;;:::o;1001:111:45:-;719:5;;-1:-1:-1;;;;;719:5:45;705:10;:19;697:28;;;;;;1077:5;;;1058:25;;-1:-1:-1;;;;;1077:5:45;;;;1058:25;;;1105:1;1089:18;;-1:-1:-1;;1089:18:45;;;1001:111::o;666:90:42:-;719:5:45;;-1:-1:-1;;;;;719:5:45;705:10;:19;697:28;;;;;;416:6:42;;-1:-1:-1;;;416:6:42;;;;415:7;407:16;;;;;;720:6;:13;;-1:-1:-1;;720:13:42;-1:-1:-1;;;720:13:42;;;744:7;;;;720:6;744:7;666:90::o;238:20:45:-;;;-1:-1:-1;;;;;238:20:45;;:::o;2096:637:20:-;2207:4;416:6:42;;2207:4:20;;;;;;-1:-1:-1;;;416:6:42;;;;415:7;407:16;;;;;;2314:11:20;;:44;;;;;;;;;;;;;;-1:-1:-1;;;;;2314:11:20;;;;:28;;:44;;;;;;;;;;;;;:11;;:44;;;5:2:-1;;;;30:1;27;20:12;5:2;2314:44:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2314:44:20;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;2314:44:20;;;;;;;;;-1:-1:-1;2314:44:20;-1:-1:-1;2372:10:20;-1:-1:-1;;;;;2372:27:20;;;;:50;;-1:-1:-1;2417:5:20;;-1:-1:-1;;;;;2417:5:20;2403:10;:19;2372:50;2364:99;;;;;;;-1:-1:-1;;;;;2364:99:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2486:11;;:41;;;;;;;;;;;;;;-1:-1:-1;;;;;2486:11:20;;;;:25;;:41;;;;;;;;;;;;;;;:11;;:41;;;5:2:-1;;;;30:1;27;20:12;5:2;2486:41:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2486:41:20;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;2486:41:20;;-1:-1:-1;2533:48:20;;;;;;;;-1:-1:-1;;;;;2533:48:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;2588:11;;:57;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;2588:11:20;;;;:28;;:57;;;;;:11;;:57;;;;;;;;:11;;:57;;;5:2:-1;;;;30:1;27;20:12;5:2;2588:57:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;-1:-1;;2657:53:20;;;;;;;;2686:10;;-1:-1:-1;2670:14:20;;-1:-1:-1;2657:53:20;;;;;;;;;-1:-1:-1;2724:4:20;;2096:637;-1:-1:-1;;;;;2096:637:20:o;2816:104::-;719:5:45;;-1:-1:-1;;;;;719:5:45;705:10;:19;697:28;;;;;;2889:11:20;:26;;-1:-1:-1;;2889:26:20;-1:-1:-1;;;;;2889:26:20;;;;;;;;;;2816:104::o;1159:631::-;1262:7;416:6:42;;1262:7:20;;;;;;-1:-1:-1;;;416:6:42;;;;415:7;407:16;;;;;;-1:-1:-1;;;;;1287:31:20;;;;1279:74;;;;;-1:-1:-1;;;;;1279:74:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;1453:11;;:44;;;;;;;;;;;;;;-1:-1:-1;;;;;1453:11:20;;;;:28;;:44;;;;;;;;;;;;;:11;;:44;;;5:2:-1;;;;30:1;27;20:12;5:2;1453:44:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1453:44:20;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1453:44:20;;;;;;;;;-1:-1:-1;1453:44:20;-1:-1:-1;1511:10:20;-1:-1:-1;;;;;1511:27:20;;;;:50;;-1:-1:-1;1556:5:20;;-1:-1:-1;;;;;1556:5:20;1542:10;:19;1511:50;1503:99;;;;;;;-1:-1:-1;;;;;1503:99:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1625:11;;:41;;;;;;;;;;;;;;-1:-1:-1;;;;;1625:11:20;;;;:25;;:41;;;;;;;;;;;;;;;:11;;:41;;;5:2:-1;;;;30:1;27;20:12;5:2;1625:41:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1625:41:20;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1625:41:20;;-1:-1:-1;1672:48:20;;;;;;;;-1:-1:-1;;;;;1672:48:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;1734:11;;:51;;;;;;-1:-1:-1;;;;;1734:51:20;;;;;;;;;;;;;;;:11;;;;;:16;;:51;;;;;;;;;;;;;;:11;;:51;;;5:2:-1;;;;30:1;27;20:12;5:2;1734:51:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1734:51:20;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1734:51:20;;1159:631;-1:-1:-1;;;;;;1159:631:20:o;601:34::-;;;-1:-1:-1;;;;;601:34:20;;:::o;1274:103:45:-;719:5;;-1:-1:-1;;;;;719:5:45;705:10;:19;697:28;;;;;;1343:29;1362:9;1343:18;:29::i;:::-;1274:103;:::o;1512:171::-;-1:-1:-1;;;;;1582:23:45;;;;1574:32;;;;;;1638:5;;;1617:38;;-1:-1:-1;;;;;1617:38:45;;;;1638:5;;;1617:38;;;1661:5;:17;;-1:-1:-1;;1661:17:45;-1:-1:-1;;;;;1661:17:45;;;;;;;;;;1512:171::o",
+  "sourceMap": "479:2443:20:-;;;268:5:43;247:26;;-1:-1:-1;;;;;;247:26:43;;;757:86:20;5:2:-1;;;;30:1;27;20:12;5:2;757:86:20;;;;;;;;;;;;;567:5:46;:18;;-1:-1:-1;;;;;;567:18:46;;;575:10;567:18;;;;;812:26:20;;-1:-1:-1;;;;;812:26:20;;;;;;;;;;;;;479:2443;;;;;;",
+  "deployedSourceMap": "479:2443:20:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;838:92:43;;8:9:-1;5:2;;;30:1;27;20:12;5:2;838:92:43;;;;;;247:26;;8:9:-1;5:2;;;30:1;27;20:12;5:2;247:26:43;;;;;;;;;;;;;;;;;;;;;;1001:111:46;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1001:111:46;;;;666:90:43;;8:9:-1;5:2;;;30:1;27;20:12;5:2;666:90:43;;;;238:20:46;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:46;;;;;;;;-1:-1:-1;;;;;238:20:46;;;;;;;;;;;;;;2096:637:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;2096:637:20;;;;;;;2816:104;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;2816:104:20;-1:-1:-1;;;;;2816:104:20;;;;;1159:631;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1159:631:20;-1:-1:-1;;;;;1159:631:20;;;;;;;;;;;;;;;;;;;;;;;601:34;;8:9:-1;5:2;;;30:1;27;20:12;5:2;601:34:20;;;;1274:103:46;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1274:103:46;-1:-1:-1;;;;;1274:103:46;;;;;838:92:43;719:5:46;;-1:-1:-1;;;;;719:5:46;705:10;:19;697:28;;;;;;568:6:43;;-1:-1:-1;;;568:6:43;;;;560:15;;;;;;;;900:5;891:14;;-1:-1:-1;;891:14:43;;;916:9;;;;900:5;916:9;838:92::o;247:26::-;;;-1:-1:-1;;;247:26:43;;;;;:::o;1001:111:46:-;719:5;;-1:-1:-1;;;;;719:5:46;705:10;:19;697:28;;;;;;1077:5;;;1058:25;;-1:-1:-1;;;;;1077:5:46;;;;1058:25;;;1105:1;1089:18;;-1:-1:-1;;1089:18:46;;;1001:111::o;666:90:43:-;719:5:46;;-1:-1:-1;;;;;719:5:46;705:10;:19;697:28;;;;;;416:6:43;;-1:-1:-1;;;416:6:43;;;;415:7;407:16;;;;;;720:6;:13;;-1:-1:-1;;720:13:43;-1:-1:-1;;;720:13:43;;;744:7;;;;720:6;744:7;666:90::o;238:20:46:-;;;-1:-1:-1;;;;;238:20:46;;:::o;2096:637:20:-;2207:4;416:6:43;;2207:4:20;;;;;;-1:-1:-1;;;416:6:43;;;;415:7;407:16;;;;;;2314:11:20;;:44;;;;;;;;;;;;;;-1:-1:-1;;;;;2314:11:20;;;;:28;;:44;;;;;;;;;;;;;:11;;:44;;;5:2:-1;;;;30:1;27;20:12;5:2;2314:44:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2314:44:20;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;2314:44:20;;;;;;;;;-1:-1:-1;2314:44:20;-1:-1:-1;2372:10:20;-1:-1:-1;;;;;2372:27:20;;;;:50;;-1:-1:-1;2417:5:20;;-1:-1:-1;;;;;2417:5:20;2403:10;:19;2372:50;2364:99;;;;;;;-1:-1:-1;;;;;2364:99:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2486:11;;:41;;;;;;;;;;;;;;-1:-1:-1;;;;;2486:11:20;;;;:25;;:41;;;;;;;;;;;;;;;:11;;:41;;;5:2:-1;;;;30:1;27;20:12;5:2;2486:41:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;2486:41:20;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;2486:41:20;;-1:-1:-1;2533:48:20;;;;;;;;-1:-1:-1;;;;;2533:48:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;2588:11;;:57;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;2588:11:20;;;;:28;;:57;;;;;:11;;:57;;;;;;;;:11;;:57;;;5:2:-1;;;;30:1;27;20:12;5:2;2588:57:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;-1:-1;;2657:53:20;;;;;;;;2686:10;;-1:-1:-1;2670:14:20;;-1:-1:-1;2657:53:20;;;;;;;;;-1:-1:-1;2724:4:20;;2096:637;-1:-1:-1;;;;;2096:637:20:o;2816:104::-;719:5:46;;-1:-1:-1;;;;;719:5:46;705:10;:19;697:28;;;;;;2889:11:20;:26;;-1:-1:-1;;2889:26:20;-1:-1:-1;;;;;2889:26:20;;;;;;;;;;2816:104::o;1159:631::-;1262:7;416:6:43;;1262:7:20;;;;;;-1:-1:-1;;;416:6:43;;;;415:7;407:16;;;;;;-1:-1:-1;;;;;1287:31:20;;;;1279:74;;;;;-1:-1:-1;;;;;1279:74:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;1453:11;;:44;;;;;;;;;;;;;;-1:-1:-1;;;;;1453:11:20;;;;:28;;:44;;;;;;;;;;;;;:11;;:44;;;5:2:-1;;;;30:1;27;20:12;5:2;1453:44:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1453:44:20;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1453:44:20;;;;;;;;;-1:-1:-1;1453:44:20;-1:-1:-1;1511:10:20;-1:-1:-1;;;;;1511:27:20;;;;:50;;-1:-1:-1;1556:5:20;;-1:-1:-1;;;;;1556:5:20;1542:10;:19;1511:50;1503:99;;;;;;;-1:-1:-1;;;;;1503:99:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1625:11;;:41;;;;;;;;;;;;;;-1:-1:-1;;;;;1625:11:20;;;;:25;;:41;;;;;;;;;;;;;;;:11;;:41;;;5:2:-1;;;;30:1;27;20:12;5:2;1625:41:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1625:41:20;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1625:41:20;;-1:-1:-1;1672:48:20;;;;;;;;-1:-1:-1;;;;;1672:48:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;1734:11;;:51;;;;;;-1:-1:-1;;;;;1734:51:20;;;;;;;;;;;;;;;:11;;;;;:16;;:51;;;;;;;;;;;;;;:11;;:51;;;5:2:-1;;;;30:1;27;20:12;5:2;1734:51:20;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1734:51:20;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1734:51:20;;1159:631;-1:-1:-1;;;;;;1159:631:20:o;601:34::-;;;-1:-1:-1;;;;;601:34:20;;:::o;1274:103:46:-;719:5;;-1:-1:-1;;;;;719:5:46;705:10;:19;697:28;;;;;;1343:29;1362:9;1343:18;:29::i;:::-;1274:103;:::o;1512:171::-;-1:-1:-1;;;;;1582:23:46;;;;1574:32;;;;;;1638:5;;;1617:38;;-1:-1:-1;;;;;1617:38:46;;;;1638:5;;;1617:38;;;1661:5;:17;;-1:-1:-1;;1661:17:46;-1:-1:-1;;;;;1661:17:46;;;;;;;;;;1512:171::o",
   "source": "pragma solidity 0.4.24;\n\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\nimport \"openzeppelin-solidity/contracts/lifecycle/Pausable.sol\";\nimport \"openzeppelin-solidity/contracts/math/SafeMath.sol\";\n\nimport \"../interfaces/IKODAV2Controls.sol\";\n\n/**\n* @title Artists self minting for KnownOrigin (KODA)\n*\n* Allows for the edition artists to mint there own assets and control the price of an edition\n*\n* https://www.knownorigin.io/\n*\n* BE ORIGINAL. BUY ORIGINAL.\n*/\ncontract ArtistEditionControls is Ownable, Pausable {\n  using SafeMath for uint256;\n\n  // Interface into the KODA world\n  IKODAV2Controls public kodaAddress;\n\n  event PriceChanged(\n    uint256 indexed _editionNumber,\n    address indexed _artist,\n    uint256 _priceInWei\n  );\n\n  constructor(IKODAV2Controls _kodaAddress) public {\n    kodaAddress = _kodaAddress;\n  }\n\n  /**\n   * @dev Ability to gift new NFTs to an address, from a KODA edition\n   * @dev Only callable from edition artists defined in KODA NFT contract\n   * @dev Only callable when contract is not paused\n   * @dev Reverts if edition is invalid\n   * @dev Reverts if edition is not active in KDOA NFT contract\n   */\n  function gift(address _receivingAddress, uint256 _editionNumber)\n  external\n  whenNotPaused\n  returns (uint256)\n  {\n    require(_receivingAddress != address(0), \"Unable to send to zero address\");\n\n    address artistAccount;\n    uint256 artistCommission;\n    (artistAccount, artistCommission) = kodaAddress.artistCommission(_editionNumber);\n    require(msg.sender == artistAccount || msg.sender == owner, \"Only from the edition artist account\");\n\n    bool isActive = kodaAddress.editionActive(_editionNumber);\n    require(isActive, \"Only when edition is active\");\n\n    return kodaAddress.mint(_receivingAddress, _editionNumber);\n  }\n\n  /**\n   * @dev Sets the price of the provided edition in the WEI\n   * @dev Only callable from edition artists defined in KODA NFT contract\n   * @dev Only callable when contract is not paused\n   * @dev Reverts if edition is invalid\n   * @dev Reverts if edition is not active in KDOA NFT contract\n   */\n  function updateEditionPrice(uint256 _editionNumber, uint256 _priceInWei)\n  external\n  whenNotPaused\n  returns (bool)\n  {\n    address artistAccount;\n    uint256 artistCommission;\n    (artistAccount, artistCommission) = kodaAddress.artistCommission(_editionNumber);\n    require(msg.sender == artistAccount || msg.sender == owner, \"Only from the edition artist account\");\n\n    bool isActive = kodaAddress.editionActive(_editionNumber);\n    require(isActive, \"Only when edition is active\");\n\n    kodaAddress.updatePriceInWei(_editionNumber, _priceInWei);\n\n    emit PriceChanged(_editionNumber, msg.sender, _priceInWei);\n\n    return true;\n  }\n\n  /**\n   * @dev Sets the KODA address\n   * @dev Only callable from owner\n   */\n  function setKodavV2(IKODAV2Controls _kodaAddress) onlyOwner public {\n    kodaAddress = _kodaAddress;\n  }\n}\n",
   "sourcePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/artist-controls/ArtistEditionControls.sol",
   "ast": {
@@ -252,7 +252,7 @@
         "id": 5546,
         "nodeType": "ImportDirective",
         "scope": 5725,
-        "sourceUnit": 11637,
+        "sourceUnit": 12581,
         "src": "25:63:20",
         "symbolAliases": [],
         "unitAlias": ""
@@ -263,7 +263,7 @@
         "id": 5547,
         "nodeType": "ImportDirective",
         "scope": 5725,
-        "sourceUnit": 11421,
+        "sourceUnit": 12365,
         "src": "89:64:20",
         "symbolAliases": [],
         "unitAlias": ""
@@ -274,7 +274,7 @@
         "id": 5548,
         "nodeType": "ImportDirective",
         "scope": 5725,
-        "sourceUnit": 11515,
+        "sourceUnit": 12459,
         "src": "154:59:20",
         "symbolAliases": [],
         "unitAlias": ""
@@ -299,10 +299,10 @@
               "id": 5550,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 11636,
+              "referencedDeclaration": 12580,
               "src": "513:7:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$11636",
+                "typeIdentifier": "t_contract$_Ownable_$12580",
                 "typeString": "contract Ownable"
               }
             },
@@ -317,10 +317,10 @@
               "id": 5552,
               "name": "Pausable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 11420,
+              "referencedDeclaration": 12364,
               "src": "522:8:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Pausable_$11420",
+                "typeIdentifier": "t_contract$_Pausable_$12364",
                 "typeString": "contract Pausable"
               }
             },
@@ -330,8 +330,8 @@
           }
         ],
         "contractDependencies": [
-          11420,
-          11636
+          12364,
+          12580
         ],
         "contractKind": "contract",
         "documentation": "@title Artists self minting for KnownOrigin (KODA)\n* Allows for the edition artists to mint there own assets and control the price of an edition\n* https://www.knownorigin.io/\n* BE ORIGINAL. BUY ORIGINAL.",
@@ -339,8 +339,8 @@
         "id": 5724,
         "linearizedBaseContracts": [
           5724,
-          11420,
-          11636
+          12364,
+          12580
         ],
         "name": "ArtistEditionControls",
         "nodeType": "ContractDefinition",
@@ -352,10 +352,10 @@
               "id": 5554,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 11514,
+              "referencedDeclaration": 12458,
               "src": "541:8:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$11514",
+                "typeIdentifier": "t_contract$_SafeMath_$12458",
                 "typeString": "library SafeMath"
               }
             },
@@ -738,10 +738,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        12770,
-                        12771
+                        13714,
+                        13715
                       ],
-                      "referencedDeclaration": 12771,
+                      "referencedDeclaration": 13715,
                       "src": "1279:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -998,7 +998,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 12767,
+                              "referencedDeclaration": 13711,
                               "src": "1511:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -1061,7 +1061,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 12767,
+                              "referencedDeclaration": 13711,
                               "src": "1542:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -1090,7 +1090,7 @@
                             "name": "owner",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 11554,
+                            "referencedDeclaration": 12498,
                             "src": "1556:5:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -1143,10 +1143,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        12770,
-                        12771
+                        13714,
+                        13715
                       ],
-                      "referencedDeclaration": 12771,
+                      "referencedDeclaration": 13715,
                       "src": "1503:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -1323,10 +1323,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        12770,
-                        12771
+                        13714,
+                        13715
                       ],
-                      "referencedDeclaration": 12771,
+                      "referencedDeclaration": 13715,
                       "src": "1672:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -1456,7 +1456,7 @@
                   "name": "whenNotPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 11381,
+                  "referencedDeclaration": 12325,
                   "src": "1237:13:20",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1806,7 +1806,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 12767,
+                              "referencedDeclaration": 13711,
                               "src": "2372:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -1869,7 +1869,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 12767,
+                              "referencedDeclaration": 13711,
                               "src": "2403:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -1898,7 +1898,7 @@
                             "name": "owner",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 11554,
+                            "referencedDeclaration": 12498,
                             "src": "2417:5:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -1951,10 +1951,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        12770,
-                        12771
+                        13714,
+                        13715
                       ],
-                      "referencedDeclaration": 12771,
+                      "referencedDeclaration": 13715,
                       "src": "2364:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -2131,10 +2131,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        12770,
-                        12771
+                        13714,
+                        13715
                       ],
-                      "referencedDeclaration": 12771,
+                      "referencedDeclaration": 13715,
                       "src": "2533:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -2271,7 +2271,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 12767,
+                          "referencedDeclaration": 13711,
                           "src": "2686:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -2391,7 +2391,7 @@
                   "name": "whenNotPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 11381,
+                  "referencedDeclaration": 12325,
                   "src": "2182:13:20",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2572,7 +2572,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 11584,
+                  "referencedDeclaration": 12528,
                   "src": "2866:9:20",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2666,7 +2666,7 @@
         "id": 5546,
         "nodeType": "ImportDirective",
         "scope": 5725,
-        "sourceUnit": 11637,
+        "sourceUnit": 12581,
         "src": "25:63:20",
         "symbolAliases": [],
         "unitAlias": ""
@@ -2677,7 +2677,7 @@
         "id": 5547,
         "nodeType": "ImportDirective",
         "scope": 5725,
-        "sourceUnit": 11421,
+        "sourceUnit": 12365,
         "src": "89:64:20",
         "symbolAliases": [],
         "unitAlias": ""
@@ -2688,7 +2688,7 @@
         "id": 5548,
         "nodeType": "ImportDirective",
         "scope": 5725,
-        "sourceUnit": 11515,
+        "sourceUnit": 12459,
         "src": "154:59:20",
         "symbolAliases": [],
         "unitAlias": ""
@@ -2713,10 +2713,10 @@
               "id": 5550,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 11636,
+              "referencedDeclaration": 12580,
               "src": "513:7:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$11636",
+                "typeIdentifier": "t_contract$_Ownable_$12580",
                 "typeString": "contract Ownable"
               }
             },
@@ -2731,10 +2731,10 @@
               "id": 5552,
               "name": "Pausable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 11420,
+              "referencedDeclaration": 12364,
               "src": "522:8:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Pausable_$11420",
+                "typeIdentifier": "t_contract$_Pausable_$12364",
                 "typeString": "contract Pausable"
               }
             },
@@ -2744,8 +2744,8 @@
           }
         ],
         "contractDependencies": [
-          11420,
-          11636
+          12364,
+          12580
         ],
         "contractKind": "contract",
         "documentation": "@title Artists self minting for KnownOrigin (KODA)\n* Allows for the edition artists to mint there own assets and control the price of an edition\n* https://www.knownorigin.io/\n* BE ORIGINAL. BUY ORIGINAL.",
@@ -2753,8 +2753,8 @@
         "id": 5724,
         "linearizedBaseContracts": [
           5724,
-          11420,
-          11636
+          12364,
+          12580
         ],
         "name": "ArtistEditionControls",
         "nodeType": "ContractDefinition",
@@ -2766,10 +2766,10 @@
               "id": 5554,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 11514,
+              "referencedDeclaration": 12458,
               "src": "541:8:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$11514",
+                "typeIdentifier": "t_contract$_SafeMath_$12458",
                 "typeString": "library SafeMath"
               }
             },
@@ -3152,10 +3152,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        12770,
-                        12771
+                        13714,
+                        13715
                       ],
-                      "referencedDeclaration": 12771,
+                      "referencedDeclaration": 13715,
                       "src": "1279:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -3412,7 +3412,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 12767,
+                              "referencedDeclaration": 13711,
                               "src": "1511:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -3475,7 +3475,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 12767,
+                              "referencedDeclaration": 13711,
                               "src": "1542:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -3504,7 +3504,7 @@
                             "name": "owner",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 11554,
+                            "referencedDeclaration": 12498,
                             "src": "1556:5:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -3557,10 +3557,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        12770,
-                        12771
+                        13714,
+                        13715
                       ],
-                      "referencedDeclaration": 12771,
+                      "referencedDeclaration": 13715,
                       "src": "1503:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -3737,10 +3737,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        12770,
-                        12771
+                        13714,
+                        13715
                       ],
-                      "referencedDeclaration": 12771,
+                      "referencedDeclaration": 13715,
                       "src": "1672:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -3870,7 +3870,7 @@
                   "name": "whenNotPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 11381,
+                  "referencedDeclaration": 12325,
                   "src": "1237:13:20",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -4220,7 +4220,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 12767,
+                              "referencedDeclaration": 13711,
                               "src": "2372:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -4283,7 +4283,7 @@
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 12767,
+                              "referencedDeclaration": 13711,
                               "src": "2403:3:20",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
@@ -4312,7 +4312,7 @@
                             "name": "owner",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 11554,
+                            "referencedDeclaration": 12498,
                             "src": "2417:5:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -4365,10 +4365,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        12770,
-                        12771
+                        13714,
+                        13715
                       ],
-                      "referencedDeclaration": 12771,
+                      "referencedDeclaration": 13715,
                       "src": "2364:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -4545,10 +4545,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        12770,
-                        12771
+                        13714,
+                        13715
                       ],
-                      "referencedDeclaration": 12771,
+                      "referencedDeclaration": 13715,
                       "src": "2533:7:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -4685,7 +4685,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 12767,
+                          "referencedDeclaration": 13711,
                           "src": "2686:3:20",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -4805,7 +4805,7 @@
                   "name": "whenNotPaused",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 11381,
+                  "referencedDeclaration": 12325,
                   "src": "2182:13:20",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -4986,7 +4986,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 11584,
+                  "referencedDeclaration": 12528,
                   "src": "2866:9:20",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -5084,8 +5084,8 @@
       "transactionHash": "0xaf0cc3afd620cb3a15543e9e1e3c3a2bc394674e5739a61ecc6013d49af49a2d"
     }
   },
-  "schemaVersion": "3.0.16",
-  "updatedAt": "2019-11-16T07:22:38.209Z",
+  "schemaVersion": "3.0.19",
+  "updatedAt": "2020-03-13T15:52:57.824Z",
   "devdoc": {
     "methods": {
       "gift(address,uint256)": {
