@@ -25,27 +25,36 @@ contract.only('TokenMarketplace tests', function (accounts) {
   const koCommission = accounts[1];
 
   const artistAccount1 = accounts[2];
+  const optionalArtistAccount2 = accounts[3];
 
-  const bidder1 = accounts[3];
-  const bidder2 = accounts[4];
-  const bidder3 = accounts[5];
+  const bidder1 = accounts[4];
+  const bidder2 = accounts[5];
+  const bidder3 = accounts[6];
 
-  const owner1 = accounts[6];
-  const owner2 = accounts[7];
-  const owner3 = accounts[8];
+  const owner1 = accounts[7];
+  const owner2 = accounts[8];
+  const owner3 = accounts[9];
 
   const editionNumber1 = 100000;
+  const editionNumber2 = 200000;
   const editionType = 1;
-  const editionData1 = web3.utils.asciiToHex("editionData1");
-  const editionTokenUri1 = "edition1";
-  const edition1Price = etherToWei(0.1);
+  const editionData = web3.utils.asciiToHex("editionData");
+  const tokenUri = "edition1";
+  const editionPrice = etherToWei(0.1);
 
-  const artistCommission = toBN(76);
+  const artistCommission = toBN(85);
   const totalAvailable = 5;
 
-  const token1 = 100001;
-  const token2 = 100002;
-  const token3 = 100003;
+  const artistCommissionSplit = toBN(43);
+  const optionalCommissionSplit = toBN(42);
+
+  const _1_token1 = 100001;
+  const _1_token2 = 100002;
+  const _1_token3 = 100003;
+
+  const _2_token1 = 200001;
+  const _2_token2 = 200002;
+  const _2_token3 = 200003;
 
   beforeEach(async () => {
     // Create contracts
@@ -64,12 +73,26 @@ contract.only('TokenMarketplace tests', function (accounts) {
 
   beforeEach(async () => {
     // Create a new edition
-    await this.koda.createActiveEdition(editionNumber1, editionData1, editionType, 0, 0, artistAccount1, artistCommission, edition1Price, editionTokenUri1, totalAvailable, {from: _owner});
+    await this.koda.createActiveEdition(editionNumber1, editionData, editionType, 0, 0, artistAccount1, artistCommission, editionPrice, tokenUri, totalAvailable, {from: _owner});
+
+    // Create a new edition with split commission
+    await this.koda.createActiveEdition(editionNumber2, editionData, editionType, 0, 0, artistAccount1, artistCommissionSplit, editionPrice, tokenUri, totalAvailable, {from: _owner});
+    await this.koda.updateOptionalCommission(editionNumber2, optionalCommissionSplit, optionalArtistAccount2, {from: _owner});
 
     // Give each owner a token
     await this.koda.mint(owner1, editionNumber1, {from: _owner});
     await this.koda.mint(owner2, editionNumber1, {from: _owner});
     await this.koda.mint(owner3, editionNumber1, {from: _owner});
+
+    // Give each owner a token
+    await this.koda.mint(owner1, editionNumber2, {from: _owner});
+    await this.koda.mint(owner2, editionNumber2, {from: _owner});
+    await this.koda.mint(owner3, editionNumber2, {from: _owner});
+
+    // Set all owners to approve all on the marketplace
+    await this.koda.setApprovalForAll(this.marketplace.address, true, {from: owner1});
+    await this.koda.setApprovalForAll(this.marketplace.address, true, {from: owner2});
+    await this.koda.setApprovalForAll(this.marketplace.address, true, {from: owner3});
   });
 
   describe('constructed properly', async () => {
@@ -108,30 +131,42 @@ contract.only('TokenMarketplace tests', function (accounts) {
   describe('Placing a bid', async () => {
 
     it('fails for invalid token ID', async () => {
-
-
+      await assertRevert(
+        this.marketplace.placeBid(9999, {from: bidder1, value: this.minBidAmount}),
+        'Token does not exist'
+      );
     });
 
     it('fails if contract paused', async () => {
-
+      await this.marketplace.pause({from: _owner});
+      await assertRevert(
+        this.marketplace.placeBid(9999, {from: bidder1, value: this.minBidAmount})
+      );
     });
 
     it('fails if less than minimum bid amount', async () => {
-
+      await assertRevert(
+        this.marketplace.placeBid(_1_token1, {from: bidder1, value: etherToWei(0.01)}),
+        "Offer not enough"
+      );
     });
 
     it('fails if token is disabled from offers', async () => {
-
+      await this.marketplace.disableAuction(_1_token1, {from: _owner});
+      await assertRevert(
+        this.marketplace.placeBid(_1_token1, {from: bidder1, value: this.minBidAmount}),
+        "Token not enabled for offers"
+      );
     });
 
-    describe.only('when a bid is placed', async () => {
+    describe('when a bid is placed', async () => {
 
       beforeEach(async () => {
-        await this.marketplace.placeBid(token1, {from: bidder1, value: this.minBidAmount});
+        await this.marketplace.placeBid(_1_token1, {from: bidder1, value: this.minBidAmount});
       });
 
       it('offer is placed', async () => {
-        const {_bidder, _offer, _owner, _enabled, _paused} = await this.marketplace.tokenOffer(token1);
+        const {_bidder, _offer, _owner, _enabled, _paused} = await this.marketplace.tokenOffer(_1_token1);
         _bidder.should.be.equal(bidder1);
         _offer.should.be.eq.BN(this.minBidAmount);
         _owner.should.be.equal(owner1);
@@ -139,8 +174,215 @@ contract.only('TokenMarketplace tests', function (accounts) {
         _paused.should.be.equal(false);
       });
 
+      it('the contract balance is updated', async () => {
+        let auctionBalance = await getBalance(this.marketplace.address);
+        auctionBalance.should.be.eq.BN(this.minBidAmount);
+      });
+
+      describe('and then being out bid', async () => {
+
+        beforeEach(async () => {
+          this.newBidAmount = this.minBidAmount.mul(toBN(2));
+          this.bidder1Balance = await getBalance(bidder1);
+          await this.marketplace.placeBid(_1_token1, {from: bidder2, value: this.newBidAmount});
+        });
+
+        it('the original bidder is refunded', async () => {
+          const postBidBidder1Balance = await getBalance(bidder1);
+          postBidBidder1Balance.should.be.eq.BN(
+            this.bidder1Balance.add(this.minBidAmount)
+          );
+        });
+
+        it('the contract balance is updated', async () => {
+          let auctionBalance = await getBalance(this.marketplace.address);
+          auctionBalance.should.be.eq.BN(this.newBidAmount);
+        });
+
+        it('the new offer is placed', async () => {
+          const {_bidder, _offer, _owner, _enabled, _paused} = await this.marketplace.tokenOffer(_1_token1);
+          _bidder.should.be.equal(bidder2);
+          _offer.should.be.eq.BN(this.newBidAmount);
+          _owner.should.be.equal(owner1);
+          _enabled.should.be.equal(true);
+          _paused.should.be.equal(false);
+        });
+
+        describe('then the owner accepts the bid', async () => {
+
+          beforeEach(async () => {
+            this.bidder2Balance = await getBalance(bidder2);
+            this.owner1Balance = await getBalance(owner1);
+            this.marketplaceBalance = await getBalance(this.marketplace.address);
+            this.koCommissionBalance = await getBalance(koCommission);
+            this.artistAccount1Balance = await getBalance(artistAccount1);
+
+            let tx = await this.marketplace.acceptBid(_1_token1, {from: owner1});
+            this.txGasCosts = await getGasCosts(tx);
+
+            this.bidder2PostBalance = await getBalance(bidder2);
+            this.owner1PostBalance = await getBalance(owner1);
+            this.marketplacePostBalance = await getBalance(this.marketplace.address);
+            this.koCommissionPostBalance = await getBalance(koCommission);
+            this.artistAccount1PostBalance = await getBalance(artistAccount1);
+
+            console.log("bidder2PostBalance", this.bidder2PostBalance.toString());
+            console.log("owner1PostBalance", this.owner1PostBalance.toString());
+            console.log("marketplacePostBalance", this.marketplacePostBalance.toString());
+            console.log("koCommissionPostBalance", this.koCommissionPostBalance.toString());
+            console.log("artistAccount1PostBalance", this.artistAccount1PostBalance.toString());
+          });
+
+          it('bidder2 now owns the token', async () => {
+            const owner = await this.koda.ownerOf(_1_token1);
+            owner.should.be.equal(bidder2);
+          });
+
+          it('owner balance goes up and does not own the token', async () => {
+            // Does not own token
+            const owner = await this.koda.ownerOf(_1_token1);
+            owner.should.not.be.equal(owner1);
+
+            // Should get 92% of the funds
+            this.owner1PostBalance.should.be.eq.BN(
+              this.owner1Balance.add(
+                this.newBidAmount
+                  .div(toBN(100)).mul(toBN(92)) // 95%
+                  .sub(this.txGasCosts) // minus gas costs
+              )
+            );
+          });
+
+          it('ko commission account balance goes up', async () => {
+            // Should get 3% of the funds
+            this.koCommissionPostBalance.should.be.eq.BN(
+              this.koCommissionBalance.add(
+                this.newBidAmount
+                  .div(toBN(100)).mul(toBN(3)) // 3%
+              )
+            );
+          });
+
+          it('artist commission account balance goes up', async () => {
+            // Should get 5% of the funds
+            this.artistAccount1PostBalance.should.be.eq.BN(
+              this.artistAccount1Balance.add(
+                this.newBidAmount
+                  .div(toBN(100)).mul(toBN(5)) // 5%
+              )
+            );
+          });
+
+          it('marketplace balance is cleared', async () => {
+            this.marketplacePostBalance.should.be.eq.BN("0");
+          });
+
+        });
+
+      });
+
     });
 
+  });
+
+  describe.only('Placing a bid on an edition with multiple collaborators', async () => {
+
+    beforeEach(async () => {
+      await this.marketplace.placeBid(_2_token1, {from: bidder1, value: this.minBidAmount});
+    });
+
+    it('offer is placed', async () => {
+      const {_bidder, _offer, _owner, _enabled, _paused} = await this.marketplace.tokenOffer(_2_token1);
+      _bidder.should.be.equal(bidder1);
+      _offer.should.be.eq.BN(this.minBidAmount);
+      _owner.should.be.equal(owner1);
+      _enabled.should.be.equal(true);
+      _paused.should.be.equal(false);
+    });
+
+    describe('when the owner accepts the bid', async () => {
+
+      beforeEach(async () => {
+        this.bidder1Balance = await getBalance(bidder1);
+        this.owner1Balance = await getBalance(owner1);
+        this.marketplaceBalance = await getBalance(this.marketplace.address);
+        this.koCommissionBalance = await getBalance(koCommission);
+        this.artistAccount1Balance = await getBalance(artistAccount1);
+        this.optionalArtistAccount1Balance = await getBalance(optionalArtistAccount2);
+
+        let tx = await this.marketplace.acceptBid(_2_token1, {from: owner1});
+        this.txGasCosts = await getGasCosts(tx);
+
+        this.bidder1PostBalance = await getBalance(bidder1);
+        this.owner1PostBalance = await getBalance(owner1);
+        this.marketplacePostBalance = await getBalance(this.marketplace.address);
+        this.koCommissionPostBalance = await getBalance(koCommission);
+        this.artistAccount1PostBalance = await getBalance(artistAccount1);
+        this.optionalArtistAccount1PostBalance = await getBalance(optionalArtistAccount2);
+
+        console.log("bidder1PostBalance", this.bidder1PostBalance.toString());
+        console.log("owner1PostBalance", this.owner1PostBalance.toString());
+        console.log("marketplacePostBalance", this.marketplacePostBalance.toString());
+        console.log("koCommissionPostBalance", this.koCommissionPostBalance.toString());
+        console.log("artistAccount1PostBalance", this.artistAccount1PostBalance.toString());
+        console.log("optionalArtistAccount1PostBalance", this.optionalArtistAccount1PostBalance.toString());
+      });
+
+      it('bidder2 now owns the token', async () => {
+        const owner = await this.koda.ownerOf(_2_token1);
+        owner.should.be.equal(bidder1);
+      });
+
+      it('owner balance goes up and does not own the token', async () => {
+        // Does not own token
+        const owner = await this.koda.ownerOf(_2_token1);
+        owner.should.not.be.equal(owner1);
+
+        // Should get 92% of the funds
+        this.owner1PostBalance.should.be.eq.BN(
+          this.owner1Balance.add(
+            this.minBidAmount
+              .div(toBN(100)).mul(toBN(92)) // 92%
+              .sub(this.txGasCosts) // minus gas costs
+          )
+        );
+      });
+
+      it('ko commission account balance goes up', async () => {
+        // Should get 3% of the funds
+        this.koCommissionPostBalance.should.be.eq.BN(
+          this.koCommissionBalance.add(
+            this.minBidAmount
+              .div(toBN(100)).mul(toBN(3)) // 3%
+          )
+        );
+      });
+
+      it('artist commission account balance goes up', async () => {
+        // Should get 5% of the funds
+        this.artistAccount1PostBalance.should.be.eq.BN(
+          this.artistAccount1Balance.add(
+            this.minBidAmount
+              .div(toBN(100)).mul(toBN(2)) // 5%
+          )
+        );
+      });
+
+      it('optioanl artist commission account balance goes up', async () => {
+        // Should get 5% of the funds
+        this.optionalArtistAccount1PostBalance.should.be.eq.BN(
+          this.optionalArtistAccount1Balance.add(
+            this.minBidAmount
+              .div(toBN(100)).mul(toBN(2)) // 5%
+          )
+        );
+      });
+
+      it('marketplace balance is cleared', async () => {
+        this.marketplacePostBalance.should.be.eq.BN("0");
+      });
+
+    });
 
   });
 

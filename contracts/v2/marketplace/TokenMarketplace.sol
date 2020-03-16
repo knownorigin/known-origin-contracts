@@ -230,9 +230,9 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
     address winningBidder = offers[_tokenId].bidder;
 
     // Get edition no.
-    uint256 _editionNumber = kodaAddress.editionOfTokenId(_tokenId);
+    uint256 editionNumber = kodaAddress.editionOfTokenId(_tokenId);
 
-    _handleFunds(_editionNumber, winningOffer, currentOwner);
+    _handleFunds(editionNumber, winningOffer, currentOwner);
 
     kodaAddress.safeTransferFrom(msg.sender, winningBidder, _tokenId);
 
@@ -275,25 +275,27 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
   function _handleFunds(uint256 _editionNumber, uint256 _offer, address _currentOwner) internal {
 
     // Get existing artist commission
-    (address artistAccount, uint256 artistCommission) = kodaAddress.artistCommission(_editionNumber);
+    (address artistAccount, uint256 artistCommissionRate) = kodaAddress.artistCommission(_editionNumber);
 
     // Get existing optional commission
     (uint256 optionalCommissionRate, address optionalCommissionRecipient) = kodaAddress.editionOptionalCommission(_editionNumber);
 
-    _splitFunds(artistAccount, artistCommission, optionalCommissionRate, optionalCommissionRecipient, _offer, _currentOwner);
+    _splitFunds(artistAccount, artistCommissionRate, optionalCommissionRecipient, optionalCommissionRate, _offer, _currentOwner);
   }
+
+  event Debug(uint256 indexed value, string name);
 
   function _splitFunds(
     address artistAccount,
-    uint256 artistCommission,
-    uint256 optionalCommissionRate,
+    uint256 artistCommissionRate,
     address optionalCommissionRecipient,
+    uint256 optionalCommissionRate,
     uint256 _offer,
     address _currentOwner
   ) internal {
 
     // Work out total % of royalties to payout e.g. 3 + 5 = 8%
-    uint256 totalCommissionPercentageToPay = koCommission.add(defaultArtistRoyaltyPercentage);
+    uint256 totalCommissionPercentageToPay = defaultKOPercentage.add(defaultArtistRoyaltyPercentage);
 
     // KO + artist commission to payout e.g. 8% of the offer
     uint256 totalCommissionToPay = _offer.div(1000).mul(totalCommissionPercentageToPay);
@@ -306,24 +308,47 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
     uint256 koCommission = _offer.div(1000).mul(defaultKOPercentage);
     koCommissionAccount.transfer(koCommission);
 
+    if (optionalCommissionRecipient == address(0)) {
+      // After KO and Seller - sending the rest to the original artist
+      artistAccount.transfer(
+        _offer.sub(koCommission).sub(totalToSendToOwner)
+      );
+    } else {
+      uint256 remainingRoyalties = _offer.sub(koCommission).sub(totalToSendToOwner);
+      _handleOptionalSplits(artistAccount, artistCommissionRate, optionalCommissionRecipient, optionalCommissionRate, remainingRoyalties);
+    }
+  }
+
+  function _handleOptionalSplits(
+    address artistAccount,
+    uint256 artistCommissionRate,
+    address optionalCommissionRecipient,
+    uint256 optionalCommissionRate,
+    uint256 remainingRoyalties
+  ) internal {
+
+    emit Debug(artistCommissionRate, "artistCommissionRate");
+    emit Debug(optionalCommissionRate, "optionalCommissionRate");
+
     // 42% + 43% = 85%
-    uint256 _totalCollaboratorsRate = artistCommission.add(optionalCommissionRate);
+    uint256 _totalCollaboratorsRate = artistCommissionRate.add(optionalCommissionRate);
+    emit Debug(_totalCollaboratorsRate, "_totalCollaboratorsRate");
 
     // work out % of royalties total to split e.g. 43 / 85 = 0.505882353
-    uint256 _collaboratorOneRate = artistCommission.div(_totalCollaboratorsRate).mul(1000);
+    uint256 primaryArtistCollabPercentage = (artistCommissionRate.mul(10 ^ 18)).div(_totalCollaboratorsRate);
+    emit Debug(primaryArtistCollabPercentage, "primaryArtistCollabPercentage");
 
-    // Send commission to primary artist
-    artistAccount.transfer(_offer.div(1000).mul(_collaboratorOneRate));
+    // work out % of royalties total to split e.g. 42 / 85 = 0.494117647
+    uint256 optionalArtistCollabPercentage = (optionalCommissionRate.mul(10 ^ 18)).div(_totalCollaboratorsRate);
+    emit Debug(optionalArtistCollabPercentage, "optionalArtistCollabPercentage");
 
-    // If there is an extra commission address
-    if (optionalCommissionRecipient != address(0)) {
+    uint256 totalPrimaryRoyaltiesToArtist = remainingRoyalties.div(10 ^ 18).mul(primaryArtistCollabPercentage);
+    emit Debug(totalPrimaryRoyaltiesToArtist, "totalPrimaryRoyaltiesToArtist");
+    artistAccount.transfer(totalPrimaryRoyaltiesToArtist);
 
-      // work out % of royalties total to split e.g. 42 / 85 = 0.494117647
-      uint256 _collaboratorTwoRate = optionalCommissionRate.div(_totalCollaboratorsRate).mul(1000);
-
-      // Send commission to additional address
-      optionalCommissionRecipient.transfer(_offer.div(1000).mul(_collaboratorTwoRate));
-    }
+    uint256 totalOptionalRoyaltiesToArtist = remainingRoyalties.div(10 ^ 18).mul(optionalArtistCollabPercentage);
+    emit Debug(totalOptionalRoyaltiesToArtist, "totaloptionalRoyaltiesToArtist");
+    optionalCommissionRecipient.transfer(totalOptionalRoyaltiesToArtist);
   }
 
   ///////////////////
