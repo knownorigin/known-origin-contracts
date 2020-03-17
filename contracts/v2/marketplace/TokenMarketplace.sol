@@ -286,69 +286,60 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
   event Debug(uint256 indexed value, string name);
 
   function _splitFunds(
-    address artistAccount,
-    uint256 artistCommissionRate,
-    address optionalCommissionRecipient,
-    uint256 optionalCommissionRate,
+    address _artistAccount,
+    uint256 _artistCommissionRate,
+    address _optionalCommissionRecipient,
+    uint256 _optionalCommissionRate,
     uint256 _offer,
     address _currentOwner
   ) internal {
 
-    // Work out total % of royalties to payout e.g. 3 + 5 = 8%
+    // Work out total % of royalties to payout = creator royalties + KO commission
     uint256 totalCommissionPercentageToPay = defaultKOPercentage.add(defaultArtistRoyaltyPercentage);
 
-    // KO + artist commission to payout e.g. 8% of the offer
-    uint256 totalCommissionToPay = _offer.div(1000).mul(totalCommissionPercentageToPay);
-
-    // Send current owner their share e.g. 92% of the offer
-    uint256 totalToSendToOwner = _offer.sub(totalCommissionToPay);
+    // Send current owner majority share of the offer
+    uint256 totalToSendToOwner = _offer.sub(
+      _offer.div(1000).mul(totalCommissionPercentageToPay)
+    );
     _currentOwner.transfer(totalToSendToOwner);
 
-    // Send 3% to KO
+    // Send % to KO
     uint256 koCommission = _offer.div(1000).mul(defaultKOPercentage);
     koCommissionAccount.transfer(koCommission);
 
-    if (optionalCommissionRecipient == address(0)) {
-      // After KO and Seller - sending the rest to the original artist
-      artistAccount.transfer(
-        _offer.sub(koCommission).sub(totalToSendToOwner)
-      );
+    // Send to seller minus royalties and commission
+    uint256 remainingRoyalties = _offer.sub(koCommission).sub(totalToSendToOwner);
+
+    if (_optionalCommissionRecipient == address(0)) {
+      // After KO and Seller - send the rest to the original artist
+      _artistAccount.transfer(remainingRoyalties);
     } else {
-      uint256 remainingRoyalties = _offer.sub(koCommission).sub(totalToSendToOwner);
-      _handleOptionalSplits(artistAccount, artistCommissionRate, optionalCommissionRecipient, optionalCommissionRate, remainingRoyalties);
+      _handleOptionalSplits(_artistAccount, _artistCommissionRate, _optionalCommissionRecipient, _optionalCommissionRate, remainingRoyalties);
     }
   }
 
   function _handleOptionalSplits(
-    address artistAccount,
-    uint256 artistCommissionRate,
-    address optionalCommissionRecipient,
-    uint256 optionalCommissionRate,
-    uint256 remainingRoyalties
+    address _artistAccount,
+    uint256 _artistCommissionRate,
+    address _optionalCommissionRecipient,
+    uint256 _optionalCommissionRate,
+    uint256 _remainingRoyalties
   ) internal {
 
-    emit Debug(artistCommissionRate, "artistCommissionRate");
-    emit Debug(optionalCommissionRate, "optionalCommissionRate");
-
-    // 42% + 43% = 85%
-    uint256 _totalCollaboratorsRate = artistCommissionRate.add(optionalCommissionRate);
+    uint256 _totalCollaboratorsRate = _artistCommissionRate.add(_optionalCommissionRate);
     emit Debug(_totalCollaboratorsRate, "_totalCollaboratorsRate");
 
-    // work out % of royalties total to split e.g. 43 / 85 = 0.505882353
-    uint256 primaryArtistCollabPercentage = (artistCommissionRate.mul(10 ^ 18)).div(_totalCollaboratorsRate);
-    emit Debug(primaryArtistCollabPercentage, "primaryArtistCollabPercentage");
+    // work out % of royalties total to split e.g. 43 / 85 = 50.5882353%
+    uint256 primaryArtistPercentage = (_artistCommissionRate.mul(10 ^ 18)).div(_totalCollaboratorsRate);
+    emit Debug(primaryArtistPercentage, "primaryArtistPercentage");
 
-    // work out % of royalties total to split e.g. 42 / 85 = 0.494117647
-    uint256 optionalArtistCollabPercentage = (optionalCommissionRate.mul(10 ^ 18)).div(_totalCollaboratorsRate);
-    emit Debug(optionalArtistCollabPercentage, "optionalArtistCollabPercentage");
-
-    uint256 totalPrimaryRoyaltiesToArtist = remainingRoyalties.div(10 ^ 18).mul(primaryArtistCollabPercentage);
+    uint256 totalPrimaryRoyaltiesToArtist = _remainingRoyalties.div(10 ^ 18).mul(primaryArtistPercentage);
     emit Debug(totalPrimaryRoyaltiesToArtist, "totalPrimaryRoyaltiesToArtist");
-    artistAccount.transfer(totalPrimaryRoyaltiesToArtist);
+    _artistAccount.transfer(totalPrimaryRoyaltiesToArtist);
 
-    uint256 totalOptionalRoyaltiesToArtist = remainingRoyalties.div(10 ^ 18).mul(optionalArtistCollabPercentage);
-    emit Debug(totalOptionalRoyaltiesToArtist, "totaloptionalRoyaltiesToArtist");
-    optionalCommissionRecipient.transfer(totalOptionalRoyaltiesToArtist);
+    uint256 remainingRoyaltiesToCollaborator = _remainingRoyalties.sub(totalPrimaryRoyaltiesToArtist);
+    emit Debug(remainingRoyaltiesToCollaborator, "remainingRoyaltiesToCollaborator");
+    _optionalCommissionRecipient.transfer(remainingRoyaltiesToCollaborator);
   }
 
   ///////////////////
