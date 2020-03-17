@@ -288,6 +288,7 @@ contract.only('TokenMarketplace tests', function (accounts) {
   describe.only('Placing a bid on an edition with multiple collaborators', async () => {
 
     beforeEach(async () => {
+      this.minBidAmount = etherToWei(1);
       await this.marketplace.placeBid(_2_token1, {from: bidder1, value: this.minBidAmount});
     });
 
