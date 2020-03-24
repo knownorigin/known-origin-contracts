@@ -5,37 +5,38 @@ import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "openzeppelin-solidity/contracts/access/Whitelist.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-import "../../v1/ERC721Receiver.sol";
-
 interface ITokenMarketplace {
 
   event BidPlaced(
-    address indexed _bidder,
     uint256 indexed _tokenId,
+    address indexed _currentOwner,
+    address indexed _bidder,
     uint256 _amount
   );
 
   event BidIncreased(
-    address indexed _bidder,
     uint256 indexed _tokenId,
+    address indexed _currentOwner,
+    address indexed _bidder,
     uint256 _amount
   );
 
   event BidWithdrawn(
-    address indexed _bidder,
-    uint256 indexed _tokenId
+    uint256 indexed _tokenId,
+    address indexed _bidder
   );
 
   event BidAccepted(
-    address indexed _bidder,
     uint256 indexed _tokenId,
+    address indexed _currentOwner,
+    address indexed _bidder,
     uint256 _amount
   );
 
   event BidRejected(
-    address indexed _caller,
-    address indexed _bidder,
     uint256 indexed _tokenId,
+    address indexed _currentOwner,
+    address indexed _bidder,
     uint256 _amount
   );
 
@@ -78,19 +79,8 @@ interface IKODAV2 {
   function safeTransferFrom(address _from, address _to, uint256 _tokenId) external;
 }
 
-/**
- * @title
- * @dev
- *
- * Goals
- * Allow Token X to be placed on the market
- *
- *
- */
-contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketplace {
+contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
   using SafeMath for uint256;
-
-  event Received(address _address, uint256 _tokenId, bytes _data, uint256 _gas);
 
   struct Offer {
     address bidder;
@@ -115,16 +105,12 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
   // Token ID to Offer mapping
   mapping(uint256 => Offer) offers;
 
+  // Explicitly disable sales for specific tokens
   mapping(uint256 => bool) disabledTokens;
 
   ///////////////
   // Modifiers //
   ///////////////
-
-  modifier onlyTokenOwner(uint256 _tokenId) {
-    require(kodaAddress.ownerOf(_tokenId) == msg.sender, "Not token owner");
-    _;
-  }
 
   modifier onlyWhenOfferOwner(uint256 _tokenId) {
     require(offers[_tokenId].bidder == msg.sender, "Not offer maker");
@@ -173,7 +159,9 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
 
     offers[_tokenId] = Offer(msg.sender, msg.value);
 
-    emit BidPlaced(msg.sender, _tokenId, msg.value);
+    address currentOwner = kodaAddress.ownerOf(_tokenId);
+
+    emit BidPlaced(_tokenId, currentOwner, msg.sender, msg.value);
   }
 
   function increaseBid(uint256 _tokenId)
@@ -186,7 +174,9 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
   {
     offers[_tokenId].offer = offers[_tokenId].offer.add(msg.value);
 
-    emit BidIncreased(msg.sender, _tokenId, msg.value);
+    address currentOwner = kodaAddress.ownerOf(_tokenId);
+
+    emit BidIncreased(_tokenId, currentOwner, msg.sender, msg.value);
   }
 
   function withdrawBid(uint256 _tokenId)
@@ -194,39 +184,41 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
   whenNotPaused
   onlyWhenTokenExists(_tokenId)
   onlyWhenOfferOwner(_tokenId)
-  onlyWhenTokenAuctionEnabled(_tokenId)
   {
-
     _refundHighestBidder(_tokenId);
 
-    emit BidWithdrawn(msg.sender, _tokenId);
+    address currentOwner = kodaAddress.ownerOf(_tokenId);
+
+    emit BidWithdrawn(_tokenId, msg.sender);
   }
 
   function rejectBid(uint256 _tokenId)
   public
   whenNotPaused
-  onlyTokenOwner(_tokenId)
   {
-    // FIXME - check open offer set
+    address currentOwner = kodaAddress.ownerOf(_tokenId);
+    require(currentOwner == msg.sender, "Not token owner");
+
+    uint256 currentHighestBiddersAmount = offers[_tokenId].offer;
+    require(currentHighestBiddersAmount > 0, "No offer open");
 
     address currentHighestBidder = offers[_tokenId].bidder;
-    uint256 currentHighestBiddersAmount = offers[_tokenId].offer;
 
     _refundHighestBidder(_tokenId);
 
-    emit BidRejected(msg.sender, currentHighestBidder, _tokenId, currentHighestBiddersAmount);
+    emit BidRejected(_tokenId, currentOwner, currentHighestBidder, currentHighestBiddersAmount);
   }
 
   function acceptBid(uint256 _tokenId)
   public
   whenNotPaused
   {
-    // FIXME - check open offer set
-
     address currentOwner = kodaAddress.ownerOf(_tokenId);
     require(currentOwner == msg.sender, "Not token owner");
 
     uint256 winningOffer = offers[_tokenId].offer;
+    require(winningOffer > 0, "No offer open");
+
     address winningBidder = offers[_tokenId].bidder;
 
     // Get edition no.
@@ -236,25 +228,11 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
 
     kodaAddress.safeTransferFrom(msg.sender, winningBidder, _tokenId);
 
-    emit BidAccepted(winningBidder, _tokenId, winningOffer);
+    emit BidAccepted(_tokenId, currentOwner, winningBidder, winningOffer);
 
     delete offers[_tokenId];
   }
 
-  function tokenOffer(uint256 _tokenId) external view returns (address _bidder, uint256 _offer, address _owner, bool _enabled, bool _paused) {
-    Offer memory offer = offers[_tokenId];
-    return (
-    offer.bidder,
-    offer.offer,
-    kodaAddress.ownerOf(_tokenId),
-    !disabledTokens[_tokenId],
-    paused
-    );
-  }
-
-  /**
-   * Returns funds of the previous highest bidder back to them if present
-   */
   function _refundHighestBidder(uint256 _tokenId) internal {
     // Get current highest bidder
     address currentHighestBidder = offers[_tokenId].bidder;
@@ -326,14 +304,20 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
     uint256 _remainingRoyalties
   ) internal {
 
+    // 43 + 42 = 85
     uint256 _totalCollaboratorsRate = _artistCommissionRate.add(_optionalCommissionRate);
-    emit Debug(_totalCollaboratorsRate, "_totalCollaboratorsRate");
+    //    emit Debug(_totalCollaboratorsRate, "_totalCollaboratorsRate"); // 85
+
+    uint256 _scaledUpCommission = _artistCommissionRate.mul(10 ** 18);
+    // emit Debug(_scaledUpCommission, "_scaledUpCommission"); // 43000000000000000000
 
     // work out % of royalties total to split e.g. 43 / 85 = 50.5882353%
-    uint256 primaryArtistPercentage = (_artistCommissionRate.mul(10 ^ 18)).div(_totalCollaboratorsRate);
-    emit Debug(primaryArtistPercentage, "primaryArtistPercentage");
+    uint256 primaryArtistPercentage = _scaledUpCommission.div(_totalCollaboratorsRate);
+    //    emit Debug(primaryArtistPercentage, "primaryArtistPercentage"); // 505882352941176470
 
-    uint256 totalPrimaryRoyaltiesToArtist = _remainingRoyalties.div(10 ^ 18).mul(primaryArtistPercentage);
+    emit Debug(_remainingRoyalties, "_remainingRoyalties");
+
+    uint256 totalPrimaryRoyaltiesToArtist = _remainingRoyalties.mul(primaryArtistPercentage).div(10 ** 18);
     emit Debug(totalPrimaryRoyaltiesToArtist, "totalPrimaryRoyaltiesToArtist");
     _artistAccount.transfer(totalPrimaryRoyaltiesToArtist);
 
@@ -343,15 +327,30 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
   }
 
   ///////////////////
+  // Query Methods //
+  ///////////////////
+
+  function tokenOffer(uint256 _tokenId) external view returns (address _bidder, uint256 _offer, address _owner, bool _enabled, bool _paused) {
+    Offer memory offer = offers[_tokenId];
+    return (
+    offer.bidder,
+    offer.offer,
+    kodaAddress.ownerOf(_tokenId),
+    !disabledTokens[_tokenId],
+    paused
+    );
+  }
+
+  ///////////////////
   // Admin Actions //
   ///////////////////
 
   function disableAuction(uint256 _tokenId)
   public
   onlyIfWhitelisted(msg.sender)
-  onlyWhenTokenExists(_tokenId)
   {
     _refundHighestBidder(_tokenId);
+
     disabledTokens[_tokenId] = true;
 
     emit AuctionDisabled(_tokenId, msg.sender);
@@ -360,17 +359,12 @@ contract TokenMarketplace is Whitelist, Pausable, ERC721Receiver, ITokenMarketpl
   function enableAuction(uint256 _tokenId)
   public
   onlyIfWhitelisted(msg.sender)
-  onlyWhenTokenExists(_tokenId)
   {
     _refundHighestBidder(_tokenId);
+
     disabledTokens[_tokenId] = false;
 
     emit AuctionEnabled(_tokenId, msg.sender);
-  }
-
-  function onERC721Received(address _address, uint256 _tokenId, bytes _data) public returns (bytes4) {
-    Received(_address, _tokenId, _data, msg.gas);
-    return ERC721_RECEIVED;
   }
 
   function setMinBidAmount(uint256 _minBidAmount) onlyIfWhitelisted(msg.sender) public {

@@ -24,8 +24,8 @@ contract.only('TokenMarketplace tests', function (accounts) {
   const _owner = accounts[0];
   const koCommission = accounts[1];
 
-  const artistAccount1 = accounts[2];
-  const optionalArtistAccount2 = accounts[3];
+  const artistAccount = accounts[2];
+  const optionalArtistAccount = accounts[3];
 
   const bidder1 = accounts[4];
   const bidder2 = accounts[5];
@@ -73,11 +73,11 @@ contract.only('TokenMarketplace tests', function (accounts) {
 
   beforeEach(async () => {
     // Create a new edition
-    await this.koda.createActiveEdition(editionNumber1, editionData, editionType, 0, 0, artistAccount1, artistCommission, editionPrice, tokenUri, totalAvailable, {from: _owner});
+    await this.koda.createActiveEdition(editionNumber1, editionData, editionType, 0, 0, artistAccount, artistCommission, editionPrice, tokenUri, totalAvailable, {from: _owner});
 
     // Create a new edition with split commission
-    await this.koda.createActiveEdition(editionNumber2, editionData, editionType, 0, 0, artistAccount1, artistCommissionSplit, editionPrice, tokenUri, totalAvailable, {from: _owner});
-    await this.koda.updateOptionalCommission(editionNumber2, optionalCommissionSplit, optionalArtistAccount2, {from: _owner});
+    await this.koda.createActiveEdition(editionNumber2, editionData, editionType, 0, 0, artistAccount, artistCommissionSplit, editionPrice, tokenUri, totalAvailable, {from: _owner});
+    await this.koda.updateOptionalCommission(editionNumber2, optionalCommissionSplit, optionalArtistAccount, {from: _owner});
 
     // Give each owner a token
     await this.koda.mint(owner1, editionNumber1, {from: _owner});
@@ -121,10 +121,9 @@ contract.only('TokenMarketplace tests', function (accounts) {
       defaultArtistRoyaltyPercentage.should.be.eq.BN("50");
     });
 
-    // FIXME
-    it.skip('koCommissionAccount set', async () => {
+    it('koCommissionAccount set', async () => {
       let koCommissionAccount = await this.marketplace.koCommissionAccount();
-      koCommissionAccount.should.be.equal(_owner);
+      koCommissionAccount.should.be.equal(koCommission);
     });
   });
 
@@ -215,7 +214,7 @@ contract.only('TokenMarketplace tests', function (accounts) {
             this.owner1Balance = await getBalance(owner1);
             this.marketplaceBalance = await getBalance(this.marketplace.address);
             this.koCommissionBalance = await getBalance(koCommission);
-            this.artistAccount1Balance = await getBalance(artistAccount1);
+            this.artistAccountBalance = await getBalance(artistAccount);
 
             let tx = await this.marketplace.acceptBid(_1_token1, {from: owner1});
             this.txGasCosts = await getGasCosts(tx);
@@ -224,13 +223,13 @@ contract.only('TokenMarketplace tests', function (accounts) {
             this.owner1PostBalance = await getBalance(owner1);
             this.marketplacePostBalance = await getBalance(this.marketplace.address);
             this.koCommissionPostBalance = await getBalance(koCommission);
-            this.artistAccount1PostBalance = await getBalance(artistAccount1);
+            this.artistAccountPostBalance = await getBalance(artistAccount);
 
             console.log("bidder2PostBalance", this.bidder2PostBalance.toString());
             console.log("owner1PostBalance", this.owner1PostBalance.toString());
             console.log("marketplacePostBalance", this.marketplacePostBalance.toString());
             console.log("koCommissionPostBalance", this.koCommissionPostBalance.toString());
-            console.log("artistAccount1PostBalance", this.artistAccount1PostBalance.toString());
+            console.log("artistAccountPostBalance", this.artistAccountPostBalance.toString());
           });
 
           it('bidder2 now owns the token', async () => {
@@ -265,8 +264,8 @@ contract.only('TokenMarketplace tests', function (accounts) {
 
           it('artist commission account balance goes up', async () => {
             // Should get 5% of the funds
-            this.artistAccount1PostBalance.should.be.eq.BN(
-              this.artistAccount1Balance.add(
+            this.artistAccountPostBalance.should.be.eq.BN(
+              this.artistAccountBalance.add(
                 this.newBidAmount
                   .div(toBN(100)).mul(toBN(5)) // 5%
               )
@@ -285,7 +284,7 @@ contract.only('TokenMarketplace tests', function (accounts) {
 
   });
 
-  describe.only('Placing a bid on an edition with multiple collaborators', async () => {
+  describe('Placing a bid on an edition with multiple collaborators', async () => {
 
     beforeEach(async () => {
       this.minBidAmount = etherToWei(1);
@@ -307,8 +306,8 @@ contract.only('TokenMarketplace tests', function (accounts) {
         this.bidder1Balance = await getBalance(bidder1);
         this.owner1Balance = await getBalance(owner1);
         this.koCommissionBalance = await getBalance(koCommission);
-        this.artistAccount1Balance = await getBalance(artistAccount1);
-        this.optionalArtistAccount1Balance = await getBalance(optionalArtistAccount2);
+        this.artistAccountBalance = await getBalance(artistAccount);
+        this.optionalArtistAccountBalance = await getBalance(optionalArtistAccount);
 
         let tx = await this.marketplace.acceptBid(_2_token1, {from: owner1});
         this.txGasCosts = await getGasCosts(tx);
@@ -317,15 +316,15 @@ contract.only('TokenMarketplace tests', function (accounts) {
         this.owner1PostBalance = await getBalance(owner1);
         this.marketplacePostBalance = await getBalance(this.marketplace.address);
         this.koCommissionPostBalance = await getBalance(koCommission);
-        this.artistAccount1PostBalance = await getBalance(artistAccount1);
-        this.optionalArtistAccount1PostBalance = await getBalance(optionalArtistAccount2);
+        this.artistAccountPostBalance = await getBalance(artistAccount);
+        this.optionalArtistAccountPostBalance = await getBalance(optionalArtistAccount);
 
         console.log("bidder1PostBalance", this.bidder1PostBalance.toString());
         console.log("owner1PostBalance", this.owner1PostBalance.toString());
         console.log("marketplacePostBalance", this.marketplacePostBalance.toString());
         console.log("koCommissionPostBalance", this.koCommissionPostBalance.toString());
-        console.log("artistAccount1PostBalance", this.artistAccount1PostBalance.toString());
-        console.log("optionalArtistAccount1PostBalance", this.optionalArtistAccount1PostBalance.toString());
+        console.log("artistAccountPostBalance", this.artistAccountPostBalance.toString());
+        console.log("optionalArtistAccountPostBalance", this.optionalArtistAccountPostBalance.toString());
       });
 
       it('bidder2 now owns the token', async () => {
@@ -359,23 +358,13 @@ contract.only('TokenMarketplace tests', function (accounts) {
       });
 
       it('artist commission account balance goes up', async () => {
-        this.artistAccount1PostBalance.should.be.eq.BN(
-          "100003999999999999984"
-          // this.artistAccount1Balance.add(
-          //   this.minBidAmount
-          //     .div(toBN(100)).mul(toBN(2)) // 5%
-          // )
-        );
+        this.artistAccountPostBalance.sub(this.artistAccountBalance)
+          .should.be.eq.BN("25294117647058823"); // gained slightly more due to the 43/42 split
       });
 
       it('optional artist commission account balance goes up', async () => {
-        this.optionalArtistAccount1PostBalance.should.be.eq.BN(
-          "100005000000000000020" // FIXME - this should not be higher than primary artist
-          // this.optionalArtistAccount1Balance.add(
-          //   this.minBidAmount
-          //     .div(toBN(100)).mul(toBN(2)) // 5%
-          // )
-        );
+        this.optionalArtistAccountPostBalance.sub(this.optionalArtistAccountBalance)
+          .should.be.eq.BN("24705882352941177");  // gained slightly less due to the 43/42 split
       });
 
       it('marketplace balance is cleared', async () => {
