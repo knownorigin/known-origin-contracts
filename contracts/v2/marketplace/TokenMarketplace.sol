@@ -164,20 +164,21 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
     emit BidPlaced(_tokenId, currentOwner, msg.sender, msg.value);
   }
 
-  function increaseBid(uint256 _tokenId)
-  public
-  payable
-  whenNotPaused
-  onlyWhenOfferOwner(_tokenId)
-  onlyWhenBidOverMinAmount(_tokenId)
-  onlyWhenTokenAuctionEnabled(_tokenId)
-  {
-    offers[_tokenId].offer = offers[_tokenId].offer.add(msg.value);
-
-    address currentOwner = kodaAddress.ownerOf(_tokenId);
-
-    emit BidIncreased(_tokenId, currentOwner, msg.sender, msg.value);
-  }
+  // TODO is this even needed
+  //  function increaseBid(uint256 _tokenId)
+  //  public
+  //  payable
+  //  whenNotPaused
+  //  onlyWhenOfferOwner(_tokenId)
+  //  onlyWhenBidOverMinAmount(_tokenId)
+  //  onlyWhenTokenAuctionEnabled(_tokenId)
+  //  {
+  //    offers[_tokenId].offer = offers[_tokenId].offer.add(msg.value);
+  //
+  //    address currentOwner = kodaAddress.ownerOf(_tokenId);
+  //
+  //    emit BidIncreased(_tokenId, currentOwner, msg.sender, msg.value);
+  //  }
 
   function withdrawBid(uint256 _tokenId)
   public
@@ -186,8 +187,6 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
   onlyWhenOfferOwner(_tokenId)
   {
     _refundHighestBidder(_tokenId);
-
-    address currentOwner = kodaAddress.ownerOf(_tokenId);
 
     emit BidWithdrawn(_tokenId, msg.sender);
   }
@@ -306,14 +305,17 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
 
     // 43 + 42 = 85
     uint256 _totalCollaboratorsRate = _artistCommissionRate.add(_optionalCommissionRate);
-    //    emit Debug(_totalCollaboratorsRate, "_totalCollaboratorsRate"); // 85
+    emit Debug(_totalCollaboratorsRate, "_totalCollaboratorsRate");
+    // 85
 
     uint256 _scaledUpCommission = _artistCommissionRate.mul(10 ** 18);
-    // emit Debug(_scaledUpCommission, "_scaledUpCommission"); // 43000000000000000000
+    emit Debug(_scaledUpCommission, "_scaledUpCommission");
+    // 43000000000000000000
 
     // work out % of royalties total to split e.g. 43 / 85 = 50.5882353%
     uint256 primaryArtistPercentage = _scaledUpCommission.div(_totalCollaboratorsRate);
-    //    emit Debug(primaryArtistPercentage, "primaryArtistPercentage"); // 505882352941176470
+    emit Debug(primaryArtistPercentage, "primaryArtistPercentage");
+    // 505882352941176470
 
     emit Debug(_remainingRoyalties, "_remainingRoyalties");
 

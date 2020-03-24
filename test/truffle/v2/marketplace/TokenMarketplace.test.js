@@ -64,9 +64,6 @@ contract.only('TokenMarketplace tests', function (accounts) {
     // Update the commission account to be something different than owner
     await this.marketplace.setKoCommissionAccount(koCommission, {from: _owner});
 
-    // Whitelist the marketplace contract
-    await this.koda.addAddressToAccessControl(this.marketplace.address, ROLE_MINTER, {from: _owner});
-
     // Grab the min bid amount
     this.minBidAmount = toBN(await this.marketplace.minBidAmount());
   });
@@ -375,26 +372,39 @@ contract.only('TokenMarketplace tests', function (accounts) {
 
   });
 
-  describe('Increasing a bid', async () => {
+  describe.skip('Increasing a bid', async () => {
 
     beforeEach(async () => {
-
+      this.marketplace.placeBid(_1_token1, {from: bidder1, value: this.minBidAmount})
     });
 
     it('fails for invalid token ID', async () => {
-
+      await assertRevert(
+        this.marketplace.increaseBid(9999, {from: bidder1, value: this.minBidAmount}),
+        'Token does not exist'
+      );
     });
 
     it('fails if contract paused', async () => {
-
+      await this.marketplace.pause({from: _owner});
+      await assertRevert(
+        this.marketplace.increaseBid(9999, {from: bidder1, value: this.minBidAmount})
+      );
     });
 
     it('fails if less than minimum bid amount', async () => {
-
+      await assertRevert(
+        this.marketplace.increaseBid(_1_token1, {from: bidder1, value: etherToWei(0.01)}),
+        "Offer not enough"
+      );
     });
 
     it('fails if token is disabled from offers', async () => {
-
+      await this.marketplace.disableAuction(_1_token1, {from: _owner});
+      await assertRevert(
+        this.marketplace.increaseBid(_1_token1, {from: bidder1, value: this.minBidAmount}),
+        "Token not enabled for offers"
+      );
     });
 
     it('', async () => {
