@@ -14,13 +14,6 @@ interface ITokenMarketplace {
     uint256 _amount
   );
 
-  event BidIncreased(
-    uint256 indexed _tokenId,
-    address indexed _currentOwner,
-    address indexed _bidder,
-    uint256 _amount
-  );
-
   event BidWithdrawn(
     uint256 indexed _tokenId,
     address indexed _bidder
@@ -51,8 +44,6 @@ interface ITokenMarketplace {
   );
 
   function placeBid(uint256 _tokenId) payable external returns (bool success);
-
-  function increaseBid(uint256 _tokenId) payable external returns (bool success);
 
   function withdrawBid(uint256 _tokenId) external returns (bool success);
 
@@ -164,22 +155,6 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
     emit BidPlaced(_tokenId, currentOwner, msg.sender, msg.value);
   }
 
-  // TODO is this even needed
-  //  function increaseBid(uint256 _tokenId)
-  //  public
-  //  payable
-  //  whenNotPaused
-  //  onlyWhenOfferOwner(_tokenId)
-  //  onlyWhenBidOverMinAmount(_tokenId)
-  //  onlyWhenTokenAuctionEnabled(_tokenId)
-  //  {
-  //    offers[_tokenId].offer = offers[_tokenId].offer.add(msg.value);
-  //
-  //    address currentOwner = kodaAddress.ownerOf(_tokenId);
-  //
-  //    emit BidIncreased(_tokenId, currentOwner, msg.sender, msg.value);
-  //  }
-
   function withdrawBid(uint256 _tokenId)
   public
   whenNotPaused
@@ -260,8 +235,6 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
     _splitFunds(artistAccount, artistCommissionRate, optionalCommissionRecipient, optionalCommissionRate, _offer, _currentOwner);
   }
 
-  event Debug(uint256 indexed value, string name);
-
   function _splitFunds(
     address _artistAccount,
     uint256 _artistCommissionRate,
@@ -302,29 +275,16 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
     uint256 _optionalCommissionRate,
     uint256 _remainingRoyalties
   ) internal {
-
-    // 43 + 42 = 85
     uint256 _totalCollaboratorsRate = _artistCommissionRate.add(_optionalCommissionRate);
-    emit Debug(_totalCollaboratorsRate, "_totalCollaboratorsRate");
-    // 85
-
     uint256 _scaledUpCommission = _artistCommissionRate.mul(10 ** 18);
-    emit Debug(_scaledUpCommission, "_scaledUpCommission");
-    // 43000000000000000000
 
     // work out % of royalties total to split e.g. 43 / 85 = 50.5882353%
     uint256 primaryArtistPercentage = _scaledUpCommission.div(_totalCollaboratorsRate);
-    emit Debug(primaryArtistPercentage, "primaryArtistPercentage");
-    // 505882352941176470
-
-    emit Debug(_remainingRoyalties, "_remainingRoyalties");
 
     uint256 totalPrimaryRoyaltiesToArtist = _remainingRoyalties.mul(primaryArtistPercentage).div(10 ** 18);
-    emit Debug(totalPrimaryRoyaltiesToArtist, "totalPrimaryRoyaltiesToArtist");
     _artistAccount.transfer(totalPrimaryRoyaltiesToArtist);
 
     uint256 remainingRoyaltiesToCollaborator = _remainingRoyalties.sub(totalPrimaryRoyaltiesToArtist);
-    emit Debug(remainingRoyaltiesToCollaborator, "remainingRoyaltiesToCollaborator");
     _optionalCommissionRecipient.transfer(remainingRoyaltiesToCollaborator);
   }
 

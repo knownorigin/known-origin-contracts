@@ -19,8 +19,6 @@ contract.only('TokenMarketplace tests', function (accounts) {
 
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
-  const ROLE_MINTER = 2;
-
   const _owner = accounts[0];
   const koCommission = accounts[1];
 
@@ -372,15 +370,17 @@ contract.only('TokenMarketplace tests', function (accounts) {
 
   });
 
-  describe.skip('Increasing a bid', async () => {
+  describe('Withdrawing a bid', async () => {
 
     beforeEach(async () => {
-      this.marketplace.placeBid(_1_token1, {from: bidder1, value: this.minBidAmount})
+      this.bidder1Balance = await getBalance(bidder1);
+      let tx = await this.marketplace.placeBid(_1_token1, {from: bidder1, value: this.minBidAmount});
+      this.placeBidGasCosts = await getGasCosts(tx);
     });
 
     it('fails for invalid token ID', async () => {
       await assertRevert(
-        this.marketplace.increaseBid(9999, {from: bidder1, value: this.minBidAmount}),
+        this.marketplace.withdrawBid(9999, {from: bidder1}),
         'Token does not exist'
       );
     });
@@ -388,106 +388,227 @@ contract.only('TokenMarketplace tests', function (accounts) {
     it('fails if contract paused', async () => {
       await this.marketplace.pause({from: _owner});
       await assertRevert(
-        this.marketplace.increaseBid(9999, {from: bidder1, value: this.minBidAmount})
+        this.marketplace.withdrawBid(_1_token1, {from: bidder1})
       );
-    });
-
-    it('fails if less than minimum bid amount', async () => {
-      await assertRevert(
-        this.marketplace.increaseBid(_1_token1, {from: bidder1, value: etherToWei(0.01)}),
-        "Offer not enough"
-      );
-    });
-
-    it('fails if token is disabled from offers', async () => {
-      await this.marketplace.disableAuction(_1_token1, {from: _owner});
-      await assertRevert(
-        this.marketplace.increaseBid(_1_token1, {from: bidder1, value: this.minBidAmount}),
-        "Token not enabled for offers"
-      );
-    });
-
-    it('', async () => {
-
-    });
-
-  });
-
-  describe('Withdrawing a bid', async () => {
-
-    beforeEach(async () => {
-
-    });
-
-    it('fails for invalid token ID', async () => {
-
-    });
-
-    it('fails if contract paused', async () => {
-
-    });
-
-    it('fails if token is disabled from offers', async () => {
-
     });
 
     it('fails if caller is not offer owner', async () => {
-
+      await assertRevert(
+        this.marketplace.withdrawBid(_1_token1, {from: bidder2}),
+        'Not offer maker'
+      );
     });
 
-    it('', async () => {
+    describe('once withdrawn', async () => {
 
-    });
+      beforeEach(async () => {
+        let tx = await this.marketplace.withdrawBid(_1_token1, {from: bidder1});
+        this.withdrawBidGasCosts = await getGasCosts(tx);
+        this.bidder1PostBalance = await getBalance(bidder1);
+      });
+
+      it('bid is withdrawn correctly', async () => {
+        // Only charged for GAS - balance before placing bid equals post withdrawing bid
+        this.bidder1Balance.sub(this.bidder1PostBalance)
+          .should.be.eq.BN(
+          this.withdrawBidGasCosts.add(this.placeBidGasCosts)
+        );
+      });
+
+      it('marketplace balance is cleared', async () => {
+        (await getBalance(this.marketplace.address)).should.be.eq.BN("0");
+      });
+
+      it('token data is blank', async () => {
+        const {_bidder, _offer, _owner, _enabled, _paused} = await this.marketplace.tokenOffer(_1_token1);
+        _bidder.should.be.equal(ZERO_ADDRESS);
+        _offer.should.be.eq.BN("0");
+        _owner.should.be.equal(owner1);
+        _enabled.should.be.equal(true);
+        _paused.should.be.equal(false);
+      });
+
+    })
 
   });
 
   describe('Rejecting a bid', async () => {
 
     beforeEach(async () => {
-
+      this.bidder1Balance = await getBalance(bidder1);
+      let tx = await this.marketplace.placeBid(_1_token1, {from: bidder1, value: this.minBidAmount});
+      this.placeBidGasCosts = await getGasCosts(tx);
     });
 
     it('fails for invalid token ID', async () => {
-
+      await assertRevert(
+        this.marketplace.rejectBid(9999, {from: owner1}),
+        'No offer open'
+      );
     });
 
     it('fails if contract paused', async () => {
-
+      await this.marketplace.pause({from: _owner});
+      await assertRevert(
+        this.marketplace.rejectBid(_1_token1, {from: owner1})
+      );
     });
 
     it('fails if caller is not token owner', async () => {
-
+      await assertRevert(
+        this.marketplace.rejectBid(_1_token1, {from: owner2}),
+        "Not token owner"
+      );
     });
 
     it('fails if no offer open', async () => {
-
+      await assertRevert(
+        this.marketplace.rejectBid(_1_token2, {from: owner2}),
+        "No offer open"
+      );
     });
 
-    it('', async () => {
+    describe('once rejected', async () => {
 
-    });
+      beforeEach(async () => {
+        let tx = await this.marketplace.rejectBid(_1_token1, {from: owner1});
+        this.rejectBidGasCosts = await getGasCosts(tx);
+
+        this.bidder1PostBalance = await getBalance(bidder1);
+      });
+
+      it('bid is withdrawn correctly', async () => {
+        // Only charged for placing bid GAS - balance before placing bid equals post rejecting bid
+        this.bidder1Balance.sub(this.bidder1PostBalance)
+          .should.be.eq.BN(this.placeBidGasCosts);
+      });
+
+      it('marketplace balance is cleared', async () => {
+        (await getBalance(this.marketplace.address)).should.be.eq.BN("0");
+      });
+
+      it('token data is blank', async () => {
+        const {_bidder, _offer, _owner, _enabled, _paused} = await this.marketplace.tokenOffer(_1_token1);
+        _bidder.should.be.equal(ZERO_ADDRESS);
+        _offer.should.be.eq.BN("0");
+        _owner.should.be.equal(owner1);
+        _enabled.should.be.equal(true);
+        _paused.should.be.equal(false);
+      });
+
+    })
 
   });
 
   describe('Accepting a bid', async () => {
 
-    it('fails for invalid token ID', async () => {
+    beforeEach(async () => {
+      let tx = await this.marketplace.placeBid(_1_token2, {from: bidder1, value: this.minBidAmount});
+      this.placeBidGasCosts = await getGasCosts(tx);
+    });
 
+    it('fails for invalid token ID', async () => {
+      await assertRevert(
+        this.marketplace.acceptBid(9999, {from: owner2}),
+        "Not token owner"
+      );
     });
 
     it('fails if contract paused', async () => {
-
+      await this.marketplace.pause({from: _owner});
+      await assertRevert(
+        this.marketplace.acceptBid(_1_token2, {from: owner1})
+      );
     });
 
     it('fails if caller is not token owner', async () => {
-
+      await assertRevert(
+        this.marketplace.acceptBid(_1_token2, {from: owner2}),
+        "Not token owner"
+      );
     });
 
     it('fails if no offer open', async () => {
-
+      await assertRevert(
+        this.marketplace.acceptBid(_1_token1, {from: owner1}),
+        "No offer open"
+      );
     });
 
-    it('', async () => {
+    describe('once accepted', async () => {
+
+      beforeEach(async () => {
+        // Tweak so optional is not only 5%
+        await this.koda.updateArtistCommission(editionNumber1, 76, {from: _owner});
+        await this.koda.updateOptionalCommission(editionNumber1, 9, optionalArtistAccount, {from: _owner});
+
+        this.bidder1Balance = await getBalance(bidder1);
+        this.owner2Balance = await getBalance(owner2);
+        this.marketplaceBalance = await getBalance(this.marketplace.address);
+        this.koCommissionBalance = await getBalance(koCommission);
+        this.artistAccountBalance = await getBalance(artistAccount);
+        this.optionalArtistAccountBalance = await getBalance(optionalArtistAccount);
+
+        let tx = await this.marketplace.acceptBid(_1_token2, {from: owner2});
+        this.txGasCosts = await getGasCosts(tx);
+
+        this.bidder1PostBalance = await getBalance(bidder1);
+        this.owner2PostBalance = await getBalance(owner2);
+        this.marketplacePostBalance = await getBalance(this.marketplace.address);
+        this.koCommissionPostBalance = await getBalance(koCommission);
+        this.artistAccountPostBalance = await getBalance(artistAccount);
+        this.optionalArtistAccountPostBalance = await getBalance(optionalArtistAccount);
+
+        console.log("bidder2PostBalance", this.bidder1PostBalance.toString());
+        console.log("owner2PostBalance", this.owner2PostBalance.toString());
+        console.log("marketplacePostBalance", this.marketplacePostBalance.toString());
+        console.log("koCommissionPostBalance", this.koCommissionPostBalance.toString());
+        console.log("artistAccountPostBalance", this.artistAccountPostBalance.toString());
+      });
+
+      it('bidder1 now owns the token', async () => {
+        const owner = await this.koda.ownerOf(_1_token2);
+        owner.should.be.equal(bidder1);
+      });
+
+      it('owner balance goes up and does not own the token', async () => {
+        // Does not own token
+        const owner = await this.koda.ownerOf(_1_token2);
+        owner.should.not.be.equal(owner1);
+
+        // Should get 92% of the funds
+        this.owner2PostBalance.should.be.eq.BN(
+          this.owner2Balance.add(
+            this.minBidAmount
+              .div(toBN(100)).mul(toBN(92)) // 95%
+              .sub(this.txGasCosts) // minus gas costs
+          )
+        );
+      });
+
+      it('ko commission account balance goes up', async () => {
+        // Should get 3% of the funds
+        this.koCommissionPostBalance.should.be.eq.BN(
+          this.koCommissionBalance.add(
+            this.minBidAmount
+              .div(toBN(100)).mul(toBN(3)) // 3%
+          )
+        );
+      });
+
+      it('artist commission account balance goes up', async () => {
+        this.artistAccountPostBalance.sub(this.artistAccountBalance)
+          .should.be.eq.BN("1788235294117647");
+      });
+
+      it('optional artist commission account balance goes up', async () => {
+        this.optionalArtistAccountPostBalance.sub(this.optionalArtistAccountBalance)
+          .should.be.eq.BN("211764705882353");
+      });
+
+      it('marketplace balance is cleared', async () => {
+        this.marketplacePostBalance.should.be.eq.BN("0");
+      });
 
     });
 
