@@ -295,6 +295,13 @@ contract('TokenMarketplace tests', function (accounts) {
       _paused.should.be.equal(false);
     });
 
+    it('should determineSaleValues() correctly', async () => {
+      const {_sellerTotal, _platformFee, _royaltyFee} = await this.marketplace.determineSaleValues(_2_token1);
+      _sellerTotal.should.be.eq.BN(etherToWei(0.92)); // 92%
+      _platformFee.should.be.eq.BN(etherToWei(0.03)); // 3%
+      _royaltyFee.should.be.eq.BN(etherToWei(0.05)); // 5%
+    });
+
     describe('when the owner accepts the bid', async () => {
 
       beforeEach(async () => {
@@ -610,6 +617,14 @@ contract('TokenMarketplace tests', function (accounts) {
         this.marketplacePostBalance.should.be.eq.BN("0");
       });
 
+    });
+
+  });
+
+  describe('should determineSaleValues() correctly', async () => {
+
+    beforeEach(async () => {
+      await this.marketplace.placeBid(_1_token2, {from: bidder1, value: this.minBidAmount});
     });
 
   });

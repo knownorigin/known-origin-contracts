@@ -4,57 +4,7 @@ import "openzeppelin-solidity/contracts/access/rbac/Roles.sol";
 import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "openzeppelin-solidity/contracts/access/Whitelist.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-
-interface ITokenMarketplace {
-
-  event BidPlaced(
-    uint256 indexed _tokenId,
-    address indexed _currentOwner,
-    address indexed _bidder,
-    uint256 _amount
-  );
-
-  event BidWithdrawn(
-    uint256 indexed _tokenId,
-    address indexed _bidder
-  );
-
-  event BidAccepted(
-    uint256 indexed _tokenId,
-    address indexed _currentOwner,
-    address indexed _bidder,
-    uint256 _amount
-  );
-
-  event BidRejected(
-    uint256 indexed _tokenId,
-    address indexed _currentOwner,
-    address indexed _bidder,
-    uint256 _amount
-  );
-
-  event AuctionEnabled(
-    uint256 indexed _tokenId,
-    address indexed _auctioneer
-  );
-
-  event AuctionDisabled(
-    uint256 indexed _tokenId,
-    address indexed _auctioneer
-  );
-
-  function placeBid(uint256 _tokenId) payable external returns (bool success);
-
-  function withdrawBid(uint256 _tokenId) external returns (bool success);
-
-  function acceptBid(uint256 _tokenId) external returns (uint256 tokenId);
-
-  function rejectBid(uint256 _tokenId) external returns (bool success);
-
-  function enableAuction(uint256 _tokenId) external returns (bool success);
-
-  function disableAuction(uint256 _tokenId) external returns (bool success);
-}
+import "./ITokenMarketplace.sol";
 
 interface IKODAV2 {
   function ownerOf(uint256 _tokenId) external view returns (address _owner);
@@ -73,6 +23,9 @@ interface IKODAV2 {
 contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
   using SafeMath for uint256;
 
+  event UpdatePlatformPercentageFee(uint256 _oldPercentage, uint256 _newPercentage);
+  event UpdateRoyaltyPercentageFee(uint256 _oldPercentage, uint256 _newPercentage);
+
   struct Offer {
     address bidder;
     uint256 offer;
@@ -87,11 +40,8 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
   // KO account which can receive commission
   address public koCommissionAccount;
 
-  // 50 = 5%
-  uint256 public defaultArtistRoyaltyPercentage = 50;
-
-  // 30 = 3%
-  uint256 public defaultKOPercentage = 30;
+  uint256 public artistRoyaltyPercentage = 50;
+  uint256 public platformFeePercentage = 30;
 
   // Token ID to Offer mapping
   mapping(uint256 => Offer) offers;
@@ -245,7 +195,7 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
   ) internal {
 
     // Work out total % of royalties to payout = creator royalties + KO commission
-    uint256 totalCommissionPercentageToPay = defaultKOPercentage.add(defaultArtistRoyaltyPercentage);
+    uint256 totalCommissionPercentageToPay = platformFeePercentage.add(artistRoyaltyPercentage);
 
     // Send current owner majority share of the offer
     uint256 totalToSendToOwner = _offer.sub(
@@ -254,7 +204,7 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
     _currentOwner.transfer(totalToSendToOwner);
 
     // Send % to KO
-    uint256 koCommission = _offer.div(1000).mul(defaultKOPercentage);
+    uint256 koCommission = _offer.div(1000).mul(platformFeePercentage);
     koCommissionAccount.transfer(koCommission);
 
     // Send to seller minus royalties and commission
@@ -303,6 +253,19 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
     );
   }
 
+  function determineSaleValues(uint256 _tokenId) external view returns (uint256 _sellerTotal, uint256 _platformFee, uint256 _royaltyFee) {
+    Offer memory offer = offers[_tokenId];
+    uint256 offerValue = offer.offer;
+    uint256 fee = offerValue.div(1000).mul(platformFeePercentage);
+    uint256 royalties = offerValue.div(1000).mul(artistRoyaltyPercentage);
+
+    return (
+    offer.offer.sub(fee).sub(royalties),
+    fee,
+    royalties
+    );
+  }
+
   ///////////////////
   // Admin Actions //
   ///////////////////
@@ -340,5 +303,15 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
   function setKoCommissionAccount(address _koCommissionAccount) public onlyIfWhitelisted(msg.sender) {
     require(_koCommissionAccount != address(0), "Invalid address");
     koCommissionAccount = _koCommissionAccount;
+  }
+
+  function setArtistRoyaltyPercentage(uint256 _artistRoyaltyPercentage) public onlyIfWhitelisted(msg.sender) {
+    emit UpdateRoyaltyPercentageFee(artistRoyaltyPercentage, _artistRoyaltyPercentage);
+    artistRoyaltyPercentage = _artistRoyaltyPercentage;
+  }
+
+  function setKOPercentage(uint256 _platformFeePercentage) public onlyIfWhitelisted(msg.sender) {
+    emit UpdatePlatformPercentageFee(platformFeePercentage, _platformFeePercentage);
+    platformFeePercentage = _platformFeePercentage;
   }
 }
