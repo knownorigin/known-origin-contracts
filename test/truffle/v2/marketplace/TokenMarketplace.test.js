@@ -107,13 +107,13 @@ contract('TokenMarketplace tests', function (accounts) {
     });
 
     it('ko percentage set', async () => {
-      let defaultKOPercentage = await this.marketplace.defaultKOPercentage();
-      defaultKOPercentage.should.be.eq.BN("30");
+      let platformFeePercentage = await this.marketplace.platformFeePercentage();
+      platformFeePercentage.should.be.eq.BN("30");
     });
 
     it('artists royalties percentage set', async () => {
-      let defaultArtistRoyaltyPercentage = await this.marketplace.defaultArtistRoyaltyPercentage();
-      defaultArtistRoyaltyPercentage.should.be.eq.BN("50");
+      let artistRoyaltyPercentage = await this.marketplace.artistRoyaltyPercentage();
+      artistRoyaltyPercentage.should.be.eq.BN("50");
     });
 
     it('koCommissionAccount set', async () => {
