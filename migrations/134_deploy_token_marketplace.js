@@ -33,4 +33,8 @@ module.exports = async function (deployer, network, accounts) {
 
   const tokenMarketplace = await TokenMarketplace.deployed();
   console.log(`TokenMarketplace deployed [${tokenMarketplace.address}]`);
+
+  // Set updated commission splits
+  await tokenMarketplace.setArtistRoyaltyPercentage(100, {from: _koAccount});
+  await tokenMarketplace.setPlatformPercentage(30, {from: _koAccount});
 };
