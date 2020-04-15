@@ -797,7 +797,7 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
     artistRoyaltyPercentage = _artistRoyaltyPercentage;
   }
 
-  function setKOPercentage(uint256 _platformFeePercentage) public onlyIfWhitelisted(msg.sender) {
+  function setPlatformPercentage(uint256 _platformFeePercentage) public onlyIfWhitelisted(msg.sender) {
     emit UpdatePlatformPercentageFee(platformFeePercentage, _platformFeePercentage);
     platformFeePercentage = _platformFeePercentage;
   }
