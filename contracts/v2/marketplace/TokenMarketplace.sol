@@ -145,6 +145,8 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
 
     address winningBidder = offers[_tokenId].bidder;
 
+    delete offers[_tokenId];
+
     // Get edition no.
     uint256 editionNumber = kodaAddress.editionOfTokenId(_tokenId);
 
@@ -154,7 +156,6 @@ contract TokenMarketplace is Whitelist, Pausable, ITokenMarketplace {
 
     emit BidAccepted(_tokenId, currentOwner, winningBidder, winningOffer);
 
-    delete offers[_tokenId];
   }
 
   function _refundHighestBidder(uint256 _tokenId) internal {
