@@ -36,5 +36,5 @@ module.exports = async function (deployer, network, accounts) {
 
   // Set updated commission splits
   await tokenMarketplace.setArtistRoyaltyPercentage(100, {from: _koAccount});
-  await tokenMarketplace.setPlatformPercentage(30, {from: _koAccount});
+  await tokenMarketplace.setPlatformPercentage(25, {from: _koAccount});
 };
