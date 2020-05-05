@@ -32,21 +32,21 @@
     "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/ISelfServiceAccessControls.sol",
     "exportedSymbols": {
       "ISelfServiceAccessControls": [
-        8001
+        8460
       ]
     },
-    "id": 8002,
+    "id": 8461,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 7993,
+        "id": 8452,
         "literals": [
           "solidity",
           "0.4",
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:23:26"
+        "src": "0:23:28"
       },
       {
         "baseContracts": [],
@@ -54,9 +54,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 8001,
+        "id": 8460,
         "linearizedBaseContracts": [
-          8001
+          8460
         ],
         "name": "ISelfServiceAccessControls",
         "nodeType": "ContractDefinition",
@@ -64,7 +64,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 8000,
+            "id": 8459,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -72,16 +72,16 @@
             "name": "isEnabledForAccount",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 7996,
+              "id": 8455,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 7995,
+                  "id": 8454,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 8000,
-                  "src": "96:15:26",
+                  "scope": 8459,
+                  "src": "96:15:28",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -89,10 +89,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 7994,
+                    "id": 8453,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "96:7:26",
+                    "src": "96:7:28",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -102,20 +102,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "95:17:26"
+              "src": "95:17:28"
             },
             "payable": false,
             "returnParameters": {
-              "id": 7999,
+              "id": 8458,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 7998,
+                  "id": 8457,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 8000,
-                  "src": "134:4:26",
+                  "scope": 8459,
+                  "src": "134:4:28",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -123,10 +123,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 7997,
+                    "id": 8456,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "134:4:26",
+                    "src": "134:4:28",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -136,40 +136,40 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "133:6:26"
+              "src": "133:6:28"
             },
-            "scope": 8001,
-            "src": "67:73:26",
+            "scope": 8460,
+            "src": "67:73:28",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 8002,
-        "src": "25:118:26"
+        "scope": 8461,
+        "src": "25:118:28"
       }
     ],
-    "src": "0:144:26"
+    "src": "0:144:28"
   },
   "legacyAST": {
     "absolutePath": "/Users/jamesmorgan/Dropbox/workspace-blockrocket/knownorigin/known-origin-contracts/contracts/v2/interfaces/ISelfServiceAccessControls.sol",
     "exportedSymbols": {
       "ISelfServiceAccessControls": [
-        8001
+        8460
       ]
     },
-    "id": 8002,
+    "id": 8461,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 7993,
+        "id": 8452,
         "literals": [
           "solidity",
           "0.4",
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:23:26"
+        "src": "0:23:28"
       },
       {
         "baseContracts": [],
@@ -177,9 +177,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 8001,
+        "id": 8460,
         "linearizedBaseContracts": [
-          8001
+          8460
         ],
         "name": "ISelfServiceAccessControls",
         "nodeType": "ContractDefinition",
@@ -187,7 +187,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 8000,
+            "id": 8459,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -195,16 +195,16 @@
             "name": "isEnabledForAccount",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 7996,
+              "id": 8455,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 7995,
+                  "id": 8454,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 8000,
-                  "src": "96:15:26",
+                  "scope": 8459,
+                  "src": "96:15:28",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -212,10 +212,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 7994,
+                    "id": 8453,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "96:7:26",
+                    "src": "96:7:28",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -225,20 +225,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "95:17:26"
+              "src": "95:17:28"
             },
             "payable": false,
             "returnParameters": {
-              "id": 7999,
+              "id": 8458,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 7998,
+                  "id": 8457,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 8000,
-                  "src": "134:4:26",
+                  "scope": 8459,
+                  "src": "134:4:28",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -246,10 +246,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 7997,
+                    "id": 8456,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "134:4:26",
+                    "src": "134:4:28",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -259,28 +259,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "133:6:26"
+              "src": "133:6:28"
             },
-            "scope": 8001,
-            "src": "67:73:26",
+            "scope": 8460,
+            "src": "67:73:28",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 8002,
-        "src": "25:118:26"
+        "scope": 8461,
+        "src": "25:118:28"
       }
     ],
-    "src": "0:144:26"
+    "src": "0:144:28"
   },
   "compiler": {
     "name": "solc",
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.16",
-  "updatedAt": "2019-11-15T10:36:42.032Z",
+  "schemaVersion": "3.0.19",
+  "updatedAt": "2020-03-13T15:52:57.853Z",
   "devdoc": {
     "methods": {}
   },
