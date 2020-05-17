@@ -12,7 +12,7 @@ require('chai')
   .use(bnChai(web3.utils.BN))
   .should();
 
-contract.only('ArtistEditionBurner', function (accounts) {
+contract('ArtistEditionBurner', function (accounts) {
 
   const ROLE_KNOWN_ORIGIN = 1;
 
