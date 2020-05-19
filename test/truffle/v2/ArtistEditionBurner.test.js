@@ -81,6 +81,11 @@ contract('ArtistEditionBurner', function (accounts) {
         editionActive.should.be.equal(false);
       });
 
+      it('totalAvailableEdition', async () => {
+        let totalAvailableEdition = await this.koda.totalAvailableEdition(editionNumber1);
+        totalAvailableEdition.should.be.eq.BN(0);
+      });
+
       it('event populated', async () => {
         const event = this.logs[0];
         event.event.should.be.equal('EditionDeactivated');

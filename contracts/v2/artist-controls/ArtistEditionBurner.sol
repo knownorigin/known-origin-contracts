@@ -21,7 +21,7 @@ interface IKODAV2ArtistBurner {
 /**
 * @title Artists burning contract for KnownOrigin (KODA)
 *
-* Allows for the edition artists to burn unsold editions or reduce the supply of sold ones
+* Allows for edition artists to burn unsold works or reduce the supply of sold tokens from editions
 *
 * https://www.knownorigin.io/
 *
@@ -70,6 +70,7 @@ contract ArtistEditionBurner is Ownable, Pausable {
     // if no tokens issued, simply disable the edition, burn it!
     if (totalSupply == 0) {
       kodaAddress.updateActive(_editionNumber, false);
+      kodaAddress.updateTotalAvailable(_editionNumber, 0);
       emit EditionDeactivated(_editionNumber);
     }
     // if some tokens issued, reduce ths supply so that no more can be issued
