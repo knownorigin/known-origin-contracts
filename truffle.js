@@ -3,7 +3,7 @@ const infuraApikey = '4396873c00c84479991e58a34a54ebd9';
 const mnemonic = process.env.KNOWN_ORIGIN_MNEMONIC;
 if (!mnemonic) {
   throw new Error(`
-    You are missing a environment variable called KNOWN_ORIGIN_MNEMONIC - please set one 
+    You are missing a environment variable called KNOWN_ORIGIN_MNEMONIC - please set one
     e.g. export KNOWN_ORIGIN_MNEMONIC='<your seed phrase>'
   `);
 }
@@ -72,7 +72,7 @@ module.exports = {
       },
       network_id: 1,
       gas: 6075039,         // default = 4712388
-      gasPrice: 6000000000, // default = 100 gwei = 100000000000
+      gasPrice: 13000000000, // default = 100 gwei = 100000000000
       timeoutBlocks: 200,   // # of blocks before a deployment times out  (minimum/default: 50)
       skipDryRun: true      // Skip dry run before migrations? (default: false for public nets )
     },
