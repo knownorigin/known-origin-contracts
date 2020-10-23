@@ -1,5 +1,5 @@
 const KnownOriginDigitalAssetV2 = artifacts.require('KnownOriginDigitalAssetV2');
-const TokenMarketplace = artifacts.require('TokenMarketplaceV2');
+const TokenMarketplaceV2 = artifacts.require('TokenMarketplaceV2');
 
 const HDWalletProvider = require('truffle-hdwallet-provider');
 const infuraApikey = '4396873c00c84479991e58a34a54ebd9';
@@ -25,12 +25,12 @@ module.exports = async function (deployer, network, accounts) {
   console.log(`KODA V2 [${koda.address}]`);
 
   // Deploy marketplace
-  await deployer.deploy(TokenMarketplace,
+  await deployer.deploy(TokenMarketplaceV2,
     koda.address,
     _koAccount,
     {from: _koAccount}
   );
 
-  const tokenMarketplace = await TokenMarketplace.deployed();
-  console.log(`TokenMarketplace deployed [${tokenMarketplace.address}]`);
+  const tokenMarketplace = await TokenMarketplaceV2.deployed();
+  console.log(`TokenMarketplace V2 deployed [${tokenMarketplace.address}]`);
 };

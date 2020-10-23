@@ -15,7 +15,7 @@ require('chai')
   .use(bnChai(web3.utils.BN))
   .should();
 
-contract.only('TokenMarketplaceV2 tests', function (accounts) {
+contract('TokenMarketplaceV2 tests', function (accounts) {
 
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
@@ -88,6 +88,10 @@ contract.only('TokenMarketplaceV2 tests', function (accounts) {
     await this.koda.setApprovalForAll(this.marketplace.address, true, {from: owner1});
     await this.koda.setApprovalForAll(this.marketplace.address, true, {from: owner2});
     await this.koda.setApprovalForAll(this.marketplace.address, true, {from: owner3});
+
+    // Set updated commission splits
+    await this.marketplace.setArtistRoyaltyPercentage(50, {from: _owner});
+    await this.marketplace.setPlatformPercentage(30, {from: _owner});
   });
 
   describe('constructed properly', async () => {
@@ -538,7 +542,7 @@ contract.only('TokenMarketplaceV2 tests', function (accounts) {
     it('fails if no offer open', async () => {
       await assertRevert(
         this.marketplace.acceptBid(_1_token1, this.minBidAmount, {from: owner1}),
-        "No offer open"
+        "Offer amount not satisfied"
       );
     });
 
@@ -625,6 +629,184 @@ contract.only('TokenMarketplaceV2 tests', function (accounts) {
 
     beforeEach(async () => {
       await this.marketplace.placeBid(_1_token2, {from: bidder1, value: this.minBidAmount});
+    });
+
+  });
+
+  describe('listing and buying tokens', async () => {
+
+    describe('listing token', async () => {
+
+      it('fails if not the owner', async () => {
+        await assertRevert(
+          this.marketplace.listToken(_1_token1, 0, {from: owner1}),
+          "Listing price not enough"
+        );
+      });
+
+      it('fails if price below min', async () => {
+        await assertRevert(
+          this.marketplace.listToken(_1_token1, this.minBidAmount, {from: owner2}),
+          "Not token owner"
+        );
+      });
+
+      it('successfully listed a token', async () => {
+        await this.marketplace.listToken(_1_token1, this.minBidAmount, {from: owner1});
+
+        const {_price, _lister, _currentOwner} = await this.marketplace.tokenListingDetails(_1_token1);
+        _price.should.be.eq.BN(this.minBidAmount);
+        _lister.should.be.equal(owner1);
+        _currentOwner.should.be.equal(owner1);
+      });
+
+    });
+
+    describe('delisting token', async () => {
+
+      it('fails if no listing found', async () => {
+        await assertRevert(
+          this.marketplace.delistToken(_1_token1, {from: owner1}),
+          "No listing found"
+        );
+      });
+
+      it('fails if you dont currently own it', async () => {
+        await this.marketplace.listToken(_1_token1, this.minBidAmount, {from: owner1});
+
+        await assertRevert(
+          this.marketplace.delistToken(_1_token1, {from: owner2}),
+          "Only the current owner can delist"
+        );
+      });
+
+      it('successfully listed a token', async () => {
+        await this.marketplace.listToken(_1_token1, this.minBidAmount, {from: owner1});
+
+        await this.marketplace.delistToken(_1_token1, {from: owner1});
+
+        const {_price, _lister, _currentOwner} = await this.marketplace.tokenListingDetails(_1_token1);
+        _price.should.be.eq.BN("0");
+        _lister.should.be.equal(ZERO_ADDRESS);
+        _currentOwner.should.be.equal(owner1);
+      });
+
+    });
+
+    describe('buying tokens', async () => {
+
+      it('fails when not listed', async () => {
+        await assertRevert(
+          this.marketplace.buyToken(_1_token1, {from: owner2, value: this.minBidAmount}),
+          "No listing found"
+        );
+      });
+
+      it('fails when token ownership has changed', async () => {
+        // list it
+        await this.marketplace.listToken(_1_token1, this.minBidAmount, {from: owner1});
+
+        // move it
+        await this.koda.transferFrom(owner1, owner3, _1_token1, {from: owner1});
+
+        //attempt to buy it
+        await assertRevert(
+          this.marketplace.buyToken(_1_token1, {from: owner2, value: this.minBidAmount}),
+          "Listing not valid, token owner has changed"
+        );
+      });
+
+      it('fails when buy price not valid', async () => {
+        await this.marketplace.listToken(_1_token1, this.minBidAmount, {from: owner1});
+
+        await assertRevert(
+          this.marketplace.buyToken(_1_token1, {from: owner2, value: "0"}),
+          "List price not satisfied"
+        );
+      });
+
+      describe('successfully buying a token', async () => {
+
+        beforeEach(async () => {
+          // Tweak so optional is not only 5%
+          await this.koda.updateArtistCommission(editionNumber1, 76, {from: _owner});
+          await this.koda.updateOptionalCommission(editionNumber1, 9, optionalArtistAccount, {from: _owner});
+        });
+
+        it('transfers ownership', async () => {
+          await this.marketplace.listToken(_1_token1, this.minBidAmount, {from: owner1});
+
+          (await this.koda.ownerOf(_1_token1)).should.be.equal(owner1);
+
+          await this.marketplace.buyToken(_1_token1, {from: owner2, value: this.minBidAmount});
+
+          (await this.koda.ownerOf(_1_token1)).should.be.equal(owner2);
+        });
+
+        describe('once purchased', async () => {
+
+          beforeEach(async () => {
+            // list it
+            await this.marketplace.listToken(_1_token1, this.minBidAmount, {from: owner1});
+
+            // checkmark balance
+            this.owner1Balance = await getBalance(owner1);
+            this.owner2Balance = await getBalance(owner2);
+            this.marketplaceBalance = await getBalance(this.marketplace.address);
+            this.koCommissionBalance = await getBalance(koCommission);
+            this.artistAccountBalance = await getBalance(artistAccount);
+            this.optionalArtistAccountBalance = await getBalance(optionalArtistAccount);
+
+            // buy it
+            let tx = await this.marketplace.buyToken(_1_token1, {from: owner2, value: this.minBidAmount});
+            this.txGasCosts = await getGasCosts(tx);
+
+            this.owner1PostBalance = await getBalance(owner1);
+            this.owner2PostBalance = await getBalance(owner2);
+            this.marketplacePostBalance = await getBalance(this.marketplace.address);
+            this.koCommissionPostBalance = await getBalance(koCommission);
+            this.artistAccountPostBalance = await getBalance(artistAccount);
+            this.optionalArtistAccountPostBalance = await getBalance(optionalArtistAccount);
+
+            console.log("owner1PostBalance", this.owner1PostBalance.toString());
+            console.log("owner2PostBalance", this.owner2PostBalance.toString());
+            console.log("marketplacePostBalance", this.marketplacePostBalance.toString());
+            console.log("koCommissionPostBalance", this.koCommissionPostBalance.toString());
+            console.log("artistAccountPostBalance", this.artistAccountPostBalance.toString());
+          });
+
+          it('original owner balance goes up', async () => {
+            // Should get 92% of the funds
+            this.owner1PostBalance.should.be.eq.BN(
+              this.owner1Balance.add(
+                this.minBidAmount
+                  .div(toBN(100)).mul(toBN(92)) // 95%
+              )
+            );
+          });
+
+          it('ko commission account balance goes up', async () => {
+            // Should get 3% of the funds
+            this.koCommissionPostBalance.should.be.eq.BN(
+              this.koCommissionBalance.add(
+                this.minBidAmount
+                  .div(toBN(100)).mul(toBN(3)) // 3%
+              )
+            );
+          });
+
+          it('artist commission account balance goes up', async () => {
+            this.artistAccountPostBalance.sub(this.artistAccountBalance)
+              .should.be.eq.BN("1788235294117647");
+          });
+
+          it('optional artist commission account balance goes up', async () => {
+            this.optionalArtistAccountPostBalance.sub(this.optionalArtistAccountBalance)
+              .should.be.eq.BN("211764705882353");
+          });
+        });
+      });
+
     });
 
   });

@@ -3,7 +3,6 @@ pragma solidity ^0.4.24;
 import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "openzeppelin-solidity/contracts/access/Whitelist.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "./ITokenMarketplace.sol";
 
 interface IKODAV2Methods {
   function ownerOf(uint256 _tokenId) external view returns (address _owner);
@@ -19,7 +18,8 @@ interface IKODAV2Methods {
   function safeTransferFrom(address _from, address _to, uint256 _tokenId) external;
 }
 
-contract TokenMarketplaceV2 is Whitelist, Pausable, ITokenMarketplace {
+// Based on ITokenMarketplace.sol
+contract TokenMarketplaceV2 is Whitelist, Pausable {
   using SafeMath for uint256;
 
   event UpdatePlatformPercentageFee(uint256 _oldPercentage, uint256 _newPercentage);
@@ -41,6 +41,42 @@ contract TokenMarketplaceV2 is Whitelist, Pausable, ITokenMarketplace {
     address indexed _buyer,
     address indexed _seller,
     uint256 _price
+  );
+
+  event BidPlaced(
+    uint256 indexed _tokenId,
+    address indexed _currentOwner,
+    address indexed _bidder,
+    uint256 _amount
+  );
+
+  event BidWithdrawn(
+    uint256 indexed _tokenId,
+    address indexed _bidder
+  );
+
+  event BidAccepted(
+    uint256 indexed _tokenId,
+    address indexed _currentOwner,
+    address indexed _bidder,
+    uint256 _amount
+  );
+
+  event BidRejected(
+    uint256 indexed _tokenId,
+    address indexed _currentOwner,
+    address indexed _bidder,
+    uint256 _amount
+  );
+
+  event AuctionEnabled(
+    uint256 indexed _tokenId,
+    address indexed _auctioneer
+  );
+
+  event AuctionDisabled(
+    uint256 indexed _tokenId,
+    address indexed _auctioneer
   );
 
   struct Offer {
@@ -398,6 +434,15 @@ contract TokenMarketplaceV2 is Whitelist, Pausable, ITokenMarketplace {
     offer.offer.sub(fee).sub(royalties),
     fee,
     royalties
+    );
+  }
+
+  function tokenListingDetails(uint256 _tokenId) external view returns (uint256 _price, address _lister, address _currentOwner) {
+    Listing memory listing = listings[_tokenId];
+    return (
+    listing.price,
+    listing.seller,
+    kodaAddress.ownerOf(_tokenId)
     );
   }
 
