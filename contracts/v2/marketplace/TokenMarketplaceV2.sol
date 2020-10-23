@@ -1,14 +1,11 @@
 pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/access/rbac/Roles.sol";
 import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "openzeppelin-solidity/contracts/access/Whitelist.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./ITokenMarketplace.sol";
-import "./ITokenListingMarketplace.sol";
-import "../ReentrancyGuard.sol";
 
-interface IKODAV2 {
+interface IKODAV2Methods {
   function ownerOf(uint256 _tokenId) external view returns (address _owner);
 
   function exists(uint256 _tokenId) external view returns (bool _exists);
@@ -22,12 +19,29 @@ interface IKODAV2 {
   function safeTransferFrom(address _from, address _to, uint256 _tokenId) external;
 }
 
-contract TokenMarketplaceV2 is ReentrancyGuard, Whitelist, Pausable, ITokenMarketplace, ITokenListingMarketplace {
+contract TokenMarketplaceV2 is Whitelist, Pausable, ITokenMarketplace {
   using SafeMath for uint256;
 
   event UpdatePlatformPercentageFee(uint256 _oldPercentage, uint256 _newPercentage);
   event UpdateRoyaltyPercentageFee(uint256 _oldPercentage, uint256 _newPercentage);
   event UpdateMinBidAmount(uint256 minBidAmount);
+
+  event TokenListed(
+    uint256 indexed _tokenId,
+    address indexed _seller,
+    uint256 _price
+  );
+
+  event TokenDeListed(
+    uint256 indexed _tokenId
+  );
+
+  event TokenPurchased(
+    uint256 indexed _tokenId,
+    address indexed _buyer,
+    address indexed _seller,
+    uint256 _price
+  );
 
   struct Offer {
     address bidder;
@@ -39,11 +53,13 @@ contract TokenMarketplaceV2 is ReentrancyGuard, Whitelist, Pausable, ITokenMarke
     address seller;
   }
 
+  bool private _notEntered = true;
+
   // Min increase in bid/list amount
   uint256 public minBidAmount = 0.04 ether;
 
   // Interface into the KODA world
-  IKODAV2 public kodaAddress;
+  IKODAV2Methods public kodaAddress;
 
   // KO account which can receive commission
   address public koCommissionAccount;
@@ -84,12 +100,26 @@ contract TokenMarketplaceV2 is ReentrancyGuard, Whitelist, Pausable, ITokenMarke
     _;
   }
 
+  modifier nonReentrant() {
+    // On the first call to nonReentrant, _notEntered will be true
+    require(_notEntered, "ReentrancyGuard: reentrant call");
+
+    // Any calls to nonReentrant after this point will fail
+    _notEntered = false;
+
+    _;
+
+    // By storing the original value once again, a refund is triggered (see
+    // https://eips.ethereum.org/EIPS/eip-2200)
+    _notEntered = true;
+  }
+
   /////////////////
   // Constructor //
   /////////////////
 
   // Set the caller as the default KO account
-  constructor(IKODAV2 _kodaAddress, address _koCommissionAccount) public {
+  constructor(IKODAV2Methods _kodaAddress, address _koCommissionAccount) public {
     kodaAddress = _kodaAddress;
     koCommissionAccount = _koCommissionAccount;
     super.addAddressToWhitelist(msg.sender);
@@ -156,7 +186,7 @@ contract TokenMarketplaceV2 is ReentrancyGuard, Whitelist, Pausable, ITokenMarke
     address currentOwner = kodaAddress.ownerOf(_tokenId);
     require(currentOwner == msg.sender, "Not token owner");
 
-    Offer offer = offers[_tokenId];
+    Offer storage offer = offers[_tokenId];
 
     uint256 winningOffer = offer.offer;
     // Check valid offer and offer not replaced whilst inflight
@@ -197,7 +227,9 @@ contract TokenMarketplaceV2 is ReentrancyGuard, Whitelist, Pausable, ITokenMarke
   // User Listing Actions //
   //////////////////////////
 
-  function listToken(uint256 _tokenId, uint256 _listingPrice) whenNotPaused public {
+  function listToken(uint256 _tokenId, uint256 _listingPrice)
+  public
+  whenNotPaused {
     // Check ownership before listing
     address tokenOwner = kodaAddress.ownerOf(_tokenId);
     require(tokenOwner == msg.sender, "Not token owner");
@@ -214,7 +246,9 @@ contract TokenMarketplaceV2 is ReentrancyGuard, Whitelist, Pausable, ITokenMarke
     emit TokenListed(_tokenId, msg.sender, _listingPrice);
   }
 
-  function delistToken(uint256 _tokenId) whenNotPaused external {
+  function delistToken(uint256 _tokenId)
+  public
+  whenNotPaused {
 
     // check listing found
     require(listings[_tokenId].seller != address(0), "No listing found");
@@ -225,7 +259,11 @@ contract TokenMarketplaceV2 is ReentrancyGuard, Whitelist, Pausable, ITokenMarke
     _delistToken(_tokenId);
   }
 
-  function buyToken(uint256 _tokenId) nonReentrant whenNotPaused external payable {
+  function buyToken(uint256 _tokenId)
+  public
+  payable
+  nonReentrant
+  whenNotPaused {
     Listing memory listing = listings[_tokenId];
 
     // check token is listed
@@ -369,7 +407,7 @@ contract TokenMarketplaceV2 is ReentrancyGuard, Whitelist, Pausable, ITokenMarke
     // constructor execution.
     uint256 size;
     // solhint-disable-next-line no-inline-assembly
-    assembly { size := extcodesize(account) }
+    assembly {size := extcodesize(account)}
     return size > 0;
   }
 
@@ -405,7 +443,7 @@ contract TokenMarketplaceV2 is ReentrancyGuard, Whitelist, Pausable, ITokenMarke
     emit UpdateMinBidAmount(minBidAmount);
   }
 
-  function setKodavV2(IKODAV2 _kodaAddress) onlyIfWhitelisted(msg.sender) public {
+  function setKodavV2(IKODAV2Methods _kodaAddress) onlyIfWhitelisted(msg.sender) public {
     kodaAddress = _kodaAddress;
   }
 

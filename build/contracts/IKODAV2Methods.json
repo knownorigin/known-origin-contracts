@@ -1,120 +1,19 @@
 {
-  "contractName": "TokenMarketplaceV2",
+  "contractName": "IKODAV2Methods",
   "abi": [
     {
       "constant": true,
       "inputs": [
         {
-          "name": "_operator",
-          "type": "address"
-        },
-        {
-          "name": "_role",
-          "type": "string"
-        }
-      ],
-      "name": "checkRole",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "ROLE_WHITELISTED",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_operator",
-          "type": "address"
-        },
-        {
-          "name": "_role",
-          "type": "string"
-        }
-      ],
-      "name": "hasRole",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_operators",
-          "type": "address[]"
-        }
-      ],
-      "name": "removeAddressesFromWhitelist",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_operator",
-          "type": "address"
-        }
-      ],
-      "name": "removeAddressFromWhitelist",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "unpause",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "minBidAmount",
-      "outputs": [
-        {
-          "name": "",
+          "name": "_tokenId",
           "type": "uint256"
         }
       ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "artistRoyaltyPercentage",
+      "name": "ownerOf",
       "outputs": [
         {
-          "name": "",
-          "type": "uint256"
+          "name": "_owner",
+          "type": "address"
         }
       ],
       "payable": false,
@@ -123,11 +22,16 @@
     },
     {
       "constant": true,
-      "inputs": [],
-      "name": "paused",
+      "inputs": [
+        {
+          "name": "_tokenId",
+          "type": "uint256"
+        }
+      ],
+      "name": "exists",
       "outputs": [
         {
-          "name": "",
+          "name": "_exists",
           "type": "bool"
         }
       ],
@@ -137,560 +41,13 @@
     },
     {
       "constant": true,
-      "inputs": [],
-      "name": "koCommissionAccount",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "renounceOwnership",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_operator",
-          "type": "address"
-        }
-      ],
-      "name": "addAddressToWhitelist",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "pause",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_operator",
-          "type": "address"
-        }
-      ],
-      "name": "whitelist",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "platformFeePercentage",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "listings",
-      "outputs": [
-        {
-          "name": "price",
-          "type": "uint256"
-        },
-        {
-          "name": "seller",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "kodaAddress",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_operators",
-          "type": "address[]"
-        }
-      ],
-      "name": "addAddressesToWhitelist",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "transferOwnership",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "name": "_kodaAddress",
-          "type": "address"
-        },
-        {
-          "name": "_koCommissionAccount",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "_oldPercentage",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "_newPercentage",
-          "type": "uint256"
-        }
-      ],
-      "name": "UpdatePlatformPercentageFee",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "_oldPercentage",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "_newPercentage",
-          "type": "uint256"
-        }
-      ],
-      "name": "UpdateRoyaltyPercentageFee",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "minBidAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "UpdateMinBidAmount",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "_tokenId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "name": "_seller",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "_price",
-          "type": "uint256"
-        }
-      ],
-      "name": "TokenListed",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "_tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "TokenDeListed",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "_tokenId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "name": "_buyer",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "_seller",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "_price",
-          "type": "uint256"
-        }
-      ],
-      "name": "TokenPurchased",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "_tokenId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "name": "_currentOwner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "_bidder",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "_amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "BidPlaced",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "_tokenId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "name": "_bidder",
-          "type": "address"
-        }
-      ],
-      "name": "BidWithdrawn",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "_tokenId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "name": "_currentOwner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "_bidder",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "_amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "BidAccepted",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "_tokenId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "name": "_currentOwner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "_bidder",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "_amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "BidRejected",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "_tokenId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "name": "_auctioneer",
-          "type": "address"
-        }
-      ],
-      "name": "AuctionEnabled",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "_tokenId",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "name": "_auctioneer",
-          "type": "address"
-        }
-      ],
-      "name": "AuctionDisabled",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [],
-      "name": "Pause",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [],
-      "name": "Unpause",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "operator",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "role",
-          "type": "string"
-        }
-      ],
-      "name": "RoleAdded",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "operator",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "role",
-          "type": "string"
-        }
-      ],
-      "name": "RoleRemoved",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "previousOwner",
-          "type": "address"
-        }
-      ],
-      "name": "OwnershipRenounced",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "previousOwner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "OwnershipTransferred",
-      "type": "event"
-    },
-    {
-      "constant": false,
       "inputs": [
         {
           "name": "_tokenId",
           "type": "uint256"
         }
       ],
-      "name": "placeBid",
-      "outputs": [],
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "withdrawBid",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "rejectBid",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_tokenId",
-          "type": "uint256"
-        },
-        {
-          "name": "_acceptedAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "acceptBid",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "acceptBid",
+      "name": "editionOfTokenId",
       "outputs": [
         {
           "name": "tokenId",
@@ -698,53 +55,7 @@
         }
       ],
       "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_tokenId",
-          "type": "uint256"
-        },
-        {
-          "name": "_listingPrice",
-          "type": "uint256"
-        }
-      ],
-      "name": "listToken",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "delistToken",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "buyToken",
-      "outputs": [],
-      "payable": true,
-      "stateMutability": "payable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -755,27 +66,15 @@
           "type": "uint256"
         }
       ],
-      "name": "tokenOffer",
+      "name": "artistCommission",
       "outputs": [
         {
-          "name": "_bidder",
+          "name": "_artistAccount",
           "type": "address"
         },
         {
-          "name": "_offer",
+          "name": "_artistCommission",
           "type": "uint256"
-        },
-        {
-          "name": "_owner",
-          "type": "address"
-        },
-        {
-          "name": "_enabled",
-          "type": "bool"
-        },
-        {
-          "name": "_paused",
-          "type": "bool"
         }
       ],
       "payable": false,
@@ -790,19 +89,15 @@
           "type": "uint256"
         }
       ],
-      "name": "determineSaleValues",
+      "name": "editionOptionalCommission",
       "outputs": [
         {
-          "name": "_sellerTotal",
+          "name": "_rate",
           "type": "uint256"
         },
         {
-          "name": "_platformFee",
-          "type": "uint256"
-        },
-        {
-          "name": "_royaltyFee",
-          "type": "uint256"
+          "name": "_recipient",
+          "type": "address"
         }
       ],
       "payable": false,
@@ -813,95 +108,19 @@
       "constant": false,
       "inputs": [
         {
-          "name": "_tokenId",
-          "type": "uint256"
-        }
-      ],
-      "name": "disableAuction",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "name": "_to",
+          "type": "address"
+        },
         {
           "name": "_tokenId",
           "type": "uint256"
         }
       ],
-      "name": "enableAuction",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_minBidAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "setMinBidAmount",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_kodaAddress",
-          "type": "address"
-        }
-      ],
-      "name": "setKodavV2",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_koCommissionAccount",
-          "type": "address"
-        }
-      ],
-      "name": "setKoCommissionAccount",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_artistRoyaltyPercentage",
-          "type": "uint256"
-        }
-      ],
-      "name": "setArtistRoyaltyPercentage",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_platformFeePercentage",
-          "type": "uint256"
-        }
-      ],
-      "name": "setPlatformPercentage",
+      "name": "safeTransferFrom",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -32203,89 +31422,11 @@
   },
   "networks": {},
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-10-23T12:16:36.388Z",
+  "updatedAt": "2020-10-23T12:16:36.371Z",
   "devdoc": {
-    "methods": {
-      "addAddressToWhitelist(address)": {
-        "details": "add an address to the whitelist",
-        "params": {
-          "_operator": "address"
-        },
-        "return": "true if the address was added to the whitelist, false if the address was already in the whitelist"
-      },
-      "addAddressesToWhitelist(address[])": {
-        "details": "add addresses to the whitelist",
-        "params": {
-          "_operators": "addresses"
-        },
-        "return": "true if at least one address was added to the whitelist, false if all addresses were already in the whitelist"
-      },
-      "checkRole(address,string)": {
-        "details": "reverts if addr does not have role",
-        "params": {
-          "_operator": "address",
-          "_role": "the name of the role // reverts"
-        }
-      },
-      "hasRole(address,string)": {
-        "details": "determine if addr has role",
-        "params": {
-          "_operator": "address",
-          "_role": "the name of the role"
-        },
-        "return": "bool"
-      },
-      "pause()": {
-        "details": "called by the owner to pause, triggers stopped state"
-      },
-      "removeAddressFromWhitelist(address)": {
-        "details": "remove an address from the whitelist",
-        "params": {
-          "_operator": "address"
-        },
-        "return": "true if the address was removed from the whitelist, false if the address wasn't in the whitelist in the first place"
-      },
-      "removeAddressesFromWhitelist(address[])": {
-        "details": "remove addresses from the whitelist",
-        "params": {
-          "_operators": "addresses"
-        },
-        "return": "true if at least one address was removed from the whitelist, false if all addresses weren't in the whitelist in the first place"
-      },
-      "renounceOwnership()": {
-        "details": "Allows the current owner to relinquish control of the contract."
-      },
-      "transferOwnership(address)": {
-        "details": "Allows the current owner to transfer control of the contract to a newOwner.",
-        "params": {
-          "_newOwner": "The address to transfer ownership to."
-        }
-      },
-      "unpause()": {
-        "details": "called by the owner to unpause, returns to normal state"
-      },
-      "whitelist(address)": {
-        "details": "getter to determine if address is in whitelist"
-      }
-    }
+    "methods": {}
   },
   "userdoc": {
-    "methods": {
-      "disableAuction(uint256)": {
-        "notice": "////////////////"
-      },
-      "listToken(uint256,uint256)": {
-        "notice": "///////////////////////"
-      },
-      "placeBid(uint256)": {
-        "notice": "///////////////////////"
-      },
-      "renounceOwnership()": {
-        "notice": "Renouncing to ownership will leave the contract without an owner. It will not be possible to call the functions with the `onlyOwner` modifier anymore."
-      },
-      "tokenOffer(uint256)": {
-        "notice": "////////////////"
-      }
-    }
+    "methods": {}
   }
 }

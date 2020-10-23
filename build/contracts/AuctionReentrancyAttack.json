@@ -157,7 +157,7 @@
         "id": 352,
         "nodeType": "ImportDirective",
         "scope": 427,
-        "sourceUnit": 14098,
+        "sourceUnit": 14126,
         "src": "0:63:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -168,7 +168,7 @@
         "id": 353,
         "nodeType": "ImportDirective",
         "scope": 427,
-        "sourceUnit": 7230,
+        "sourceUnit": 7223,
         "src": "65:48:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -182,10 +182,10 @@
               "id": 354,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14097,
+              "referencedDeclaration": 14125,
               "src": "151:7:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14097",
+                "typeIdentifier": "t_contract$_Ownable_$14125",
                 "typeString": "contract Ownable"
               }
             },
@@ -195,7 +195,7 @@
           }
         ],
         "contractDependencies": [
-          14097
+          14125
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -203,7 +203,7 @@
         "id": 426,
         "linearizedBaseContracts": [
           426,
-          14097
+          14125
         ],
         "name": "AuctionReentrancyAttack",
         "nodeType": "ContractDefinition",
@@ -218,7 +218,7 @@
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IAuction_$6299",
+              "typeIdentifier": "t_contract$_IAuction_$6292",
               "typeString": "contract IAuction"
             },
             "typeName": {
@@ -226,10 +226,10 @@
               "id": 356,
               "name": "IAuction",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 6299,
+              "referencedDeclaration": 6292,
               "src": "164:8:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IAuction_$6299",
+                "typeIdentifier": "t_contract$_IAuction_$6292",
                 "typeString": "contract IAuction"
               }
             },
@@ -285,7 +285,7 @@
                       "referencedDeclaration": 357,
                       "src": "351:7:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IAuction_$6299",
+                        "typeIdentifier": "t_contract$_IAuction_$6292",
                         "typeString": "contract IAuction"
                       }
                     },
@@ -300,13 +300,13 @@
                       "referencedDeclaration": 361,
                       "src": "361:8:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IAuction_$6299",
+                        "typeIdentifier": "t_contract$_IAuction_$6292",
                         "typeString": "contract IAuction"
                       }
                     },
                     "src": "351:18:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IAuction_$6299",
+                      "typeIdentifier": "t_contract$_IAuction_$6292",
                       "typeString": "contract IAuction"
                     }
                   },
@@ -328,7 +328,7 @@
                       "name": "owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 14015,
+                      "referencedDeclaration": 14043,
                       "src": "375:5:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -345,7 +345,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15228,
+                        "referencedDeclaration": 15256,
                         "src": "383:3:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -446,7 +446,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_contract$_IAuction_$6299",
+                    "typeIdentifier": "t_contract$_IAuction_$6292",
                     "typeString": "contract IAuction"
                   },
                   "typeName": {
@@ -454,10 +454,10 @@
                     "id": 360,
                     "name": "IAuction",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 6299,
+                    "referencedDeclaration": 6292,
                     "src": "285:8:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IAuction_$6299",
+                      "typeIdentifier": "t_contract$_IAuction_$6292",
                       "typeString": "contract IAuction"
                     }
                   },
@@ -535,7 +535,7 @@
                         "referencedDeclaration": 357,
                         "src": "547:7:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IAuction_$6299",
+                          "typeIdentifier": "t_contract$_IAuction_$6292",
                           "typeString": "contract IAuction"
                         }
                       },
@@ -622,7 +622,7 @@
                               "referencedDeclaration": 357,
                               "src": "719:7:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_IAuction_$6299",
+                                "typeIdentifier": "t_contract$_IAuction_$6292",
                                 "typeString": "contract IAuction"
                               }
                             },
@@ -633,7 +633,7 @@
                             "lValueRequested": false,
                             "memberName": "withdrawBid",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 6284,
+                            "referencedDeclaration": 6277,
                             "src": "719:19:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_external_nonpayable$_t_uint256_$returns$_t_bool_$",
@@ -730,7 +730,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 15228,
+                            "referencedDeclaration": 15256,
                             "src": "880:3:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -770,7 +770,7 @@
                             "referencedDeclaration": 357,
                             "src": "857:7:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_IAuction_$6299",
+                              "typeIdentifier": "t_contract$_IAuction_$6292",
                               "typeString": "contract IAuction"
                             }
                           },
@@ -781,7 +781,7 @@
                           "lValueRequested": false,
                           "memberName": "placeBid",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 6270,
+                          "referencedDeclaration": 6263,
                           "src": "857:16:4",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_external_payable$_t_uint256_$returns$_t_bool_$",
@@ -851,7 +851,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14045,
+                  "referencedDeclaration": 14073,
                   "src": "804:9:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -923,7 +923,7 @@
                         "referencedDeclaration": 357,
                         "src": "1235:7:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IAuction_$6299",
+                          "typeIdentifier": "t_contract$_IAuction_$6292",
                           "typeString": "contract IAuction"
                         }
                       },
@@ -934,7 +934,7 @@
                       "lValueRequested": false,
                       "memberName": "withdrawBid",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 6284,
+                      "referencedDeclaration": 6277,
                       "src": "1235:19:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_uint256_$returns$_t_bool_$",
@@ -976,7 +976,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14045,
+                  "referencedDeclaration": 14073,
                   "src": "941:9:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1031,7 +1031,7 @@
         "id": 352,
         "nodeType": "ImportDirective",
         "scope": 427,
-        "sourceUnit": 14098,
+        "sourceUnit": 14126,
         "src": "0:63:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1042,7 +1042,7 @@
         "id": 353,
         "nodeType": "ImportDirective",
         "scope": 427,
-        "sourceUnit": 7230,
+        "sourceUnit": 7223,
         "src": "65:48:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1056,10 +1056,10 @@
               "id": 354,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 14097,
+              "referencedDeclaration": 14125,
               "src": "151:7:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$14097",
+                "typeIdentifier": "t_contract$_Ownable_$14125",
                 "typeString": "contract Ownable"
               }
             },
@@ -1069,7 +1069,7 @@
           }
         ],
         "contractDependencies": [
-          14097
+          14125
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -1077,7 +1077,7 @@
         "id": 426,
         "linearizedBaseContracts": [
           426,
-          14097
+          14125
         ],
         "name": "AuctionReentrancyAttack",
         "nodeType": "ContractDefinition",
@@ -1092,7 +1092,7 @@
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_IAuction_$6299",
+              "typeIdentifier": "t_contract$_IAuction_$6292",
               "typeString": "contract IAuction"
             },
             "typeName": {
@@ -1100,10 +1100,10 @@
               "id": 356,
               "name": "IAuction",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 6299,
+              "referencedDeclaration": 6292,
               "src": "164:8:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_IAuction_$6299",
+                "typeIdentifier": "t_contract$_IAuction_$6292",
                 "typeString": "contract IAuction"
               }
             },
@@ -1159,7 +1159,7 @@
                       "referencedDeclaration": 357,
                       "src": "351:7:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IAuction_$6299",
+                        "typeIdentifier": "t_contract$_IAuction_$6292",
                         "typeString": "contract IAuction"
                       }
                     },
@@ -1174,13 +1174,13 @@
                       "referencedDeclaration": 361,
                       "src": "361:8:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_IAuction_$6299",
+                        "typeIdentifier": "t_contract$_IAuction_$6292",
                         "typeString": "contract IAuction"
                       }
                     },
                     "src": "351:18:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IAuction_$6299",
+                      "typeIdentifier": "t_contract$_IAuction_$6292",
                       "typeString": "contract IAuction"
                     }
                   },
@@ -1202,7 +1202,7 @@
                       "name": "owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 14015,
+                      "referencedDeclaration": 14043,
                       "src": "375:5:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1219,7 +1219,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 15228,
+                        "referencedDeclaration": 15256,
                         "src": "383:3:4",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -1320,7 +1320,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_contract$_IAuction_$6299",
+                    "typeIdentifier": "t_contract$_IAuction_$6292",
                     "typeString": "contract IAuction"
                   },
                   "typeName": {
@@ -1328,10 +1328,10 @@
                     "id": 360,
                     "name": "IAuction",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 6299,
+                    "referencedDeclaration": 6292,
                     "src": "285:8:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_IAuction_$6299",
+                      "typeIdentifier": "t_contract$_IAuction_$6292",
                       "typeString": "contract IAuction"
                     }
                   },
@@ -1409,7 +1409,7 @@
                         "referencedDeclaration": 357,
                         "src": "547:7:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IAuction_$6299",
+                          "typeIdentifier": "t_contract$_IAuction_$6292",
                           "typeString": "contract IAuction"
                         }
                       },
@@ -1496,7 +1496,7 @@
                               "referencedDeclaration": 357,
                               "src": "719:7:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_IAuction_$6299",
+                                "typeIdentifier": "t_contract$_IAuction_$6292",
                                 "typeString": "contract IAuction"
                               }
                             },
@@ -1507,7 +1507,7 @@
                             "lValueRequested": false,
                             "memberName": "withdrawBid",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 6284,
+                            "referencedDeclaration": 6277,
                             "src": "719:19:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_external_nonpayable$_t_uint256_$returns$_t_bool_$",
@@ -1604,7 +1604,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 15228,
+                            "referencedDeclaration": 15256,
                             "src": "880:3:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -1644,7 +1644,7 @@
                             "referencedDeclaration": 357,
                             "src": "857:7:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_IAuction_$6299",
+                              "typeIdentifier": "t_contract$_IAuction_$6292",
                               "typeString": "contract IAuction"
                             }
                           },
@@ -1655,7 +1655,7 @@
                           "lValueRequested": false,
                           "memberName": "placeBid",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 6270,
+                          "referencedDeclaration": 6263,
                           "src": "857:16:4",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_external_payable$_t_uint256_$returns$_t_bool_$",
@@ -1725,7 +1725,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14045,
+                  "referencedDeclaration": 14073,
                   "src": "804:9:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1797,7 +1797,7 @@
                         "referencedDeclaration": 357,
                         "src": "1235:7:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IAuction_$6299",
+                          "typeIdentifier": "t_contract$_IAuction_$6292",
                           "typeString": "contract IAuction"
                         }
                       },
@@ -1808,7 +1808,7 @@
                       "lValueRequested": false,
                       "memberName": "withdrawBid",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 6284,
+                      "referencedDeclaration": 6277,
                       "src": "1235:19:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_uint256_$returns$_t_bool_$",
@@ -1850,7 +1850,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 14045,
+                  "referencedDeclaration": 14073,
                   "src": "941:9:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1895,7 +1895,7 @@
   },
   "networks": {},
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-10-23T11:15:09.935Z",
+  "updatedAt": "2020-10-23T12:16:36.239Z",
   "devdoc": {
     "methods": {
       "renounceOwnership()": {

@@ -2262,8 +2262,7 @@
             }
           ],
           "name": "OwnershipRenounced",
-          "type": "event",
-          "signature": "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820"
+          "type": "event"
         },
         "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
           "anonymous": false,
@@ -2280,8 +2279,7 @@
             }
           ],
           "name": "OwnershipTransferred",
-          "type": "event",
-          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+          "type": "event"
         }
       },
       "links": {},
@@ -2300,8 +2298,7 @@
             }
           ],
           "name": "OwnershipRenounced",
-          "type": "event",
-          "signature": "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820"
+          "type": "event"
         },
         "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
           "anonymous": false,
@@ -2318,8 +2315,7 @@
             }
           ],
           "name": "OwnershipTransferred",
-          "type": "event",
-          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+          "type": "event"
         }
       },
       "links": {},
@@ -2338,8 +2334,7 @@
             }
           ],
           "name": "OwnershipRenounced",
-          "type": "event",
-          "signature": "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820"
+          "type": "event"
         },
         "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
           "anonymous": false,
@@ -2356,17 +2351,53 @@
             }
           ],
           "name": "OwnershipTransferred",
-          "type": "event",
-          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+          "type": "event"
         }
       },
       "links": {},
       "address": "0x1c9817aEdeC8Af91e439c228b70AEb9145ae5508",
       "transactionHash": "0x18106577ed52b6b1de93872ce160e284f8e6a62092a71d1903780c8f8a994afb"
+    },
+    "5777": {
+      "events": {
+        "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipRenounced",
+          "type": "event"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x04d4Ba81D40D0bA76c74bF6f6a985C98fc0a9BF0",
+      "transactionHash": "0x0105a600ec35654757d2a0f123a7e4705b5f974a8a017073117844160f2d5b98"
     }
   },
-  "schemaVersion": "3.0.19",
-  "updatedAt": "2020-03-13T15:52:57.878Z",
+  "schemaVersion": "3.1.0",
+  "updatedAt": "2020-10-23T11:53:56.703Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {
       "isEnabledForAccount(address)": {

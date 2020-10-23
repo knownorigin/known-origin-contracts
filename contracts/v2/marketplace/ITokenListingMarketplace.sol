@@ -23,5 +23,5 @@ interface ITokenListingMarketplace {
 
   function delistToken(uint256 _tokenId) external;
 
-  function buyToken(uint256 _tokenId) external payable;
+  function buyToken(uint256 _tokenId) payable external;
 }
