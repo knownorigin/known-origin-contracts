@@ -48,8 +48,8 @@ contract TokenMarketplaceV2 is ReentrancyGuard, Whitelist, Pausable, ITokenMarke
   // KO account which can receive commission
   address public koCommissionAccount;
 
-  uint256 public artistRoyaltyPercentage = 50;
-  uint256 public platformFeePercentage = 30;
+  uint256 public artistRoyaltyPercentage = 100;
+  uint256 public platformFeePercentage = 25;
 
   // Token ID to Offer mapping
   mapping(uint256 => Offer) offers;

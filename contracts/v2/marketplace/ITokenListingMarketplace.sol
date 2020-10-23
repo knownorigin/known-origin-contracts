@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-interface ITokenListingMarketplace  {
+interface ITokenListingMarketplace {
 
   event TokenListed(
     uint256 indexed _tokenId,
@@ -19,4 +19,9 @@ interface ITokenListingMarketplace  {
     uint256 _price
   );
 
+  function listToken(uint256 _tokenId, uint256 _listingPrice) external;
+
+  function delistToken(uint256 _tokenId) external;
+
+  function buyToken(uint256 _tokenId) external payable;
 }
