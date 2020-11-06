@@ -210,8 +210,9 @@ contract TokenMarketplaceV2 is Whitelist, Pausable, ReentrancyGuard {
     Offer storage offer = offers[_tokenId];
 
     uint256 winningOffer = offer.offer;
+
     // Check valid offer and offer not replaced whilst inflight
-    require(winningOffer > 0 && winningOffer >= _acceptedAmount, "Offer amount not satisfied");
+    require(winningOffer > 0 && _acceptedAmount >= winningOffer, "Offer amount not satisfied");
 
     address winningBidder = offer.bidder;
 
