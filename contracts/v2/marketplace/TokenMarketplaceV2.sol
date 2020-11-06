@@ -3,6 +3,7 @@ pragma solidity ^0.4.24;
 import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "openzeppelin-solidity/contracts/access/Whitelist.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "../ReentrancyGuard.sol";
 
 interface IKODAV2Methods {
   function ownerOf(uint256 _tokenId) external view returns (address _owner);
@@ -19,7 +20,7 @@ interface IKODAV2Methods {
 }
 
 // Based on ITokenMarketplace.sol
-contract TokenMarketplaceV2 is Whitelist, Pausable {
+contract TokenMarketplaceV2 is Whitelist, Pausable, ReentrancyGuard {
   using SafeMath for uint256;
 
   event UpdatePlatformPercentageFee(uint256 _oldPercentage, uint256 _newPercentage);
@@ -89,8 +90,6 @@ contract TokenMarketplaceV2 is Whitelist, Pausable {
     address seller;
   }
 
-  bool private _notEntered = true;
-
   // Min increase in bid/list amount
   uint256 public minBidAmount = 0.04 ether;
 
@@ -104,13 +103,13 @@ contract TokenMarketplaceV2 is Whitelist, Pausable {
   uint256 public platformFeePercentage = 25;
 
   // Token ID to Offer mapping
-  mapping(uint256 => Offer) offers;
+  mapping(uint256 => Offer) public offers;
 
   // Token ID to Listing
   mapping(uint256 => Listing) public listings;
 
   // Explicitly disable sales for specific tokens
-  mapping(uint256 => bool) disabledTokens;
+  mapping(uint256 => bool) public disabledTokens;
 
   ///////////////
   // Modifiers //
@@ -134,20 +133,6 @@ contract TokenMarketplaceV2 is Whitelist, Pausable {
   modifier onlyWhenTokenAuctionEnabled(uint256 _tokenId) {
     require(!disabledTokens[_tokenId], "Token not enabled for offers");
     _;
-  }
-
-  modifier nonReentrant() {
-    // On the first call to nonReentrant, _notEntered will be true
-    require(_notEntered, "ReentrancyGuard: reentrant call");
-
-    // Any calls to nonReentrant after this point will fail
-    _notEntered = false;
-
-    _;
-
-    // By storing the original value once again, a refund is triggered (see
-    // https://eips.ethereum.org/EIPS/eip-2200)
-    _notEntered = true;
   }
 
   /////////////////
@@ -228,7 +213,7 @@ contract TokenMarketplaceV2 is Whitelist, Pausable {
     // Check valid offer and offer not replaced whilst inflight
     require(winningOffer > 0 && winningOffer >= _acceptedAmount, "Offer amount not satisfied");
 
-    address winningBidder = offers[_tokenId].bidder;
+    address winningBidder = offer.bidder;
 
     delete offers[_tokenId];
 
@@ -246,16 +231,19 @@ contract TokenMarketplaceV2 is Whitelist, Pausable {
     // Get current highest bidder
     address currentHighestBidder = offers[_tokenId].bidder;
 
-    // Get current highest bid amount
-    uint256 currentHighestBiddersAmount = offers[_tokenId].offer;
+    if (currentHighestBidder != address(0)) {
 
-    if (currentHighestBidder != address(0) && currentHighestBiddersAmount > 0) {
+      // Get current highest bid amount
+      uint256 currentHighestBiddersAmount = offers[_tokenId].offer;
 
-      // Clear out highest bidder
-      delete offers[_tokenId];
+      if (currentHighestBiddersAmount > 0) {
 
-      // Refund it
-      currentHighestBidder.transfer(currentHighestBiddersAmount);
+        // Clear out highest bidder
+        delete offers[_tokenId];
+
+        // Refund it
+        currentHighestBidder.transfer(currentHighestBiddersAmount);
+      }
     }
   }
 
@@ -300,7 +288,7 @@ contract TokenMarketplaceV2 is Whitelist, Pausable {
   payable
   nonReentrant
   whenNotPaused {
-    Listing memory listing = listings[_tokenId];
+    Listing storage listing = listings[_tokenId];
 
     // check token is listed
     require(listing.seller != address(0), "No listing found");
@@ -317,10 +305,8 @@ contract TokenMarketplaceV2 is Whitelist, Pausable {
     uint256 editionNumber = kodaAddress.editionOfTokenId(_tokenId);
 
     // refund any open offers on it
-    Offer memory offer = offers[_tokenId];
-    if (offer.bidder != address(0)) {
-      _refundHighestBidder(_tokenId);
-    }
+    Offer storage offer = offers[_tokenId];
+    _refundHighestBidder(_tokenId);
 
     // split funds
     _handleFunds(editionNumber, listingPrice, currentOwner);

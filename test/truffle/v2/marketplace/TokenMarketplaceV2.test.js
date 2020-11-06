@@ -15,7 +15,7 @@ require('chai')
   .use(bnChai(web3.utils.BN))
   .should();
 
-contract('TokenMarketplaceV2 tests', function (accounts) {
+contract.only('TokenMarketplaceV2 tests', function (accounts) {
 
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
