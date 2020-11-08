@@ -26,5 +26,6 @@ node ./node_modules/.bin/truffle-flattener ./contracts/v2/self-service/SelfServi
 node ./node_modules/.bin/truffle-flattener ./contracts/v2/self-service/SelfServiceAccessControls.sol > ./contracts-flat/FLAT-SelfServiceAccessControls.sol;
 node ./node_modules/.bin/truffle-flattener ./contracts/v2/self-service/SelfServiceFrequencyControls.sol > ./contracts-flat/FLAT-SelfServiceFrequencyControls.sol;
 node ./node_modules/.bin/truffle-flattener ./contracts/v2/marketplace/TokenMarketplace.sol > ./contracts-flat/FLAT-TokenMarketplace.sol;
+node ./node_modules/.bin/truffle-flattener ./contracts/v2/marketplace/TokenMarketplaceV2.sol > ./contracts-flat/FLAT-TokenMarketplaceV2.sol;
 node ./node_modules/.bin/truffle-flattener ./contracts/v2/artist-controls/ArtistEditionBurner.sol > ./contracts-flat/FLAT-ArtistEditionBurner.sol;
 
