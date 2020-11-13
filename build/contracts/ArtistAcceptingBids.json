@@ -26559,7 +26559,171 @@
   },
   "networks": {
     "1": {
-      "events": {},
+      "events": {
+        "0xdf8644c0a4c21ed214ce69f395675b3a5fcd1039083daea5058898de40ea3149": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_bidder",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "_editionNumber",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "_amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "BidPlaced",
+          "type": "event"
+        },
+        "0xabdd90c2558a13a111c790b3e52da9a52768834a1139e2993b68b6db09c071c5": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_bidder",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "_editionNumber",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "_amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "BidIncreased",
+          "type": "event"
+        },
+        "0x03f0427e8bcfdf5f69217150cf160ebe2dac5fa607336fd7643bfd61a9019080": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_bidder",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "_editionNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "BidWithdrawn",
+          "type": "event"
+        },
+        "0x77273c2a169296530c120eb6f1142012378aad0ed4337eac090eaf4223a1a2f1": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_bidder",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "_editionNumber",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "_tokenId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "_amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "BidAccepted",
+          "type": "event"
+        },
+        "0xa01ed4ff1bfc084518bd795b4114da41c800c9ae1fc5e594cb505cb4c0c3fae1": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_editionNumber",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "_bidder",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "_amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "BidderRefunded",
+          "type": "event"
+        },
+        "0x2809c7e17bf978fbc7194c0a694b638c4215e9140cacc6c38ca36010b45697df": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_editionNumber",
+              "type": "uint256"
+            }
+          ],
+          "name": "AuctionCancelled",
+          "type": "event"
+        },
+        "0x6985a02210a168e66602d3235cb6db0e70f92b3ba4d376a33c0f3d9434bff625": {
+          "anonymous": false,
+          "inputs": [],
+          "name": "Pause",
+          "type": "event"
+        },
+        "0x7805862f689e2f13df9f062ff482ad3ad112aca9e0847911ed832e158c525b33": {
+          "anonymous": false,
+          "inputs": [],
+          "name": "Unpause",
+          "type": "event"
+        },
+        "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipRenounced",
+          "type": "event"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        }
+      },
       "links": {},
       "address": "0x921ade9018Eec4a01e41e80a7eeBa982B61724Ec",
       "transactionHash": "0xa19d9d02835a8cf93d091bce95e83a8046598c2a37664f9364134e4cdd012969"
@@ -26912,7 +27076,7 @@
     }
   },
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-11-13T15:25:35.533Z",
+  "updatedAt": "2020-11-13T16:55:37.430Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {

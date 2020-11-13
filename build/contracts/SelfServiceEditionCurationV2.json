@@ -16010,7 +16010,81 @@
   },
   "networks": {
     "1": {
-      "events": {},
+      "events": {
+        "0xaa456f9f24703ca25ecf5b0bfd7bed18ed96589119418060049a312d98372766": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_editionNumber",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "_creator",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "_priceInWei",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "_totalAvailable",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "_enableAuction",
+              "type": "bool"
+            }
+          ],
+          "name": "SelfServiceEditionCreated",
+          "type": "event"
+        },
+        "0x6985a02210a168e66602d3235cb6db0e70f92b3ba4d376a33c0f3d9434bff625": {
+          "anonymous": false,
+          "inputs": [],
+          "name": "Pause",
+          "type": "event"
+        },
+        "0x7805862f689e2f13df9f062ff482ad3ad112aca9e0847911ed832e158c525b33": {
+          "anonymous": false,
+          "inputs": [],
+          "name": "Unpause",
+          "type": "event"
+        },
+        "0xf8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c64820": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipRenounced",
+          "type": "event"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        }
+      },
       "links": {},
       "address": "0xFF043A999a697fB1EFdb0C18fd500eB7eAB4E846",
       "transactionHash": "0x8d0637264a89678c1f69ded5ee747029a1296e4cb64403c7bf2f262020ddbd6c"
@@ -16183,7 +16257,7 @@
     }
   },
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-11-13T15:25:35.569Z",
+  "updatedAt": "2020-11-13T16:55:37.468Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {
