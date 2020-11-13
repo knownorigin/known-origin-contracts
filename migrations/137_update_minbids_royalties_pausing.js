@@ -25,7 +25,7 @@ module.exports = async function (deployer, network, accounts) {
     _koAccount = new HDWalletProvider(require('../mnemonic_live'), `https://mainnet.infura.io/v3/${infuraApikey}`, 0).getAddress();
   }
 
-  const _0_POINT_0_1_ETH = '10000000';
+  const _0_POINT_0_1_ETH = '10000000000000000';
   const _17_POINT_5_PERCENT = '175';
 
   const tokenMarketplace = await TokenMarketplace.deployed();
