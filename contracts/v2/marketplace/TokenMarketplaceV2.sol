@@ -80,6 +80,14 @@ contract TokenMarketplaceV2 is Whitelist, Pausable, ReentrancyGuard {
     address indexed _auctioneer
   );
 
+  event ListingEnabled(
+    uint256 indexed _tokenId
+  );
+
+  event ListingDisabled(
+    uint256 indexed _tokenId
+  );
+
   struct Offer {
     address bidder;
     uint256 offer;
@@ -110,6 +118,9 @@ contract TokenMarketplaceV2 is Whitelist, Pausable, ReentrancyGuard {
 
   // Explicitly disable sales for specific tokens
   mapping(uint256 => bool) public disabledTokens;
+
+  // Explicitly disable listings for specific tokens
+  mapping(uint256 => bool) public disabledListings;
 
   ///////////////
   // Modifiers //
@@ -162,7 +173,7 @@ contract TokenMarketplaceV2 is Whitelist, Pausable, ReentrancyGuard {
     require(!isContract(msg.sender), "Unable to place a bid as a contract");
     _refundHighestBidder(_tokenId);
 
-    offers[_tokenId] = Offer(msg.sender, msg.value);
+    offers[_tokenId] = Offer({bidder : msg.sender, offer : msg.value});
 
     address currentOwner = kodaAddress.ownerOf(_tokenId);
 
@@ -255,6 +266,8 @@ contract TokenMarketplaceV2 is Whitelist, Pausable, ReentrancyGuard {
   function listToken(uint256 _tokenId, uint256 _listingPrice)
   public
   whenNotPaused {
+    require(!disabledListings[_tokenId], "Listing disabled");
+
     // Check ownership before listing
     address tokenOwner = kodaAddress.ownerOf(_tokenId);
     require(tokenOwner == msg.sender, "Not token owner");
@@ -452,7 +465,6 @@ contract TokenMarketplaceV2 is Whitelist, Pausable, ReentrancyGuard {
   onlyIfWhitelisted(msg.sender)
   {
     _refundHighestBidder(_tokenId);
-    _delistToken(_tokenId);
 
     disabledTokens[_tokenId] = true;
 
@@ -468,6 +480,26 @@ contract TokenMarketplaceV2 is Whitelist, Pausable, ReentrancyGuard {
     disabledTokens[_tokenId] = false;
 
     emit AuctionEnabled(_tokenId, msg.sender);
+  }
+
+  function disableListing(uint256 _tokenId)
+  public
+  onlyIfWhitelisted(msg.sender)
+  {
+    _delistToken(_tokenId);
+
+    disabledListings[_tokenId] = true;
+
+    emit ListingDisabled(_tokenId);
+  }
+
+  function enableListing(uint256 _tokenId)
+  public
+  onlyIfWhitelisted(msg.sender)
+  {
+    disabledListings[_tokenId] = false;
+
+    emit ListingEnabled(_tokenId);
   }
 
   function setMinBidAmount(uint256 _minBidAmount) onlyIfWhitelisted(msg.sender) public {
