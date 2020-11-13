@@ -27818,7 +27818,7 @@
     }
   },
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-11-13T13:45:59.391Z",
+  "updatedAt": "2020-11-13T15:22:37.279Z",
   "devdoc": {
     "methods": {
       "approve(address,uint256)": {
