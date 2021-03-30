@@ -2,7 +2,7 @@ const KnownOriginDigitalAssetV2 = artifacts.require('KnownOriginDigitalAssetV2')
 const TokenMarketplace = artifacts.require('TokenMarketplace');
 
 const HDWalletProvider = require('truffle-hdwallet-provider');
-const infuraApikey = '4396873c00c84479991e58a34a54ebd9';
+const infuraApikey = '';
 
 module.exports = async function (deployer, network, accounts) {
 

@@ -7,7 +7,7 @@ const SelfServiceAccessControls = artifacts.require('SelfServiceAccessControls')
 const SelfServiceFrequencyControls = artifacts.require('SelfServiceFrequencyControls');
 
 const HDWalletProvider = require('truffle-hdwallet-provider');
-const infuraApikey = '4396873c00c84479991e58a34a54ebd9';
+const infuraApikey = '';
 
 module.exports = async function (deployer, network, accounts) {
 

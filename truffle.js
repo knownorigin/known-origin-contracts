@@ -1,5 +1,5 @@
 const HDWalletProvider = require('truffle-hdwallet-provider');
-const infuraApikey = '4396873c00c84479991e58a34a54ebd9';
+const infuraApikey = '';
 const mnemonic = process.env.KNOWN_ORIGIN_MNEMONIC;
 if (!mnemonic) {
   throw new Error(`

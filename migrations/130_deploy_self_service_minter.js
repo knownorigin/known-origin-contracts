@@ -3,7 +3,7 @@ const ArtistAcceptingBidsV2 = artifacts.require('ArtistAcceptingBidsV2');
 const SelfServiceEditionCuration = artifacts.require('SelfServiceEditionCuration');
 
 const HDWalletProvider = require('truffle-hdwallet-provider');
-const infuraApikey = '4396873c00c84479991e58a34a54ebd9';
+const infuraApikey = '';
 
 module.exports = async function (deployer, network, accounts) {
 
