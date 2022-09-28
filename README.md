@@ -26,9 +26,9 @@
 
 # About
 
-Discover, buy and collect rare digital artwork by some of the worlds most respected artists, illustrators and creative practitioners.
+Discover, buy and collect rare digital artwork by some of the world's most respected artists, illustrators and creative practitioners.
 
-We provide a platform for our artists to exhibit and sell their work as 'digital assets', also know as crypto-collectables or non-fungible tokens (NFTs).
+We provide a platform for our artists to exhibit and sell their work as 'digital assets', also known as crypto-collectables or non-fungible tokens (NFTs).
 
 © 2018 KNOWNORIGIN
 
@@ -49,7 +49,7 @@ Created and maintained by [BlockRocket](http://blockrocket.tech)
 * **IPFS Support** - Internally IPFS is used for storing asset files and metadata
 * **Artist Controls** - the ability for artists to modify prices and gift NFTs
 * **Auctions/Offers** - the ability for users to make offers on artworks and artists to accept these offers
-* **Artist Profiles** - artists can update and modify there own profiles and details
+* **Artist Profiles** - artists can update and modify their own profiles and details
 * **Self Service Creation** - artists can create and mint NFTs directly on the platform with only a logged in web3 dApp browser
 
 # License
