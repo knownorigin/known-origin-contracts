@@ -38,7 +38,7 @@
     "ethjs": "^0.4.0",
     "ganache-cli": "^6.7.0",
     "ipfs-api": "^18.1.1",
-    "mocha": "^6.2.2",
+    "mocha": "^10.2.0",
     "openzeppelin-solidity": "^1.12.0",
     "solidity-coverage": "^0.6.7",
     "truffle": "^5.1.0",
