@@ -34,14 +34,14 @@
     "eslint": "^3.19.0",
     "memory-streams": "^0.1.3",
     "file-matcher": "^1.3.0",
-    "eth-gas-reporter": "^0.2.12",
+    "eth-gas-reporter": "^0.2.25",
     "ethjs": "^0.4.0",
     "ganache-cli": "^6.7.0",
     "ipfs-api": "^18.1.1",
     "mocha": "^6.2.2",
     "openzeppelin-solidity": "^1.12.0",
     "solidity-coverage": "^0.6.7",
-    "truffle": "^5.1.0",
+    "truffle": "^5.7.8",
     "truffle-flattener": "^1.4.2",
     "truffle-hdwallet-provider": "^1.0.5"
   }
